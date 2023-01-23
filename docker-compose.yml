@@ -1,0 +1,29 @@
+version: '3'
+services:
+  nestjs:
+    build:
+      context: ./ft_transcendence
+      dockerfile: Dockerfile
+    ports:
+      - 3000:3000
+    depends_on:
+      - postgres
+  postgres:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+      POSTGRES_DB: mydb
+    ports:
+      - 5432:5432
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: mathcervier@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: pgadmin
+    ports:
+      - 5050:80
+    depends_on:
+      - postgres
