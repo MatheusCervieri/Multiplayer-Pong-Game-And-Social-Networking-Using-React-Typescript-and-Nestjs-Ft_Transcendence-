@@ -2,10 +2,10 @@ version: '3'
 services:
   nestjs:
     build:
-      context: ./ft_transcendence
+      context: ./back_transcendence
       dockerfile: Dockerfile
     ports:
-      - 3000:3000
+      - 3001:3001
     depends_on:
       - postgres
   postgres:
@@ -27,3 +27,11 @@ services:
       - 5050:80
     depends_on:
       - postgres
+  react:
+    build:
+      context: ./front_transcendence
+      dockerfile: Dockerfile
+    ports:
+      - 3000:3000
+    depends_on:
+      - nestjs
