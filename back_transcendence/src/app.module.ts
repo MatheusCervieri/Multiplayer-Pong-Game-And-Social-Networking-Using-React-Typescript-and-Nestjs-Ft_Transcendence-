@@ -4,6 +4,9 @@ import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { SimpleGetController } from './simple-get.controller';
 import { SimplePostController } from './simple-post.controller';
+import { Email } from './email.entity';
+import { EmailModule } from './Email.module';
+import { EmailService } from './services/email.service';
 
 @Module({
   imports: [
@@ -14,11 +17,11 @@ import { SimplePostController } from './simple-post.controller';
       username: 'myuser',
       password: 'mypassword',
       database: 'mydb',
+      entities: [Email],
       autoLoadEntities: true,
       synchronize: true,
-    }),
-  ],
+    }), EmailModule],
   controllers: [AppController, SimpleGetController, SimplePostController],
-  providers: [AppService],
+  providers: [AppService, EmailService],
 })
 export class AppModule {}
