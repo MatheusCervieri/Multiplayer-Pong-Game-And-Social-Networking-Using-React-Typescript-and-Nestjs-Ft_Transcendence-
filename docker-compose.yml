@@ -29,7 +29,7 @@ services:
       - postgres
   react:
     build:
-      context: ./front_transcendence
+      context: ./front_transcendence_ts
       dockerfile: Dockerfile
     ports:
       - 3000:3000

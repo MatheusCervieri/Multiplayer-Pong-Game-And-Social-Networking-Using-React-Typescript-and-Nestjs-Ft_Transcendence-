@@ -1,0 +1,36 @@
+Criar o projeto com as últimas versões mais estáveis do
+nodejs, do react e do postgres. 
+Criar o projeto do react com typescript. 
+
+Os básicos do react:
+https://www.youtube.com/watch?v=hQAHSlTtcmY
+https://www.youtube.com/watch?v=bjnW2NLAofI
+
+Router (Single page apps):
+https://www.theodinproject.com/lessons/node-path-javascript-router
+https://www.youtube.com/watch?v=SLfhMt5OUPI 
+
+Depois disso, vamos criar o front da aplicação. 
+
+Criar dois caminhos:
+1- Caminho:
+    Logar - uma tela de login bem simples no começo que loga com o usuário mesmo. 
+2- Caminho:
+    Criar conta.
+    Escolher o nome. 
+    Fazer upload do avatar. - Se o usuário não fazer o upload um default precisa ser escolhido.
+
+Frontend:
+React com typescript. 
+
+Backend:
+Criar a database que armazena os usuários. 
+
+
+
+The user should be able to choose a unique name that will be displayed on the
+website.
+• The user should be able to upload an avatar. If the user doesn’t upload an avatar,
+a default one must be set.
+• The user should be able to enable two-factor authentication. For instance,
+Google Authenticator or sending a text message to their phone.
