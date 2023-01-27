@@ -7,6 +7,7 @@ import { SimplePostController } from './simple-post.controller';
 import { Email } from './email.entity';
 import { EmailModule } from './Email.module';
 import { EmailService } from './services/email.service';
+import { SingUpController } from './singup/SingUp.controller';
 
 @Module({
   imports: [
@@ -21,7 +22,7 @@ import { EmailService } from './services/email.service';
       autoLoadEntities: true,
       synchronize: true,
     }), EmailModule],
-  controllers: [AppController, SimpleGetController, SimplePostController],
+  controllers: [AppController, SimpleGetController, SimplePostController, SingUpController],
   providers: [AppService, EmailService],
 })
 export class AppModule {}

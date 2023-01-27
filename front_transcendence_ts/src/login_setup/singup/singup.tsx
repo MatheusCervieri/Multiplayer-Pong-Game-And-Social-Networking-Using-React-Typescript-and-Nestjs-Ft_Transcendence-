@@ -1,19 +1,43 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import styles from './singup.module.css';
+import instance from '../../confs/axios_information';
 
-interface Props {
-  onSubmit: (formData: {email: string, password: string, verify_password: string}) => void;
+const loginDTO = {
+  email: 'your-email',
+  password: 'your-password',
+};
+
+type dtotype = typeof loginDTO;
+
+const PostSingup = async (dto: dtotype) => {
+  instance.defaults.withCredentials = true;
+  instance.post('/sing-up', dto)
+  .then((response) => {
+    console.log(response.data);
+  })
+  .catch((error) => {
+    console.log(error);
+  });
 }
 
-const Singup: React.FC<Props> = (props) => {
+const Singup = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [verify_password, setVerifyPassword] = useState('');
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    props.onSubmit({email, password, verify_password});
+    if (password === verify_password && password !== '' && email !== '')
+    {
+      loginDTO.email = email;
+      loginDTO.password = password;
+      PostSingup(loginDTO);
+    }
+    else
+    {
+      alert("Incorrect Information!");
+    }
   }
 
   return (
