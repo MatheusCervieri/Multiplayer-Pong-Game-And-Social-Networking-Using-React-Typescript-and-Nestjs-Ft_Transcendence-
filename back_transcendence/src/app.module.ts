@@ -8,6 +8,8 @@ import { Email } from './email.entity';
 import { EmailModule } from './Email.module';
 import { EmailService } from './services/email.service';
 import { SingUpController } from './singup/SingUp.controller';
+import { UserModule } from './user_database/user.module';
+import { UsersService } from './user_database/user.service';
 
 @Module({
   imports: [
@@ -21,8 +23,8 @@ import { SingUpController } from './singup/SingUp.controller';
       entities: [Email],
       autoLoadEntities: true,
       synchronize: true,
-    }), EmailModule],
+    }), EmailModule, UserModule],
   controllers: [AppController, SimpleGetController, SimplePostController, SingUpController],
-  providers: [AppService, EmailService],
+  providers: [AppService, EmailService, UsersService],
 })
 export class AppModule {}

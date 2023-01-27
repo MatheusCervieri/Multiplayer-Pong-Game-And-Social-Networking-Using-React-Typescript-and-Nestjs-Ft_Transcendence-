@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import styles from './singup.module.css';
 import instance from '../../confs/axios_information';
+import { useNavigate } from 'react-router-dom';
+
 
 const loginDTO = {
   email: 'your-email',
@@ -10,29 +12,42 @@ const loginDTO = {
 
 type dtotype = typeof loginDTO;
 
-const PostSingup = async (dto: dtotype) => {
+
+async function PostSingup2(dto: dtotype): Promise<number> {
   instance.defaults.withCredentials = true;
-  instance.post('/sing-up', dto)
-  .then((response) => {
+  try {
+    const response = await instance.post('/sing-up', dto);
     console.log(response.data);
-  })
-  .catch((error) => {
+    return 0;
+  } catch (error) {
     console.log(error);
-  });
+    return 1;
+  }
 }
+
 
 const Singup = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [verify_password, setVerifyPassword] = useState('');
+  const navigate = useNavigate();
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (password === verify_password && password !== '' && email !== '')
     {
       loginDTO.email = email;
       loginDTO.password = password;
-      PostSingup(loginDTO);
+      const result = await PostSingup2(loginDTO);
+      if (result === 0)
+      {
+        navigate('/setname');
+      }
+      else
+      {
+        alert("Error creating the account!");
+      }
     }
     else
     {

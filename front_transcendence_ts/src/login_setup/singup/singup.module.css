@@ -20,8 +20,8 @@ input[type="email"],[type="name"], input[type="password"], input[type="verify_pa
 
 button[type="submit"] {
     width: 100%;
-    background-color: #4CAF50;
-    color: white;
+    background-color: #fd8c0a;
+    color: rgb(255, 255, 255);
     padding: 14px 20px;
     margin: 8px 0;
     border: none;
@@ -30,7 +30,7 @@ button[type="submit"] {
 }
 
 button[type="submit"]:hover {
-    background-color: #45a049;
+    background-color: #ff590c;
 }
 
 a {

@@ -3,7 +3,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Email } from './email.entity';
 
 
-
 @Module({
   imports: [TypeOrmModule.forFeature([Email])],
   exports: [TypeOrmModule],
