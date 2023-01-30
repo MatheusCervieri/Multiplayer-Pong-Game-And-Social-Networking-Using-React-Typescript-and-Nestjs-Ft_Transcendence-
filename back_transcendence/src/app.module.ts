@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, NestModule } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -11,6 +11,8 @@ import { SingUpController } from './singup/SingUp.controller';
 import { UserModule } from './user_database/user.module';
 import { UsersService } from './user_database/user.service';
 import { NameSetController } from './choose_name/Nameset.controller';
+import { RequestMethod, MiddlewareConsumer } from '@nestjs/common';
+import { AuthMiddleware } from './user_database/auth.middleware';
 
 @Module({
   imports: [
@@ -28,4 +30,11 @@ import { NameSetController } from './choose_name/Nameset.controller';
   controllers: [AppController, SimpleGetController, SimplePostController, SingUpController, NameSetController],
   providers: [AppService, EmailService, UsersService],
 })
-export class AppModule {}
+export class AppModule implements NestModule{
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(AuthMiddleware)
+      .forRoutes({ path: 'set-name', method: RequestMethod.POST });
+  }
+
+}
