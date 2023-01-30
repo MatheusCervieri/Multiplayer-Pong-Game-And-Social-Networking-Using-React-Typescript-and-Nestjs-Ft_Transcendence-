@@ -4,6 +4,7 @@ import Singup from "./login_setup/singup/singup";
 import Login from   "./login_setup/login/Login";
 import Setname from "./login_setup/Setname/Setname";
 import Dashboard from "./dashboard/dashboard";
+import Chat from "./chat/chat";
 
 export default function Displayroute() {
   return (
@@ -13,6 +14,7 @@ export default function Displayroute() {
         <Route path="/login" element={<Login  />} />
         <Route path="/setname" element={<Setname />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path='/chat' element={<Chat />} />
       </Routes>
     </BrowserRouter>
   )
