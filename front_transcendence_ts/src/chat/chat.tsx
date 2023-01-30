@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./Chat.css";
+import io, {Socket} from "socket.io-client";
 
 interface Message {
   author: string;
@@ -7,15 +8,36 @@ interface Message {
 }
 
 const Chat: React.FC = () => {
-  const [message, setMessage] = useState("");
-  const [chatRoom, setChatRoom] = useState("General");
-  const [messages, setMessages] = useState<Message[]>([]);
+    const [message, setMessage] = useState("");
+    const [chatRoom, setChatRoom] = useState("General");
+    const [messages, setMessages] = useState<Message[]>([]);
+    const [socket, setSocket] = useState<Socket>();
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setMessages([...messages, { author: "User", text: message }]);
-    setMessage("");
+    SendMessage(message);
   };
+
+  const SendMessage = (value: string) => {
+    socket?.emit("message", value);
+    }
+
+  const messageListener = (message:string) => {
+    setMessages([...messages, {author: "User", text: message}]);
+}
+
+  useEffect(() => {
+    const new_socket = io("http://localhost:8001");
+    setSocket(new_socket);
+   
+  }, [setSocket]);
+
+  useEffect(()=> {
+    socket?.on("message", messageListener);
+    return () => {
+      socket?.off("message", messageListener);
+    }
+  }, [messageListener]);
 
   return (
     <div className="chat-container">

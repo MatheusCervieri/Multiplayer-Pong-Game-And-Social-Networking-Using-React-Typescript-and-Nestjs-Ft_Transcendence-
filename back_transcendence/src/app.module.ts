@@ -15,6 +15,7 @@ import { RequestMethod, MiddlewareConsumer } from '@nestjs/common';
 import { AuthMiddleware } from './user_database/auth.middleware';
 import { UserController } from './user_database/user.controller';
 import { LoginController } from './login/Login.controller';
+import { ChatGateway } from './chat/chat.gateway';
 
 @Module({
   imports: [
@@ -30,7 +31,7 @@ import { LoginController } from './login/Login.controller';
       synchronize: true,
     }), EmailModule, UserModule],
   controllers: [AppController, SimpleGetController, SimplePostController, SingUpController, NameSetController, UserController, LoginController],
-  providers: [AppService, EmailService, UsersService],
+  providers: [AppService, EmailService, UsersService, ChatGateway],
 })
 export class AppModule implements NestModule{
   configure(consumer: MiddlewareConsumer) {
