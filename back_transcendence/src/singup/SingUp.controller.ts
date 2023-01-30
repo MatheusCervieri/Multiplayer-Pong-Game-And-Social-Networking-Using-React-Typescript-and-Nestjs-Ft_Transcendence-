@@ -37,9 +37,14 @@ export class SingUpController {
     async handleData(@Body() data: SingUpDTO) {
         console.log(data);
         const user = make_user(data);
-        const token = create_JWT(user);
-        set_token(user, token);
         await this.UsersService.create(user);
+        const savedUser = await this.UsersService.findOneEmail(user.email) ;
+        const token = create_JWT(savedUser);
+        set_token(savedUser, token);
+        console.log(savedUser.token);
+        console.log("ID: ", savedUser.id);
+        await this.UsersService.update(savedUser.id, savedUser);
         return (token);
     }
 }
+

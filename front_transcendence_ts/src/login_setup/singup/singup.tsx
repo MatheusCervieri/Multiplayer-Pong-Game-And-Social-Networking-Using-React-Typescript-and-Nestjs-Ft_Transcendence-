@@ -17,6 +17,7 @@ async function PostSingup2(dto: dtotype): Promise<number> {
   instance.defaults.withCredentials = true;
   try {
     const response = await instance.post('/sing-up', dto);
+    localStorage.setItem('token', response.data);
     console.log(response.data);
     return 0;
   } catch (error) {

@@ -10,6 +10,7 @@ import { EmailService } from './services/email.service';
 import { SingUpController } from './singup/SingUp.controller';
 import { UserModule } from './user_database/user.module';
 import { UsersService } from './user_database/user.service';
+import { NameSetController } from './choose_name/Nameset.controller';
 
 @Module({
   imports: [
@@ -24,7 +25,7 @@ import { UsersService } from './user_database/user.service';
       autoLoadEntities: true,
       synchronize: true,
     }), EmailModule, UserModule],
-  controllers: [AppController, SimpleGetController, SimplePostController, SingUpController],
+  controllers: [AppController, SimpleGetController, SimplePostController, SingUpController, NameSetController],
   providers: [AppService, EmailService, UsersService],
 })
 export class AppModule {}

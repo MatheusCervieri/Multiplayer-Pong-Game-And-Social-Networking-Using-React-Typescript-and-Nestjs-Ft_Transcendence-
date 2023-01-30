@@ -1,16 +1,28 @@
 import React, { useState } from 'react';
 import styles from '../singup/singup.module.css'
+import instance from '../../confs/axios_information';
 
-interface Props {
-  onSubmit: (formData: {name: string}) => void;
-}
 
-const Setname: React.FC<Props> = (props) => {
+const Setname = () => {
   const [name, setName] = useState('');
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    props.onSubmit({name});
+    const token = localStorage.getItem('token');
+    console.log("Front token", token);
+    instance.post('set-name', {
+      name: name
+    }, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    })
+      .then(response => {
+        console.log(response.data);
+      })
+      .catch(error => {
+        console.error(error);
+      });
   }
 
   return (

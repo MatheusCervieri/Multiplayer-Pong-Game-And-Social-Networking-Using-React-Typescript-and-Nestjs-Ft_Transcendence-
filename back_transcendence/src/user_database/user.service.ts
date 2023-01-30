@@ -14,8 +14,14 @@ export class UsersService {
     return this.usersRepository.save(user);
   }
 
-  async update(id: string, user: User): Promise<void> {
+  async update(id: number, user: User): Promise<void> {
     await this.usersRepository.update(id, user);
+  }
+
+  async updateName(id: number, name: string): Promise<void> {
+    const user = await this.usersRepository.findOne({ where: { id } });
+    user.name = name;
+    await this.usersRepository.save(user);
   }
 
   findAll(): Promise<User[]> {
@@ -24,6 +30,10 @@ export class UsersService {
 
   findOne(id: number): Promise<User> {
     return this.usersRepository.findOneBy({ id });
+  }
+
+  findOneEmail(email: string): Promise<User> {
+    return this.usersRepository.findOneBy({ email });
   }
 
   async remove(id: string): Promise<void> {

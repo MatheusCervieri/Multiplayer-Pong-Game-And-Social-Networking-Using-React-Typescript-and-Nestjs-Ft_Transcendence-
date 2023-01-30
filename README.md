@@ -4,3 +4,8 @@ sudo chmod -R 777 pgdata
 HOW TO CONNECT DATABASE - MUITO IMPORTANTE: 
 https://docs.nestjs.com/techniques/database 
 
+
+Sistema de login:
+https://www.youtube.com/watch?v=SinonmkxRSI 
+
+
