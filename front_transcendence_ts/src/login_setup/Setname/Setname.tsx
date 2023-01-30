@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import styles from '../singup/singup.module.css'
 import instance from '../../confs/axios_information';
+import { useNavigate } from 'react-router-dom';
 
 
 const Setname = () => {
   const [name, setName] = useState('');
+  const navigate = useNavigate();
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -19,6 +21,7 @@ const Setname = () => {
     })
       .then(response => {
         console.log(response.data);
+        navigate('/dashboard');
       })
       .catch(error => {
         console.error(error);

@@ -1,17 +1,45 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import instance from '../../confs/axios_information';
+import { useNavigate } from 'react-router-dom';
 
-interface Props {
-  onSubmit: (formData: {email: string, password: string}) => void;
-}
+const loginDTO = {
+  email: 'your-email',
+  password: 'your-password',
+};
 
-const Login: React.FC<Props> = (props) => {
+type dtotype = typeof loginDTO;
+
+const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate();
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    props.onSubmit({email, password});
+    loginDTO.email = email;
+    loginDTO.password = password;
+    const result = await PostLogin(loginDTO);
+    if (result === 0)
+    {
+      navigate('/dashboard');
+    }
+    else
+    {
+      alert("Error Login!");
+    }
+  }
+
+  async function PostLogin(dto: dtotype): Promise<number>{
+    try {
+      const response = await instance.post('login', dto);
+      localStorage.setItem('token', response.data);
+      console.log(response.data);
+      return 0;
+    } catch (error) {
+      console.log(error);
+      return 1;
+    }
   }
 
   return (

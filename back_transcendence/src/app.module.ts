@@ -13,6 +13,8 @@ import { UsersService } from './user_database/user.service';
 import { NameSetController } from './choose_name/Nameset.controller';
 import { RequestMethod, MiddlewareConsumer } from '@nestjs/common';
 import { AuthMiddleware } from './user_database/auth.middleware';
+import { UserController } from './user_database/user.controller';
+import { LoginController } from './login/Login.controller';
 
 @Module({
   imports: [
@@ -27,14 +29,14 @@ import { AuthMiddleware } from './user_database/auth.middleware';
       autoLoadEntities: true,
       synchronize: true,
     }), EmailModule, UserModule],
-  controllers: [AppController, SimpleGetController, SimplePostController, SingUpController, NameSetController],
+  controllers: [AppController, SimpleGetController, SimplePostController, SingUpController, NameSetController, UserController, LoginController],
   providers: [AppService, EmailService, UsersService],
 })
 export class AppModule implements NestModule{
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(AuthMiddleware)
-      .forRoutes({ path: 'set-name', method: RequestMethod.POST });
+      .forRoutes({ path: 'set-name', method: RequestMethod.POST }, UserController);
   }
 
 }
