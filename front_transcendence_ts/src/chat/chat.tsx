@@ -16,6 +16,7 @@ const Chat: React.FC = () => {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     SendMessage(message);
+    setMessage("");
   };
 
   const SendMessage = (value: string) => {
