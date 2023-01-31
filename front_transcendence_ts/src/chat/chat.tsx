@@ -7,7 +7,7 @@ interface Message {
   text: string;
 }
 
-const Chat: React.FC = () => {
+const Chat = (props : {id: string | undefined}) => {
     const [message, setMessage] = useState("");
     const [chatRoom, setChatRoom] = useState("General");
     const [messages, setMessages] = useState<Message[]>([]);
@@ -42,7 +42,7 @@ const Chat: React.FC = () => {
 
   return (
     <div className="chat-container">
-      <h3 className="chat-room">Chat Room: {chatRoom}</h3>
+      <h3 className="chat-room">Chat Room: {props.id}</h3>
       <ul className="messages-list">
         {messages.map((message, index) => (
           <li className="message" key={index}>
