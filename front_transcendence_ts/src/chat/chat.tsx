@@ -7,16 +7,16 @@ import instance from "../confs/axios_information";
 interface Message {
   user: string;
   message: string;
+  roomid: string | undefined;
 }
 
-const Chat = (props : {id: string | undefined}) => {
+const Chat = (props : {id: string | undefined, socket: Socket | undefined}) => {
     const [message, setMessage] = useState("");
     const [chatRoom, setChatRoom] = useState("General");
     const [messages, setMessages] = useState<Message[]>([]);
-    const [socket, setSocket] = useState<Socket>();
     const navigate = useNavigate();
     const [username, setUsername] = useState("");
-
+    const socket = props.socket;
     async function checkToken() {
         const token = localStorage.getItem('token');
         console.log(token);
@@ -51,7 +51,7 @@ const Chat = (props : {id: string | undefined}) => {
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const data = {user: username, message: message};
+    const data = {user: username, message: message, roomid: props.id};
     console.log(data);
     SendMessage(data);
     setMessage("");
@@ -62,15 +62,10 @@ const Chat = (props : {id: string | undefined}) => {
     }
 
   const messageListener = (data: Message) => {
-    setMessages([...messages, {user: data.user, message: data.message}]);
-}
+    setMessages([...messages, {user: data.user, message: data.message, roomid: data.roomid}]);
+  }
 
-  useEffect(() => {
-    const new_socket = io("http://localhost:8001");
-    setSocket(new_socket);
-   
-  }, [setSocket]);
-
+  
   useEffect(()=> {
     socket?.on("message", messageListener);
     return () => {

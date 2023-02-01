@@ -13,19 +13,15 @@ interface NewRoomProps {
   handleCreateRoom: () => void;
   getRooms: () => void;
   rooms: Room[];
+  socket: Socket | undefined;
 }
 
 const ChatRoomList = (props: NewRoomProps) => {
-  const [socket, setSocket] = useState<Socket>();
-
+  const socket = props.socket;
   const handleJoinRoom = (roomId: number) => {
     socket?.emit('join-room', { name:'user' , room_id: roomId});
   };
 
-  useEffect(() => {
-    const new_socket = io("http://localhost:8001");
-    setSocket(new_socket);
-  }, [setSocket]);
 
   return (
     <div>

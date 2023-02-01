@@ -5,7 +5,8 @@ import instance from '../confs/axios_information';
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
-
+import { useEffect } from 'react';
+import io, {Socket} from "socket.io-client";
 
 export interface Room {
     id: number;
@@ -16,8 +17,14 @@ const ChatInterface: React.FC = () => {
     const [rooms, setRooms] = useState<Room[]>([]);
     const [newRoomName, setNewRoomName] = useState('');
     const { id } = useParams<{ id: string | undefined }>();
-   
+    const [socket, setSocket] = useState<Socket>();
     
+    useEffect(() => {
+      const new_socket = io("http://localhost:8001");
+      console.log('Client ID: ', new_socket.id);
+      setSocket(new_socket);
+    }, []);
+
 
     const handleCreateRoom = () => {
         console.log(newRoomName);
@@ -37,6 +44,7 @@ const ChatInterface: React.FC = () => {
         return 1;
         }
     }
+
     async function GetRooms(): Promise<number>{
         try {
         const response = await instance.get('chatdata/get-rooms');
@@ -51,8 +59,8 @@ const ChatInterface: React.FC = () => {
 
   return (
     <div style={{ display: 'flex' }}>
-      <ChatRoomList newRoomName={newRoomName} setNewRoomName={setNewRoomName} handleCreateRoom={handleCreateRoom} rooms={rooms} getRooms={GetRooms}/>
-      <Chat id={id}/>
+      <ChatRoomList newRoomName={newRoomName} setNewRoomName={setNewRoomName} handleCreateRoom={handleCreateRoom} rooms={rooms} getRooms={GetRooms} socket={socket}/>
+      <Chat id={id} socket={socket}/>
     </div>
   );
 };
