@@ -13,18 +13,12 @@ export interface Room {
     name: string;
 }
 
+const socket = io("http://localhost:8001");
+
 const ChatInterface: React.FC = () => {
     const [rooms, setRooms] = useState<Room[]>([]);
     const [newRoomName, setNewRoomName] = useState('');
     const { id } = useParams<{ id: string | undefined }>();
-    const [socket, setSocket] = useState<Socket>();
-    
-    useEffect(() => {
-      const new_socket = io("http://localhost:8001");
-      console.log('Client ID: ', new_socket.id);
-      setSocket(new_socket);
-    }, []);
-
 
     const handleCreateRoom = () => {
         console.log(newRoomName);

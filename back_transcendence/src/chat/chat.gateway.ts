@@ -26,6 +26,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     console.log(`Client ${client.id} joined room: ${data.room_id}`);
   }
 
+
   @SubscribeMessage('leave-room')
   handleLeaveRoom(client: Socket, room: string) {
     client.leave(room);
@@ -33,8 +34,9 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   }
 
   @SubscribeMessage('message')
-  handleMessage(@ConnectedSocket() client: Socket, @MessageBody() data: { user:string , message:string, roomid: string}): void {
+  handleMessage(client: Socket, data: { user:string , message:string, roomid: string}) {
     console.log("Received message: ", client.id, data);
+    console.log("Client is connected to rooms: ", client.rooms);
     this.server.to(data.roomid).emit('message', data);
   }
 }

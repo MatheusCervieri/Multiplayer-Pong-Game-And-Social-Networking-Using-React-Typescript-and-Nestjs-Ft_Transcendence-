@@ -62,6 +62,7 @@ const Chat = (props : {id: string | undefined, socket: Socket | undefined}) => {
     }
 
   const messageListener = (data: Message) => {
+    console.log("Recebemos uma mensagem uhulllll");
     setMessages([...messages, {user: data.user, message: data.message, roomid: data.roomid}]);
   }
 
