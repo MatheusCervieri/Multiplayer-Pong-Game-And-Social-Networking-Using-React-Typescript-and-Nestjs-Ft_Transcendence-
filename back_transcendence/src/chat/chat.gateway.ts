@@ -4,8 +4,8 @@ import { MessageBody, SubscribeMessage, WebSocketGateway, WebSocketServer } from
 export class ChatGateway {
   @WebSocketServer() server;
   @SubscribeMessage('message')
-  handleMessage(@MessageBody() message: string): void {
-    console.log(message);
-    this.server.emit('message', message);
+  handleMessage(@MessageBody() data: { user:string , message:string}): void {
+    console.log(data);
+    this.server.emit('message', data);
   }
 }

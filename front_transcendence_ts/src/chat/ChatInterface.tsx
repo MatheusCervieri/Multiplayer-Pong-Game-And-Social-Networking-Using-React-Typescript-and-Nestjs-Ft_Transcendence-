@@ -4,6 +4,7 @@ import Chat from './chat';
 import instance from '../confs/axios_information';
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 
 export interface Room {
@@ -15,6 +16,8 @@ const ChatInterface: React.FC = () => {
     const [rooms, setRooms] = useState<Room[]>([]);
     const [newRoomName, setNewRoomName] = useState('');
     const { id } = useParams<{ id: string | undefined }>();
+   
+    
 
     const handleCreateRoom = () => {
         console.log(newRoomName);

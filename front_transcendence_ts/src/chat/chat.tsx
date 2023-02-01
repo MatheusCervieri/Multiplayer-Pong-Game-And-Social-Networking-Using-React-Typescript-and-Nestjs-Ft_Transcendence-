@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import "./Chat.css";
 import io, {Socket} from "socket.io-client";
+import { useNavigate } from 'react-router-dom';
+import instance from "../confs/axios_information";
 
 interface Message {
-  author: string;
-  text: string;
+  user: string;
+  message: string;
 }
 
 const Chat = (props : {id: string | undefined}) => {
@@ -12,19 +14,55 @@ const Chat = (props : {id: string | undefined}) => {
     const [chatRoom, setChatRoom] = useState("General");
     const [messages, setMessages] = useState<Message[]>([]);
     const [socket, setSocket] = useState<Socket>();
+    const navigate = useNavigate();
+    const [username, setUsername] = useState("");
+
+    async function checkToken() {
+        const token = localStorage.getItem('token');
+        console.log(token);
+        if (!token) {
+          navigate('../login');
+        } else {
+          LoadUserInformation(token);
+        }
+      }
+    
+      async function fetchData(token: string) {
+        const response = await instance.get('userdata', {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }});
+        return response.data;
+      }
+    
+      const LoadUserInformation = (token: string) => {
+            fetchData(token)
+            .then(data => {
+                console.log(data);
+                setUsername(data.name);
+            })
+            .catch(error => {
+                console.error(error);
+            });
+        }
+      useEffect(() => {
+        checkToken();
+      }, []);
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    SendMessage(message);
+    const data = {user: username, message: message};
+    console.log(data);
+    SendMessage(data);
     setMessage("");
   };
 
-  const SendMessage = (value: string) => {
-    socket?.emit("message", value);
+  const SendMessage = (data : Message) => {
+    socket?.emit("message", data);
     }
 
-  const messageListener = (message:string) => {
-    setMessages([...messages, {author: "User", text: message}]);
+  const messageListener = (data: Message) => {
+    setMessages([...messages, {user: data.user, message: data.message}]);
 }
 
   useEffect(() => {
@@ -46,7 +84,7 @@ const Chat = (props : {id: string | undefined}) => {
       <ul className="messages-list">
         {messages.map((message, index) => (
           <li className="message" key={index}>
-            <b>{message.author}:</b> {message.text}
+            <b>{message.user}:</b> {message.message}
           </li>
         ))}
       </ul>
