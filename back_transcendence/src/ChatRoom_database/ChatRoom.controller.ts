@@ -20,4 +20,10 @@ export class ChatRoomController {
     new_ChatRoom.name = data.name;
     return await this.ChatRoomService.create(new_ChatRoom);
   }
+  /*
+  @Delete('delete-rooms')
+  async delete_all_rooms(@Req() request: any): Promise<any> {
+  return await this.ChatRoomService.deleteAll();
+  }
+  */
 }

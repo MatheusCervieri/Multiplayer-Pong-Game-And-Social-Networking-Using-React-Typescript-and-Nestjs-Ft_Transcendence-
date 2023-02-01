@@ -35,4 +35,8 @@ export class ChatRoomService {
   async remove(id: string): Promise<void> {
     await this.roomsRepository.delete(id);
   }
+  
+  async deleteAll(): Promise<void> {
+    await this.roomsRepository.clear();
+  }
 }

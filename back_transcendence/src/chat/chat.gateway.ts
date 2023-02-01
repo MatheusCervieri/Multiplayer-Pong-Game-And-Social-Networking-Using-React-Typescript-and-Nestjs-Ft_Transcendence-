@@ -1,6 +1,9 @@
 import { MessageBody, SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
 import { Socket } from 'socket.io';
 import { OnGatewayConnection, OnGatewayDisconnect } from '@nestjs/websockets';
+import { ConnectedSocket } from '@nestjs/websockets';
+
+//https://socket.io/pt-br/docs/v3/rooms/ 
 
 @WebSocketGateway(8001, {cors: '*' })
 export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
@@ -14,25 +17,24 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   handleDisconnect(client: Socket) {
     this.connectedUsers = this.connectedUsers.filter(user => user !== client.id);
-    console.log(`Client disconnected: ${client.id}`);
+    console.log(`Client ${client.id} disconnected: ${client.id}`);
   }
 
   @SubscribeMessage('join-room')
   handleJoinRoom(client: Socket, data : { name: string , room_id: string}) {
     client.join(data.room_id);
-    console.log(`Client joined room: ${data.room_id}`);
+    console.log(`Client ${client.id} joined room: ${data.room_id}`);
   }
 
   @SubscribeMessage('leave-room')
   handleLeaveRoom(client: Socket, room: string) {
     client.leave(room);
-    console.log(`Client left room: ${room}`);
+    console.log(`Client ${client.id} left room: ${room}`);
   }
 
   @SubscribeMessage('message')
-  handleMessage(client: Socket, @MessageBody() data: { user:string , message:string}): void {
-    console.log(client);
-    console.log(data);
-    this.server.emit('message', data);
+  handleMessage(@ConnectedSocket() client: Socket, @MessageBody() data: { user:string , message:string, roomid: string}): void {
+    console.log("Received message: ", client.id, data);
+    this.server.to(data.roomid).emit('message', data);
   }
 }
