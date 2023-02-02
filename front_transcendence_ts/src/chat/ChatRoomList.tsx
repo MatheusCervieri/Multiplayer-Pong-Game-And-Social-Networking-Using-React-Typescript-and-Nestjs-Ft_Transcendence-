@@ -1,10 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import ChatInterface from './ChatInterface';
-import { BrowserRouter, Routes, Route } from "react-router-dom";
 import {Room} from './ChatInterface';
 import io, {Socket} from "socket.io-client";
-import { useEffect } from 'react';
 
 
 interface NewRoomProps {

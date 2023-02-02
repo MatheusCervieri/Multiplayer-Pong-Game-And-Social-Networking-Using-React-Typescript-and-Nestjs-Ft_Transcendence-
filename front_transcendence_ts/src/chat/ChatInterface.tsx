@@ -52,10 +52,7 @@ const ChatInterface: React.FC = () => {
     }
 
   return (
-    <div style={{ display: 'flex' }}>
       <ChatRoomList newRoomName={newRoomName} setNewRoomName={setNewRoomName} handleCreateRoom={handleCreateRoom} rooms={rooms} getRooms={GetRooms} socket={socket}/>
-      <Chat id={id} socket={socket}/>
-    </div>
   );
 };
 

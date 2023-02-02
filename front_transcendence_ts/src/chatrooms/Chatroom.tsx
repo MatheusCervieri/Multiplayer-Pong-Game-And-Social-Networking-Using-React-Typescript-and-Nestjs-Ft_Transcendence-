@@ -6,9 +6,6 @@ import GetToken from '../utils/GetToken';
 
 const socket = io('http://localhost:8001');
 
-//A gente precisa criar um objeto que vai armazenar o:
-//nome do usuário, a sala que ele está. 
-
 const Chatroom: React.FC = () => {
 const [ messages, setMessages ] = useState<string[]>([]);
 const { id } = useParams<{ id: string | undefined }>();
@@ -21,12 +18,7 @@ const messageListener = (data: { user: string, message: string }) => {
 }
 
 useEffect(() => {
-  GetToken(navigate).then(result => {
-    console.log(result);
-    if (result) {
-      setUsername(result.name);
-    }
-  });
+  GetToken(navigate, setUsername);
 }, []);
 
 useEffect(() => {
@@ -35,7 +27,6 @@ useEffect(() => {
 
 useEffect(() => {
 socket.on("message", messageListener);
-console.log("Oi");
 return () => {
   socket.off("message", messageListener);
 }
@@ -57,7 +48,7 @@ return (
 <input type="text" id="message" value={message} onChange={(e) => setMessage(e.target.value)} />
 </div>
 <ul>
-{ messages.map((m, index) => <li key={index}>{m}</li>) }
+{ messages.map((m, index) => <li key={index}>{username} : {m}</li>) }
 </ul>
 <button onClick={handleSendMessage}>Send Message</button>
 </div>
