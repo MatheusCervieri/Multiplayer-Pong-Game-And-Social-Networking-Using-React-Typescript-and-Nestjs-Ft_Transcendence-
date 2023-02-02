@@ -2,11 +2,19 @@ import { MessageBody, SubscribeMessage, WebSocketGateway, WebSocketServer } from
 import { Socket } from 'socket.io';
 import { OnGatewayConnection, OnGatewayDisconnect } from '@nestjs/websockets';
 import { ConnectedSocket } from '@nestjs/websockets';
+import { ChatRoom, Message } from 'src/ChatRoom_database/ChatRoom.entity';
+import { ChatRoomService } from 'src/ChatRoom_database/ChatRoom.service';
+import { MessageService } from 'src/ChatRoom_database/Message.service';
+
 
 //https://socket.io/pt-br/docs/v3/rooms/ 
 
 @WebSocketGateway(8001, {cors: '*' })
 export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
+  constructor(
+    private readonly ChatRoomService: ChatRoomService,
+    private readonly MessageService: MessageService) {}
+
   @WebSocketServer() server;
   connectedUsers = [];
 
@@ -34,8 +42,15 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   }
 
   @SubscribeMessage('message')
-  handleMessage(client: Socket, data: { user:string , message:string, roomid: string}) {
+  async handleMessage(client: Socket, data: { user:string , message:string, roomid: string}) {
     console.log("Received message: ", data, client.id);
     this.server.to(data.roomid).emit('message', data);
+    const data_message = new Message();
+    data_message.user = data.user;
+    data_message.message = data.message;
+    const roomId = Number(data.roomid);
+    const room = await this.ChatRoomService.findOne(roomId) as ChatRoom;
+    data_message.chatRoom = room;
+    await this.MessageService.create(data_message);
   }
 }

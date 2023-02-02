@@ -19,6 +19,8 @@ import { ChatGateway } from './chat/chat.gateway';
 import { ChatRoomController } from './ChatRoom_database/ChatRoom.controller';
 import { ChatRoomService } from './ChatRoom_database/ChatRoom.service';
 import { ChatRoomModule } from './ChatRoom_database/ChatRoom.module';
+import { MessageModule } from './ChatRoom_database/Message.module';
+import { MessageService } from './ChatRoom_database/Message.service';
 
 @Module({
   imports: [
@@ -32,9 +34,9 @@ import { ChatRoomModule } from './ChatRoom_database/ChatRoom.module';
       entities: [Email],
       autoLoadEntities: true,
       synchronize: true,
-    }), EmailModule, UserModule, ChatRoomModule],
+    }), EmailModule, UserModule, ChatRoomModule, MessageModule],
   controllers: [AppController, SimpleGetController, SimplePostController, SingUpController, NameSetController, UserController, LoginController, ChatRoomController],
-  providers: [AppService, EmailService, UsersService, ChatRoomService, ChatGateway],
+  providers: [AppService, EmailService, UsersService, ChatRoomService, ChatGateway, MessageService],
 })
 export class AppModule implements NestModule{
   configure(consumer: MiddlewareConsumer) {

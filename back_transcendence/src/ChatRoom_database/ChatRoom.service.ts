@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { ChatRoom } from './ChatRoom.entity';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Message } from './ChatRoom.entity';
 
 @Injectable()
 export class ChatRoomService {
@@ -26,6 +27,11 @@ export class ChatRoomService {
 
   findAll(): Promise<ChatRoom[]> {
     return this.roomsRepository.find();
+  }
+
+  async findMessages(id: number): Promise<Message[]> {
+    const room = await this.roomsRepository.findOne({ where: { id }, relations: ['messages'] });
+    return room.messages;
   }
 
   findOne(id: number): Promise<ChatRoom> {

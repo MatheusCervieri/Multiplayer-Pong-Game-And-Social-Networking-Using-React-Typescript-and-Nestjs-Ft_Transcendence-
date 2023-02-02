@@ -1,4 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { User } from 'src/user_database/user.entity';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany , ManyToOne } from 'typeorm';
 
 @Entity()
 export class ChatRoom {
@@ -8,6 +9,34 @@ export class ChatRoom {
   @Column()
   name: string;
 
+  @Column({ nullable: true })
+  adm: string;
+
+  @Column({ nullable: true })
+  type: string; // private, public or protected
+
+  @Column({ nullable: true })
+  password: string;
+
   @Column({ default: true })
   isActive: boolean;
+
+  @OneToMany(type => Message, message => message.chatRoom)
+  messages: Message[];
+
+}
+
+@Entity()
+export class Message {
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @Column()
+  user: string;
+
+  @Column()
+  message: string;
+
+  @ManyToOne(type => ChatRoom, chatRoom => chatRoom.messages)
+  chatRoom: ChatRoom;
 }
