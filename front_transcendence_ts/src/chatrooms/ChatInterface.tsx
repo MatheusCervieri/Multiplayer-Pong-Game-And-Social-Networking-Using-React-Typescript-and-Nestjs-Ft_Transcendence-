@@ -1,16 +1,27 @@
 import React from 'react';
 import ChatRoomList from './ChatRoomList';
-import Chat from './chat';
 import instance from '../confs/axios_information';
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import io, {Socket} from "socket.io-client";
+import GetToken from '../utils/GetToken';
 
 export interface Room {
     id: number;
     name: string;
+    adm: string; 
+    type: string;
+    password: string;
+}
+
+export interface PostRoom
+{
+  name: string;
+  adm: string; 
+  type: string;
+  password: string;
 }
 
 const socket = io("http://localhost:8001");
@@ -19,17 +30,24 @@ const ChatInterface: React.FC = () => {
     const [rooms, setRooms] = useState<Room[]>([]);
     const [newRoomName, setNewRoomName] = useState('');
     const { id } = useParams<{ id: string | undefined }>();
+    const [username, setUsername] = useState<string>('');
+    const navigate = useNavigate();
 
-    const handleCreateRoom = () => {
+  useEffect(() => {
+    GetToken(navigate, setUsername);
+  }, []);
+
+
+    const handleCreateRoom = (data: any) => {
         console.log(newRoomName);
-        PostNewRoom(newRoomName);
+        PostNewRoom(data);
         setNewRoomName('');
       };
 
-    async function PostNewRoom(name: string): Promise<number>{
+    async function PostNewRoom(data: any): Promise<number>{
         try {
-        console.log(name);
-        const response = await instance.post('chatdata/create-room', { name: name } );
+        data.adm = username;
+        const response = await instance.post('chatdata/create-room', data );
         setRooms([...rooms, response.data]);
         console.log(response.data);
         return 0;
