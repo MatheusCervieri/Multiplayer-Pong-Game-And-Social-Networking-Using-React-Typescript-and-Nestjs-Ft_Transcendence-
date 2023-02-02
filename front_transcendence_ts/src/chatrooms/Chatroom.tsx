@@ -22,6 +22,7 @@ const messageListener = (data: { user: string, message: string }) => {
 
 useEffect(() => {
   GetToken(navigate).then(result => {
+    console.log(result);
     if (result) {
       setUsername(result.name);
     }
@@ -34,13 +35,14 @@ useEffect(() => {
 
 useEffect(() => {
 socket.on("message", messageListener);
+console.log("Oi");
 return () => {
   socket.off("message", messageListener);
 }
 }, [messageListener, id]);
 
 const handleSendMessage = () => {
-socket.emit('message', { user: username, message: message, id });
+socket.emit('message', { user: username, message: message, roomid: id });
 }
 
 function handleRoom(){

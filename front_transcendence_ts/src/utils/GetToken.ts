@@ -3,7 +3,6 @@ import instance  from '../confs/axios_information';
 
 export default async function GetToken(navigate: any) : Promise<{name: string, email:string} | undefined> {
     const token = localStorage.getItem('token');
-    console.log(token);
     if (!token) {
       navigate('../login');
       return Promise.resolve(undefined);
@@ -23,11 +22,9 @@ export default async function GetToken(navigate: any) : Promise<{name: string, e
   async function LoadUserInformation(token: string) : Promise<{name: string, email:string} | undefined | any>{
         fetchData(token)
         .then(data => {
-            console.log(data);
             return data;
         })
         .catch(error => {
-            console.error(error);
             return undefined;
         });
     }
