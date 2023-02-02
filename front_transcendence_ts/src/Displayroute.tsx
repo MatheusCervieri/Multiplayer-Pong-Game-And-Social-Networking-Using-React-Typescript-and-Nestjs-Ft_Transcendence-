@@ -6,6 +6,7 @@ import Setname from "./login_setup/Setname/Setname";
 import Dashboard from "./dashboard/dashboard";
 import ChatInterface from "./chat/ChatInterface";
 import TestRoomMessage from "./testchat";
+import Chatroom from "./chatrooms/Chatroom";
 
 export default function Displayroute() {
   return (
@@ -16,7 +17,7 @@ export default function Displayroute() {
         <Route path="/setname" element={<Setname />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path='/chat' element={<ChatInterface />} />
-        <Route path='chat/:id' element={<ChatInterface/>} />
+        <Route path='chat/:id' element={<Chatroom/>} />
         <Route path='testechat' element={<TestRoomMessage/>} />
       </Routes>
     </BrowserRouter>
