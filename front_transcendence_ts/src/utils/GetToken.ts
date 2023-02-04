@@ -3,7 +3,6 @@ import instance  from '../confs/axios_information';
 
    export default async function GetToken(navigate: any, setUsername: any) {
     const token = localStorage.getItem('token');
-    console.log(token);
     if (!token) {
       navigate('../login');
     } else {
@@ -22,7 +21,6 @@ import instance  from '../confs/axios_information';
   const LoadUserInformation = (token: string, setUsername: any) => {
         fetchData(token)
         .then(data => {
-            console.log("Token information: " , data);
             setUsername(data.name);
         })
         .catch(error => {

@@ -3,7 +3,7 @@ import io from 'socket.io-client';
 import { useFetcher, useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import GetToken from '../utils/GetToken';
-import  instance from '../confs/axios_information';
+import instance from '../confs/axios_information';
 
 const socket = io('http://localhost:8001');
 
@@ -16,96 +16,80 @@ const [data, setData] = useState<any>();
 const [renderPage, SetRenderPage] = useState<boolean>(false);
 const navigate = useNavigate();
 
-
 const messageListener = (data: { user: string, message: string }) => {
   setMessages(prevMessages => [...prevMessages, data.message]);
 }
 
 async function fetchRoomData() {
-  const response = await instance.get('chatdata/get-room/' + id);
-  if (response.status >= 200 && response.status < 300) {
-    console.log("Chegu no fetch room data!");
-  return response.data;
-  } 
-  else {
-    alert("This room does not exist!");
-    navigate('/chat');
-  }
-}
-
-  async function fetchMessageData() {
-    const response = await instance.get('/chatdata/get-room-messages/' + id);
+    const response = await instance.get('chatdata/get-room/' + id);
     if (response.status >= 200 && response.status < 300) {
     return response.data;
     } 
     else {
-      console.log("Error!");
-      return [];
+      alert("This room does not exist!");
+      navigate('/chat');
     }
-  }
-  function extractMessages(objects: Array<any>) {
-    return objects.map(object => object.message);
-  }
-
-function LoadMessages()
-{
-  const datamessages = fetchMessageData();
-  datamessages.then((data) => {
-    console.log(datamessages);
-    setMessages(extractMessages(data));
-  });
-
-}
-
-function StartRoom()
-{
-  SetRenderPage(true);
-  LoadMessages();
-}
-
-const InitializeRoom = () => {
-  fetchRoomData().then(roomdata => {
-    setData(roomdata);
-    console.log(data);
-    if (data.type === 'public')
-    {
-      console.log("Public 1");
-      StartRoom();
     }
-    if (data.type === 'protected')
-    {
-      const enteredPassword = prompt("Please enter the password for this room:");
-      if (enteredPassword == data.password)
-      {
-        StartRoom();
+  
+    async function fetchMessageData() {
+        const response = await instance.get('/chatdata/get-room-messages/' + id);
+        if (response.status >= 200 && response.status < 300) {
+        return response.data;
+        } 
+        else {
+          return [];
+        }
       }
-      else {
-        alert("Incorrect password! You will be redirected to the chat page.");
-        navigate('/chat');
-      }
+      
+    function extractMessages(objects: Array<any>) {
+        return objects.map(object => object.message);
     }
-    if (data.type === 'private')
+    
+    function LoadMessages()
     {
-      StartRoom();
+
     }
-  });
- 
 
+    function StartRoom()
+    {
+      SetRenderPage(true);
+      LoadMessages();
+    }
 
-}
+    const InitializeRoom = () => {  
+        const roomdata = fetchRoomData();
+        setData(roomdata);
+        if (data.type === 'public')
+        {
+          StartRoom();
+        }
+        if (data.type === 'protected')
+        {
+          const enteredPassword = prompt("Please enter the password for this room:");
+          if (enteredPassword === data.password)
+          {
+            StartRoom();
+          }
+          else {
+            alert("Incorrect password! You will be redirected to the chat page.");
+            navigate('/chat');
+          }
+        }
+        if (data.type == 'private')
+        {
+      
+        }
+      }
 
 useEffect(() => {
   GetToken(navigate, setUsername);
-  console.log("It will initiadlize  room!1");
   InitializeRoom();
 }, []);
 
+
 useEffect(() => {
-  if (renderPage == true)
-  {
-    handleRoom();
-  }
-}, [renderPage, socket]);
+  handleRoom();
+}, [socket]);
 
 useEffect(() => {
 socket.on("message", messageListener);

@@ -34,5 +34,7 @@ services:
       dockerfile: Dockerfile
     ports:
       - 3000:3000
+    volumes:
+      - ./front_transcendence_ts:/app
     depends_on:
       - nestjs
