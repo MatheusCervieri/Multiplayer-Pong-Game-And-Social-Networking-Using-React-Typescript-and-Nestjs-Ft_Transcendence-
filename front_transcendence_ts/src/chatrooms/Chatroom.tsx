@@ -10,7 +10,7 @@ import { serverurl } from '../confs/axios_information';
 const socket = io('http://localhost:8001');
 
 const Chatroom: React.FC = () => {
-const [ messages, setMessages ] = useState<string[]>([]);
+const [ messages, setMessages ] = useState<{id: number , user: string, message:string}[]>([]);
 const { id } = useParams<{ id: string | undefined }>();
 const [ message, setMessage ] = useState<string>('Test Message');
 const [username, setUsername] = useState<string>('');
@@ -22,7 +22,8 @@ const navigate = useNavigate();
 
 
 const messageListener = (data: { user: string, message: string }) => {
-  setMessages(prevMessages => [...prevMessages, data.message]);
+  const datamessage = { id: 1, user: data.user, message: data.message };
+  setMessages(prevMessages => [...prevMessages, datamessage]);
 }
 
 useEffect(() => {
@@ -39,28 +40,19 @@ useEffect(() => {
   });
 }, [id, navigate]);
 
-  async function fetchMessageData() {
-    const response = await instance.get('/chatdata/get-room-messages/' + id);
-    if (response.status >= 200 && response.status < 300) {
-    return response.data;
-    } 
-    else {
-      console.log("Error!");
-      return [];
-    }
-  }
-  function extractMessages(objects: Array<any>) {
-    return objects.map(object => object.message);
-  }
-
 function LoadMessages()
 {
-  const datamessages = fetchMessageData();
-  datamessages.then((data) => {
-    console.log(datamessages);
-    setMessages(extractMessages(data));
-  });
-
+  axios.get(serverurl + '/chatdata/get-room-messages/' + id)
+    .then(response => {
+      // handle success
+      console.log(response.data);
+      setMessages(response.data);
+      })
+    .catch(error => {
+      // handle error
+      console.log(error);
+      return null;
+    });
 }
 
 function StartRoom()
@@ -75,7 +67,7 @@ function handlePassword()
   {
     return;
   }
-  
+
   if (enteredPassowrd === data.password)
   {
     StartRoom();
@@ -142,7 +134,7 @@ return (
 <input type="text" id="message" value={message} onChange={(e) => setMessage(e.target.value)} />
 </div>
 <ul>
-{ messages.map((m, index) => <li key={index}>{username} : {m}</li>) }
+{ messages.map((m, index) => <li key={index}>{m.user} : {m.message}</li>) }
 </ul>
 <button onClick={handleSendMessage}>Send Message</button>
 </div>
