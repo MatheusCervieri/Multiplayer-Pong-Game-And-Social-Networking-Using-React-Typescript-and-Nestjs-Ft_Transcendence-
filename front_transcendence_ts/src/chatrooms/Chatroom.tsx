@@ -4,6 +4,8 @@ import { useFetcher, useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import GetToken from '../utils/GetToken';
 import  instance from '../confs/axios_information';
+import axios from 'axios';
+import { serverurl } from '../confs/axios_information';
 
 const socket = io('http://localhost:8001');
 
@@ -12,8 +14,10 @@ const [ messages, setMessages ] = useState<string[]>([]);
 const { id } = useParams<{ id: string | undefined }>();
 const [ message, setMessage ] = useState<string>('Test Message');
 const [username, setUsername] = useState<string>('');
-const [data, setData] = useState<any>();
+const [data, setData] = useState<{id: string, name: string, adm: string | null , type: string | null , password:string | null }>();
 const [renderPage, SetRenderPage] = useState<boolean>(false);
+const [promptShown, setPromptShown] = useState<boolean>(false);
+const [enteredPassowrd, setEnteredPassword] = useState<string>(''); 
 const navigate = useNavigate();
 
 
@@ -21,17 +25,19 @@ const messageListener = (data: { user: string, message: string }) => {
   setMessages(prevMessages => [...prevMessages, data.message]);
 }
 
-async function fetchRoomData() {
-  const response = await instance.get('chatdata/get-room/' + id);
-  if (response.status >= 200 && response.status < 300) {
-    console.log("Chegu no fetch room data!");
-  return response.data;
-  } 
-  else {
-    alert("This room does not exist!");
-    navigate('/chat');
-  }
-}
+useEffect(() => {
+  GetToken(navigate, setUsername);
+  axios.get(serverurl + '/chatdata/get-room/' + id)
+  .then(response => {
+    // handle success
+    setData(response.data);
+    InitializeRoom(response.data);
+    })
+  .catch(error => {
+    // handle error
+    console.log(error);
+  });
+}, [id, navigate]);
 
   async function fetchMessageData() {
     const response = await instance.get('/chatdata/get-room-messages/' + id);
@@ -63,42 +69,38 @@ function StartRoom()
   LoadMessages();
 }
 
-const InitializeRoom = () => {
-  fetchRoomData().then(roomdata => {
-    setData(roomdata);
-    console.log(data);
+function handlePassword()
+{
+  if (!data)
+  {
+    return;
+  }
+  
+  if (enteredPassowrd === data.password)
+  {
+    StartRoom();
+  }
+  else
+  {
+    alert("Wrong password!");
+  }
+}
+
+const InitializeRoom = (data: any) => {
     if (data.type === 'public')
     {
-      console.log("Public 1");
       StartRoom();
     }
     if (data.type === 'protected')
     {
-      const enteredPassword = prompt("Please enter the password for this room:");
-      if (enteredPassword == data.password)
-      {
-        StartRoom();
-      }
-      else {
-        alert("Incorrect password! You will be redirected to the chat page.");
-        navigate('/chat');
-      }
+      setPromptShown(true);
     }
     if (data.type === 'private')
     {
       StartRoom();
     }
-  });
- 
-
 
 }
-
-useEffect(() => {
-  GetToken(navigate, setUsername);
-  console.log("It will initiadlize  room!1");
-  InitializeRoom();
-}, []);
 
 useEffect(() => {
   if (renderPage == true)
@@ -121,7 +123,17 @@ socket.emit('message', { user: username, message: message, roomid: id });
 function handleRoom(){
   socket.emit('join-room', { name: username, room_id: id });
 }
-
+if (renderPage == false && promptShown == true)
+{
+  return (
+  <div>
+    <label>Password:</label>
+    <input type="password" id="passwordInput" onChange={(event) => setEnteredPassword(event.target.value)}/>
+    <button onClick={handlePassword} id="submitPasswordButton">Submit</button>
+  </div>
+  );
+}
+else{
 return (
 <div>
 <h1>Chat Room {id}</h1>
@@ -135,6 +147,7 @@ return (
 <button onClick={handleSendMessage}>Send Message</button>
 </div>
 );
+}
 }
 
 export default Chatroom;

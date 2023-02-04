@@ -1,9 +1,12 @@
 import axios from 'axios';
 
+export const serverurl = 'http://localhost:3001';
+
 const instance = axios.create({
-    baseURL: 'http://localhost:3001',
+    baseURL: serverurl,
     headers: { 'Content-Type': 'application/json' },
 });
+
 
 
 
