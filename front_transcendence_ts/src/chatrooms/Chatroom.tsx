@@ -8,6 +8,7 @@ import axios from 'axios';
 import { serverurl } from '../confs/axios_information';
 import Privateroomdiv from './Privateroomdiv';
 import UserSearch from '../utils/components/Usersearch';
+import GetUserData from '../utils/GetUserData';
 
 const socket = io('http://localhost:8001');
 
@@ -28,18 +29,25 @@ const messageListener = (data: { user: string, message: string }) => {
   setMessages(prevMessages => [...prevMessages, datamessage]);
 }
 
-useEffect(() => {
-  GetToken(navigate, setUsername);
+async function start()
+{
+  const userdata = await GetUserData(navigate);
+  setUsername(userdata.name);
   axios.get(serverurl + '/chatdata/get-room/' + id)
-  .then(response => {
-    // handle success
-    setData(response.data);
-    InitializeRoom(response.data);
-    })
-  .catch(error => {
-    // handle error
-    console.log(error);
-  });
+          .then(response => {
+            // handle success
+            setData(response.data);
+            InitializeRoom(response.data, userdata.name);
+          })
+          .catch(error => {
+            // handle error
+            console.log(error);
+    });
+}
+
+useEffect(() => {
+  start();
+
 }, [id, navigate]);
 
 function LoadMessages()
@@ -80,7 +88,17 @@ function handlePassword()
   }
 }
 
-const InitializeRoom = (data: any) => {
+function isStringInArray(string: string | undefined, arrayOfStrings: string[]) {
+  if(string)
+  {
+    console.log("Chegou aqui");
+    console.log(string);
+    return arrayOfStrings.includes(string);
+    
+  }
+  }
+
+const InitializeRoom = (data: any, user_name? : string) => {
     if (data.type === 'public')
     {
       StartRoom();
@@ -91,7 +109,26 @@ const InitializeRoom = (data: any) => {
     }
     if (data.type === 'private')
     {
-      StartRoom();
+      //Check if the user is in the room
+    axios.get(serverurl + '/chatdata/room-users/' + id)
+    .then(response => {
+      // handle success
+      console.log("Username:", user_name, "Reponse:" , response.data);
+      if(isStringInArray(user_name, response.data) == true)
+      {
+        StartRoom();
+      }
+      else
+      {
+        navigate('/chat');
+      }
+      })
+    .catch(error => {
+      // handle error
+      console.log(error);
+      navigate('/chat');
+    });
+      
     }
 
 }
@@ -118,9 +155,20 @@ function handleRoom(){
   socket.emit('join-room', { name: username, room_id: id });
 }
 
+const addUserToChatRoom = async (userName : string, roomId : string | undefined) => {
+  try {
+    const response = await axios.post(serverurl + `/chatdata/add-user-room/${roomId}`, {
+      name: userName
+    });
+    return response.data;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 function AddUserToRoom(user : string)
 {
-  alert(user);
+  addUserToChatRoom(user, id);
 }
 
 if (renderPage == false && promptShown == true)
@@ -150,5 +198,4 @@ return (
 );
 }
 }
-
 export default Chatroom;

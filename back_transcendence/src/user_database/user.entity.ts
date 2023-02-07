@@ -1,4 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import {ManyToMany} from 'typeorm';
+import { ChatRoom } from 'src/ChatRoom_database/ChatRoom.entity';
 
 @Entity()
 export class User {
@@ -19,4 +21,7 @@ export class User {
 
   @Column({ default: true })
   isActive: boolean;
+
+  @ManyToMany(type => ChatRoom, chatRoom => chatRoom.users)
+  chatRooms: ChatRoom[];
 }

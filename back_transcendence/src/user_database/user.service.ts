@@ -36,6 +36,10 @@ export class UsersService {
     return this.usersRepository.findOneBy({ email });
   }
 
+  findOneByName(name: string): Promise<User> {
+    return this.usersRepository.findOneBy({ name });
+  }
+
   async findAllNames(): Promise<string[]> {
     const users = await this.usersRepository.find();
     return users.map(user => user.name);

@@ -1,5 +1,7 @@
 import { User } from 'src/user_database/user.entity';
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany , ManyToOne } from 'typeorm';
+import { ManyToMany } from 'typeorm';
+import { JoinTable } from 'typeorm'
 
 @Entity()
 export class ChatRoom {
@@ -24,6 +26,9 @@ export class ChatRoom {
   @OneToMany(type => Message, message => message.chatRoom)
   messages: Message[];
 
+  @ManyToMany(type => User, user => user.chatRooms)
+  @JoinTable()
+  users: User[];
 }
 
 @Entity()
