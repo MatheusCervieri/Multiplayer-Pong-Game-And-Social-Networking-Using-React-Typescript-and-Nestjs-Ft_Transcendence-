@@ -6,6 +6,8 @@ import GetToken from '../utils/GetToken';
 import  instance from '../confs/axios_information';
 import axios from 'axios';
 import { serverurl } from '../confs/axios_information';
+import Privateroomdiv from './Privateroomdiv';
+import UserSearch from '../utils/components/Usersearch';
 
 const socket = io('http://localhost:8001');
 
@@ -115,6 +117,12 @@ socket.emit('message', { user: username, message: message, roomid: id });
 function handleRoom(){
   socket.emit('join-room', { name: username, room_id: id });
 }
+
+function AddUserToRoom(user : string)
+{
+  alert(user);
+}
+
 if (renderPage == false && promptShown == true)
 {
   return (
@@ -137,6 +145,7 @@ return (
 { messages.map((m, index) => <li key={index}>{m.user} : {m.message}</li>) }
 </ul>
 <button onClick={handleSendMessage}>Send Message</button>
+{data?.type == 'private' && <UserSearch btnName="Add User To This ROOM!" handleUser={AddUserToRoom}/>}
 </div>
 );
 }

@@ -14,4 +14,5 @@ export class UserController {
     const userId = request.user_id;
     return await this.userService.findOne(userId);
   }
+
 }

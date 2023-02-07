@@ -36,6 +36,11 @@ export class UsersService {
     return this.usersRepository.findOneBy({ email });
   }
 
+  async findAllNames(): Promise<string[]> {
+    const users = await this.usersRepository.find();
+    return users.map(user => user.name);
+  }
+
   async remove(id: string): Promise<void> {
     await this.usersRepository.delete(id);
   }

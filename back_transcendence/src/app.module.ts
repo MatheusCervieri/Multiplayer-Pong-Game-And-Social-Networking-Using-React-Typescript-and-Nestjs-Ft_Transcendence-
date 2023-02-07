@@ -21,6 +21,7 @@ import { ChatRoomService } from './ChatRoom_database/ChatRoom.service';
 import { ChatRoomModule } from './ChatRoom_database/ChatRoom.module';
 import { MessageModule } from './ChatRoom_database/Message.module';
 import { MessageService } from './ChatRoom_database/Message.service';
+import { UsersInformationController } from './user_database/usersinformation.controller';
 
 @Module({
   imports: [
@@ -35,7 +36,7 @@ import { MessageService } from './ChatRoom_database/Message.service';
       autoLoadEntities: true,
       synchronize: true,
     }), EmailModule, UserModule, ChatRoomModule, MessageModule],
-  controllers: [AppController, SimpleGetController, SimplePostController, SingUpController, NameSetController, UserController, LoginController, ChatRoomController],
+  controllers: [AppController, SimpleGetController, SimplePostController, SingUpController, NameSetController, UserController, LoginController, ChatRoomController, UsersInformationController],
   providers: [AppService, EmailService, UsersService, ChatRoomService, ChatGateway, MessageService],
 })
 export class AppModule implements NestModule{
