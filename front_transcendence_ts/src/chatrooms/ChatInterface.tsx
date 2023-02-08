@@ -30,6 +30,7 @@ const socket = io("http://localhost:8001");
 
 const ChatInterface: React.FC = () => {
     const [rooms, setRooms] = useState<Room[]>([]);
+    const [dms, setDms] = useState<Room[]>([]);	
     const [newRoomName, setNewRoomName] = useState('');
     const { id } = useParams<{ id: string | undefined }>();
     const [username, setUsername] = useState<string>('');
@@ -82,8 +83,12 @@ const ChatInterface: React.FC = () => {
         }
     }
 
+  function btnRooms()
+  {
+    GetRooms();
+  }
   return (
-      <ChatRoomList newRoomName={newRoomName} setNewRoomName={setNewRoomName} handleCreateRoom={handleCreateRoom} rooms={rooms} getRooms={GetRooms} socket={socket}/>
+      <ChatRoomList newRoomName={newRoomName} setNewRoomName={setNewRoomName} handleCreateRoom={handleCreateRoom} rooms={rooms} getRooms={GetRooms} btnRooms={btnRooms} socket={socket} dms={dms} username={username}/>
   );
 };
 

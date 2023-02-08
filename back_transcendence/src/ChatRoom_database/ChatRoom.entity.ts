@@ -15,7 +15,7 @@ export class ChatRoom {
   adm: string;
 
   @Column({ nullable: true })
-  type: string; // private, public or protected
+  type: string; // private, public, protected or dm 
 
   @Column({ nullable: true })
   password: string;

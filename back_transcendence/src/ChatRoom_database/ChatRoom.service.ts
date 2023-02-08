@@ -32,6 +32,13 @@ export class ChatRoomService {
     await this.roomsRepository.save(room);
   }
 
+  async findDMsByUser(user: User): Promise<ChatRoom[]> {
+    return this.roomsRepository.find({
+      where: { type: 'dm', users: user },
+      relations: ['users']
+    });
+  }
+
   findAll(): Promise<ChatRoom[]> {
     return this.roomsRepository.find();
   }
