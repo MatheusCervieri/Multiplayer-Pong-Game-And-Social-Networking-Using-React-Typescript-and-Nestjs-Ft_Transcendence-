@@ -25,8 +25,23 @@ export class ChatRoomController {
 
   @Get('get-dms/:user')
   async findDmsFromUser(@Param() params: any): Promise<any> {
-    const user = await this.UsersService.findOneByName(params.user);
-    return await this.ChatRoomService.findDMsByUser(user);
+    const username = decodeURIComponent(params.user);
+    const user = await this.UsersService.findOneByName(username);
+    const DmsRooms = await this.ChatRoomService.findDMsByUser(user);
+    console.log(DmsRooms);
+    return DmsRooms;
+  }
+
+  @Get('get-dms2/:user')
+  async findDms2FromUser(@Param() params: any): Promise<any> {
+    const username = decodeURIComponent(params.user);
+    const user = await this.UsersService.findOneByName(username);
+    const RoomsDMS = await this.ChatRoomService.findAllDmsWithUsers();
+    const RoomsWithSpecificUser = RoomsDMS.filter(roomDMS => {
+      return roomDMS.users.some(user => user === user);
+    });
+    console.log(RoomsWithSpecificUser);
+    return RoomsWithSpecificUser;
   }
 
   @Get('get-room-messages/:id')

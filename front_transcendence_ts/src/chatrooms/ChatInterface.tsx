@@ -16,6 +16,7 @@ export interface Room {
     adm: string; 
     type: string;
     password: string;
+    users: any[];    
 }
 
 export interface PostRoom
@@ -88,7 +89,7 @@ const ChatInterface: React.FC = () => {
     GetRooms();
   }
   return (
-      <ChatRoomList newRoomName={newRoomName} setNewRoomName={setNewRoomName} handleCreateRoom={handleCreateRoom} rooms={rooms} getRooms={GetRooms} btnRooms={btnRooms} socket={socket} dms={dms} username={username}/>
+      <ChatRoomList newRoomName={newRoomName} setNewRoomName={setNewRoomName} handleCreateRoom={handleCreateRoom} rooms={rooms} getRooms={GetRooms} btnRooms={btnRooms} socket={socket} setDms={setDms} dms={dms} username={username}/>
   );
 };
 

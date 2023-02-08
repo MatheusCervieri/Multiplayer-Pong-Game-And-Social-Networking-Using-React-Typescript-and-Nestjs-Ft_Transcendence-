@@ -16,6 +16,7 @@ interface NewRoomProps {
   rooms: Room[];
   socket: Socket | undefined;
   dms: Room[];
+  setDms : (dms: Room[]) => void;
   username: string;
 }
 
@@ -47,13 +48,13 @@ const ChatRoomList = (props: NewRoomProps) => {
     <div>
       <h3>Chat:</h3>
       {showForm && !roomDm && <Createroomaux handleCreateRoom={handleCreateRoom}/>}
-      {newDmCompoment && roomDm && <CreateDmAux username={props.username} dms={props.dms}/>}
+      {newDmCompoment && roomDm && <CreateDmAux username={props.username} setDms={props.setDms} dms={props.dms}/>}
       {roomDm && <button onClick={handleNewDm}>New DM</button>}
       {!roomDm && <button onClick={handleCreateRoom}>Create Room</button>}
       <button onClick={handleRoomBtn}>Rooms</button>
       <button onClick={handleDmBtn}>Direct Messages</button>
       {!roomDm && <RoomList rooms={props.rooms}/>}
-      {roomDm && <DmList/>}
+      {roomDm && <DmList username={props.username} dms={props.dms}/>}
     </div>
   );
 };

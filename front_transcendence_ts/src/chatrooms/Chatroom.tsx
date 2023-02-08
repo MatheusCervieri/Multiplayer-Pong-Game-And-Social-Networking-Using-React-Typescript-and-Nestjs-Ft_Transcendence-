@@ -128,7 +128,27 @@ const InitializeRoom = (data: any, user_name? : string) => {
       console.log(error);
       navigate('/chat');
     });
-      
+    }
+    if (data.type == 'dm')
+    {
+      axios.get(serverurl + '/chatdata/room-users/' + id)
+    .then(response => {
+      // handle success
+      console.log("Username:", user_name, "Reponse:" , response.data);
+      if(isStringInArray(user_name, response.data) == true)
+      {
+        StartRoom();
+      }
+      else
+      {
+        navigate('/chat');
+      }
+      })
+    .catch(error => {
+      // handle error
+      console.log(error);
+      navigate('/chat');
+    });
     }
 
 }
@@ -171,6 +191,13 @@ function AddUserToRoom(user : string)
   addUserToChatRoom(user, id);
 }
 
+function removeSubstring(str: string | undefined, substring: string) {
+  if (!str) {
+    return '';
+  }
+  return str.replace(substring, '');
+}
+
 if (renderPage == false && promptShown == true)
 {
   return (
@@ -184,7 +211,7 @@ if (renderPage == false && promptShown == true)
 else{
 return (
 <div>
-<h1>Chat Room {id}</h1>
+<h1>Chat - {removeSubstring(data?.name, username)} {id}</h1>
 <div>
 <label htmlFor="message">Message:</label>
 <input type="text" id="message" value={message} onChange={(e) => setMessage(e.target.value)} />

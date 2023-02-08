@@ -34,10 +34,19 @@ export class ChatRoomService {
 
   async findDMsByUser(user: User): Promise<ChatRoom[]> {
     return this.roomsRepository.find({
-      where: { type: 'dm', users: user },
+      where: { type: 'dm', users: user},
       relations: ['users']
     });
   }
+
+  findAllWithUsers(): Promise<ChatRoom[]> {
+    return this.roomsRepository.find({relations: ['users']});
+  }
+
+  findAllDmsWithUsers(): Promise<ChatRoom[]> {
+    return this.roomsRepository.find({where: {type: 'dm'} ,relations: ['users']});
+  }
+
 
   findAll(): Promise<ChatRoom[]> {
     return this.roomsRepository.find();
