@@ -10,6 +10,7 @@ import Chatroom from "./chatrooms/Chatroom";
 import Chatroomtest from "./Chatroomtest";
 import Createroomaux from "./chatrooms/Createroomaux";
 import UserSearch from "./utils/components/Usersearch";
+import Profile from "./profile/Profile";
 
 function handleUser()
 {
@@ -26,6 +27,7 @@ export default function Displayroute() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path='/chat' element={<ChatInterface />} />
         <Route path='chat/:id' element={<Chatroom/>} />
+        <Route path='profile/:name' element={<Profile/>} />
       </Routes>
     </BrowserRouter>
   )

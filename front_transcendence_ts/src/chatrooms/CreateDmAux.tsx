@@ -30,6 +30,7 @@ function encodeUsername(username : string) {
 export default function CreateDmAux(props: CreateDmAuxProps) {
     const navigate = useNavigate();
 
+
 async function loadDms()
 {
     axios.get(serverurl + '/chatdata/get-dms2/' + encodeUsername(props.username))
@@ -96,15 +97,10 @@ async function loadDms()
         });
        
     }
-    function showdms(){
-        loadDms();
-       
-    }
 
   return (
     <div>
     <UserSearch btnName='Start DM!' handleUser={handleUser}/>
-    <button onClick={showdms}>Load Dms</button>
     </div>
   )
 }

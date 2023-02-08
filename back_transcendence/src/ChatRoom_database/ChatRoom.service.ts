@@ -52,6 +52,19 @@ export class ChatRoomService {
     return this.roomsRepository.find();
   }
 
+  findAllPublic(): Promise<ChatRoom[]> {
+    return this.roomsRepository.find({ where: { type: 'public' } });
+  }
+
+  findAllPrivate(): Promise<ChatRoom[]> {
+    return this.roomsRepository.find({ where: { type: 'private' } });
+  }
+
+  findAllProtected(): Promise<ChatRoom[]> {
+    return this.roomsRepository.find({ where: { type: 'protected' } });
+  }
+
+
   async findMessages(id: number): Promise<Message[]> {
     const room = await this.roomsRepository.findOne({ where: { id }, relations: ['messages'] });
     return room.messages;

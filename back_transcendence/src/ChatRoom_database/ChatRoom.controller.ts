@@ -14,8 +14,12 @@ export class ChatRoomController {
     ) {}
 
   @Get('get-rooms')
-  async findAll(@Req() request: any): Promise<any> {
-    return await this.ChatRoomService.findAll();
+  async findAllPublic(@Req() request: any): Promise<any> {
+    const privateRooms = await this.ChatRoomService.findAllPrivate();
+    const publicRooms = await this.ChatRoomService.findAllPublic();
+    const protectedRooms = await this.ChatRoomService.findAllProtected();
+    const rooms = privateRooms.concat(publicRooms, protectedRooms);
+    return rooms;
   }
 
   @Get('get-room/:id')

@@ -6,6 +6,9 @@ import Createroomaux from './Createroomaux';
 import RoomList from './RoomList';
 import DmList from './DmList';
 import CreateDmAux from './CreateDmAux';
+import axios from 'axios';
+import instance from '../confs/axios_information';
+import { serverurl } from '../confs/axios_information';
 
 interface NewRoomProps {
   newRoomName: string;
@@ -40,7 +43,26 @@ const ChatRoomList = (props: NewRoomProps) => {
     props.btnRooms();
   }
 
+  function encodeUsername(username : string) {
+    return encodeURIComponent(username);
+}
+    
+  async function loadDms()
+  {
+  axios.get(serverurl + '/chatdata/get-dms2/' + encodeUsername(props.username))
+  .then(response => {
+    // handle success
+    props.setDms(response.data);
+    })
+  .catch(error => {
+    // handle error
+    console.log(error);
+    return null;
+  });
+  }
+
   function handleDmBtn(){
+    loadDms();
     setRoomDm(true);
   }
 
