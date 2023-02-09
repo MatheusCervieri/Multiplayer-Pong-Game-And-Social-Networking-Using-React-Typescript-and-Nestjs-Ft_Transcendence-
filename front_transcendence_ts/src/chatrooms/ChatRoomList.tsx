@@ -10,7 +10,7 @@ import axios from 'axios';
 import instance from '../confs/axios_information';
 import { serverurl } from '../confs/axios_information';
 import Blockuser from './Blockuser';
-import { Container, Title, StyledButton, BtnContainer, StyledButton2, StyledButton3 } from './Styles/ChatRoomList.style';
+import { Container, StyledButton, BtnContainer, StyledButton2, StyledButton3 } from './Styles/ChatRoomList.style';
 
 
 interface NewRoomProps {
@@ -77,7 +77,6 @@ const ChatRoomList = (props: NewRoomProps) => {
 
   return (
     <Container>
-      <Title>Chat:</Title>
       {showForm && !roomDm && <Createroomaux handleCreateRoom={handleCreateRoom} />}
       {newDmCompoment && roomDm && <CreateDmAux username={props.username} setDms={props.setDms} dms={props.dms} />}
       {roomDm && <StyledButton onClick={handleNewDm}>+</StyledButton>}

@@ -9,7 +9,7 @@ label {
     margin-bottom: 10px;
 }
 
-input[type="email"],[type="name"], input[type="password"], input[type="verify_password"] {
+input[type="email"],[type="name"], input[type="verify_password"] {
     width: 100%;
     padding: 12px 20px;
     margin: 8px 0;

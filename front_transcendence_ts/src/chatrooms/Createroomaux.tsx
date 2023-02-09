@@ -1,8 +1,66 @@
 import React, { useState } from "react";
+import styled from "styled-components";
 
 interface CreateroomauxProps {
     handleCreateRoom: (data: any) => void;
   }
+
+  const Form = styled.form`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 50px;
+`;
+
+const Label = styled.label`
+  font-size: 16px;
+  margin-bottom: 10px;
+`;
+
+const Input = styled.input`
+  width: 180px;
+  height: 25px;
+  margin-bottom: 20px;
+  padding: 5px;
+  font-size: 14px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+`;
+
+const InputPassword = styled.input`
+  width: 180px;
+  height: 25px;
+  margin-bottom: 20px;
+  padding: 5px;
+  font-size: 14px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+`;
+
+const Select = styled.select`
+  width: 180px;
+  height: 30px;
+  margin-bottom: 20px;
+  padding: 5px;
+  font-size: 14px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+`;
+
+const SubmitButton = styled.input`
+  width: 200px;
+  height: 40px;
+  background-color: #007bff;
+  color: #fff;
+  border-radius: 5px;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  &:disabled {
+    background-color: #ccc;
+  }
+`;
 
 const Createroomaux = (props: CreateroomauxProps) => {
   const [roomName, setRoomName] = useState("");
@@ -50,27 +108,27 @@ const Createroomaux = (props: CreateroomauxProps) => {
   
 
   return (
-    <form onSubmit={handleSubmit}>
-      <label htmlFor="roomName">Room Name:</label>
-      <input
+    <Form onSubmit={handleSubmit}>
+      <Label htmlFor="roomName">Room Name:</Label>
+      <Input
         type="text"
         id="roomName"
         value={roomName}
         onChange={handleRoomNameChange}
       />
-
-      <label htmlFor="roomType">Room Type:</label>
-      <select id="roomType" value={roomType.type} onChange={handleRoomTypeChange}>
+  
+      <Label htmlFor="roomType">Room Type:</Label>
+      <Select id="roomType" value={roomType.type} onChange={handleRoomTypeChange}>
         <option value="">Select a room type</option>
         <option value="public">Public</option>
         <option value="private">Private</option>
         <option value="protected">Protected</option>
-      </select>
-
+      </Select>
+  
       {showPasswordInput && (
         <>
-          <label htmlFor="password">Password:</label>
-          <input
+          <Label htmlFor="password">Password:</Label>
+          <InputPassword
             type="password"
             id="password"
             value={roomType.password || ""}
@@ -78,10 +136,8 @@ const Createroomaux = (props: CreateroomauxProps) => {
           />
         </>
       )}
-      <br />
-      <br />
-      <input type="submit" value="Create Room!" disabled={!(roomName && roomType.type)} />
-    </form>
+      <SubmitButton type="submit" value="Create Room!" disabled={!(roomName && roomType.type)} />
+    </Form>
   );
 };
 

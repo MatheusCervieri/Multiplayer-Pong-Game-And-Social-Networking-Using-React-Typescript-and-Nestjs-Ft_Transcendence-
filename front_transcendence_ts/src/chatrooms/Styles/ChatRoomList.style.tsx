@@ -10,14 +10,9 @@ const BtnContainer = styled.div`
     display: flex;
 `;
 
-const Title = styled.h3`
-  font-size: 24px;
-  color: orange;
-  margin-bottom: 20px;
-`;
 
 const StyledButton = styled.button`
-  background-color: blue;
+  background-color: #007bff;
   color: white;
   padding: 10px 20px;
   border-radius: 5px;
@@ -32,11 +27,11 @@ const StyledButton = styled.button`
 
 
 const StyledButton2 = styled.button<{selected: string}> `
-  background-color: ${props => (props.selected === 'Rooms') ? 'blue' : 'white'};
-  color: ${props => (props.selected === 'Rooms') ? 'white' : 'blue'};
+  background-color: ${props => (props.selected === 'Rooms') ? '#007bff' : 'white'};
+  color: ${props => (props.selected === 'Rooms') ? 'white' : '#007bff'};
   padding: 10px 20px;
   border-radius: 5px;
-  border: 1px solid blue;
+  border: 1px solid #007bff;
   font-size: 16px;
   cursor: pointer;
   min-width: 100px;
@@ -44,15 +39,15 @@ const StyledButton2 = styled.button<{selected: string}> `
 `;
 
 const StyledButton3 = styled.button<{selected: string}> `
-  background-color: ${props => (props.selected === 'Direct Message') ? 'blue' : 'white'};
-  color: ${props => (props.selected === 'Direct Message') ? 'white' : 'blue'};
+  background-color: ${props => (props.selected === 'Direct Message') ? '#007bff' : 'white'};
+  color: ${props => (props.selected === 'Direct Message') ? 'white' : '#007bff'};
   padding: 10px 20px;
   border-radius: 5px;
-  border: 1px solid blue;
+  border: 1px solid #007bff;
   font-size: 16px;
   cursor: pointer;
   min-width: 100px;
   max-width: 100px;
 `;
 
-export { Container, BtnContainer, StyledButton2, Title, StyledButton , StyledButton3};
+export { Container, BtnContainer, StyledButton2, StyledButton , StyledButton3};

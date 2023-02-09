@@ -10,6 +10,68 @@ import Privateroomdiv from './Privateroomdiv';
 import UserSearch from '../utils/components/Usersearch';
 import GetUserData from '../utils/GetUserData';
 import Message from './Message';
+import styled from 'styled-components';
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  background-color: #E5E5E5;
+  padding: 20px;
+  box-sizing: border-box;
+`;
+
+const ChatHeader = styled.h1`
+  font-size: 36px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: #333;
+`;
+
+const InputContainer = styled.div`
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  margin: 10px;
+`;
+
+const Label = styled.label`
+  font-size: 18px;
+  font-weight: bold;
+  margin-right: 10px;
+  color: #333;
+`;
+
+const Input = styled.input`
+  font-size: 18px;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #333;
+  width: 80%;
+`;
+
+const MessageContainer = styled.ul`
+  list-style: none;
+  height: 300px;
+  overflow-y: scroll;
+  padding: 0;
+`;
+
+const SendButton = styled.button`
+  background-color: #333;
+  color: #fff;
+  font-size: 18px;
+  padding: 10px 20px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  width: 20%;
+  &:hover {
+    background-color: #444;
+  }
+`;
+
 
 const socket = io('http://localhost:8001');
 
@@ -199,6 +261,7 @@ return () => {
 
 const handleSendMessage = () => {
 socket.emit('message', { user: username, message: message, roomid: id });
+setMessage('');
 }
 
 function handleRoom(){
@@ -228,6 +291,12 @@ function removeSubstring(str: string | undefined, substring: string) {
   return str.replace(substring, '');
 }
 
+const handleKeyDown = (event: any) => {
+  if (event.keyCode === 13) {
+    handleSendMessage();
+  }
+};
+
 if (renderPage == false && promptShown == true)
 {
   return (
@@ -239,29 +308,29 @@ if (renderPage == false && promptShown == true)
   );
 }
 else{
-return (
-<div>
-<h1>Chat - {removeSubstring(data?.name, username)} {id}</h1>
-<div>
-<label htmlFor="message">Message:</label>
-<input type="text" id="message" value={message} onChange={(e) => setMessage(e.target.value)} />
-</div>
-<ul>
-{ messages.map((m, index) => {
-  if (blockedUsers.indexOf(m.user) !== -1) {
-  }
-  else
-  {
+  return (
+    <Container>
+    <ChatHeader>Chat - {removeSubstring(data?.name, username)} {id}</ChatHeader>
+    <MessageContainer>
+    { messages.map((m, index) => {
+    if (blockedUsers.indexOf(m.user) !== -1) {
+    }
+    else {
     console.log(blockedUsers);
     console.log(m.user);
     return <Message username={username} index={index} user={m.user} message={m.message} />
-  }
-}) }
-</ul>
-<button onClick={handleSendMessage}>Send Message</button>
-{data?.type == 'private' && <UserSearch btnName="Add User To This ROOM!" handleUser={AddUserToRoom}/>}
-</div>
-);
+    }
+    
+    }) }
+    </MessageContainer>
+    <InputContainer>
+    <Input type="text" id="message" value={message} onChange={(e) => setMessage(e.target.value)} onKeyDown={handleKeyDown}/>
+    <SendButton onClick={handleSendMessage}>Send!</SendButton>
+    </InputContainer>
+   
+    {data?.type == 'private' && <UserSearch btnName="Add User To This ROOM!" handleUser={AddUserToRoom}/>}
+    </Container>
+    );
 }
 }
 export default Chatroom;
