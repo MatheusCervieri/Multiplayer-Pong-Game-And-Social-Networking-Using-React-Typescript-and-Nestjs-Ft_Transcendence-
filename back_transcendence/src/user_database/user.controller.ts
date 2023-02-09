@@ -1,9 +1,10 @@
-import { Controller, Get, HttpCode, HttpStatus, Req } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, HttpStatus, Post, Req } from '@nestjs/common';
 import { Request } from 'express';
 import { UsersService } from './user.service';
 import { UseInterceptors } from '@nestjs/common';
 import { AuthMiddleware } from './auth.middleware';7
 import {Param} from '@nestjs/common';
+import { User } from './user.entity';
 
 @Controller('userdata')
 @UseInterceptors(AuthMiddleware)
@@ -18,12 +19,29 @@ export class UserController {
 
   @Get('profile/:name')
   async findProfileByName(@Param() params: any, @Req() request: any): Promise<any> {
+    console.log(params.name);
     const user = await this.userService.findOneByName(params.name);
-    const userprofile = {
-      name: user.name,
-      email: user.email,
+    if (user)
+    {
+      const userprofile = {
+        name: user.name,
+        email: user.email,
+      }
+      return userprofile;
     }
-    return userprofile;
+    return "Invalid user";
   }
 
+  @Post('block')
+  async blockUser(@Req() request: any, @Body() body: { userToBlockName: string }): Promise<void> {
+    const blockingUser = await this.userService.findByIdWithBlocks(request.user_id);
+    const userToBlock = await this.userService.findOneByName(body.userToBlockName);
+    await this.userService.blockUser(blockingUser, userToBlock);
+  }
+
+  @Get('blocked-users')
+  async getBlockedUsers(@Req() request: any): Promise<User[]> {
+  const blockingUser = await this.userService.findByIdWithBlocks(request.user_id);
+  return blockingUser.blocks;
+  }
 }

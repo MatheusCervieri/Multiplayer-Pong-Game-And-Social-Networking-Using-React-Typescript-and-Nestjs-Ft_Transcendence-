@@ -9,6 +9,7 @@ import { serverurl } from '../confs/axios_information';
 import Privateroomdiv from './Privateroomdiv';
 import UserSearch from '../utils/components/Usersearch';
 import GetUserData from '../utils/GetUserData';
+import Message from './Message';
 
 const socket = io('http://localhost:8001');
 
@@ -20,8 +21,26 @@ const [username, setUsername] = useState<string>('');
 const [data, setData] = useState<{id: string, name: string, adm: string | null , type: string | null , password:string | null }>();
 const [renderPage, SetRenderPage] = useState<boolean>(false);
 const [promptShown, setPromptShown] = useState<boolean>(false);
-const [enteredPassowrd, setEnteredPassword] = useState<string>(''); 
+const [enteredPassowrd, setEnteredPassword] = useState<string>('');
+const [blockedUsers , setBlockedUsers] = useState<string[]>([]);
 const navigate = useNavigate();
+
+
+const loadBlockedUsers = async () => {
+  const token = localStorage.getItem('token');
+  instance.get('/userdata/blocked-users', {
+    headers: {
+      'Authorization': `Bearer ${token}`
+    }
+  })
+    .then(response => {
+      const blockednames = response.data.map((obj: { name: string; }) => (obj.name));
+      setBlockedUsers(blockednames);
+    })
+    .catch(error => {
+      console.error(error);
+    });
+};
 
 
 const messageListener = (data: { user: string, message: string }) => {
@@ -36,8 +55,16 @@ async function start()
   axios.get(serverurl + '/chatdata/get-room/' + id)
           .then(response => {
             // handle success
-            setData(response.data);
-            InitializeRoom(response.data, userdata.name);
+            if(response.data.status === 404)
+            {
+              navigate('/404');
+            }
+            else 
+            {
+            console.log(response.data.room);
+            setData(response.data.room);
+            InitializeRoom(response.data.room, userdata.name);
+            }
           })
           .catch(error => {
             // handle error
@@ -66,6 +93,7 @@ function LoadMessages()
 
 function StartRoom()
 {
+  loadBlockedUsers();
   SetRenderPage(true);
   LoadMessages();
 }
@@ -98,6 +126,7 @@ function isStringInArray(string: string | undefined, arrayOfStrings: string[]) {
   }
 
 const InitializeRoom = (data: any, user_name? : string) => {
+  console.log(data.type);
     if (data.type === 'public')
     {
       StartRoom();
@@ -108,6 +137,8 @@ const InitializeRoom = (data: any, user_name? : string) => {
     }
     if (data.type === 'private')
     {
+      console.log("PRIVATEEEE");
+      
       //Check if the user is in the room
     axios.get(serverurl + '/chatdata/room-users/' + id)
     .then(response => {
@@ -216,7 +247,16 @@ return (
 <input type="text" id="message" value={message} onChange={(e) => setMessage(e.target.value)} />
 </div>
 <ul>
-{ messages.map((m, index) => <li key={index}>{m.user} : {m.message}</li>) }
+{ messages.map((m, index) => {
+  if (blockedUsers.indexOf(m.user) !== -1) {
+  }
+  else
+  {
+    console.log(blockedUsers);
+    console.log(m.user);
+    return <Message username={username} index={index} user={m.user} message={m.message} />
+  }
+}) }
 </ul>
 <button onClick={handleSendMessage}>Send Message</button>
 {data?.type == 'private' && <UserSearch btnName="Add User To This ROOM!" handleUser={AddUserToRoom}/>}

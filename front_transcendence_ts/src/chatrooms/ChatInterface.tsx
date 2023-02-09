@@ -39,6 +39,7 @@ const ChatInterface: React.FC = () => {
 
   useEffect(() => {
     GetToken(navigate, setUsername);
+    GetRooms();
   }, []);
 
 
@@ -53,7 +54,9 @@ const ChatInterface: React.FC = () => {
         data.adm = username;
         const response = await instance.post('chatdata/create-room', data );
         setRooms([...rooms, response.data]);
-        PostRoomUser(response.data.id);
+        PostRoomUser(response.data.id).then((data) => {
+          navigate('/chat/' + response.data.id);
+        });
         console.log(response.data);
         return 0;
         } catch (error) {

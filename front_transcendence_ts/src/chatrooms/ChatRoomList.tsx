@@ -9,6 +9,7 @@ import CreateDmAux from './CreateDmAux';
 import axios from 'axios';
 import instance from '../confs/axios_information';
 import { serverurl } from '../confs/axios_information';
+import Blockuser from './Blockuser';
 
 interface NewRoomProps {
   newRoomName: string;
@@ -79,6 +80,7 @@ const ChatRoomList = (props: NewRoomProps) => {
       <button onClick={handleDmBtn}>Direct Messages</button>
       {!roomDm && <RoomList rooms={props.rooms}/>}
       {roomDm && <DmList username={props.username} dms={props.dms}/>}
+      <Blockuser blockeduser='Roberto'/>
     </div>
   );
 };

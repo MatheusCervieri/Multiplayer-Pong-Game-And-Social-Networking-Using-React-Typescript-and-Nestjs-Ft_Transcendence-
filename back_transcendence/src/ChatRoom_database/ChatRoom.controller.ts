@@ -23,9 +23,36 @@ export class ChatRoomController {
     return rooms;
   }
 
+  @Get('get-room-created/:id')
+  async CheckCreated(@Param() params: any): Promise<any> {
+    const roomId = params.id;
+    try {
+      // Perform the necessary logic to check if the room with the given id is created
+      const room = await this.ChatRoomService.findOne(roomId);
+      if (room) {
+        return { status: 200, message: 'Room is created' };
+      } else {
+        return { status: 404, message: 'Room is not found' };
+      }
+    } catch (error) {
+      return { status: 500, message: 'An error occurred while checking for the room' };
+    }
+  }
+
   @Get('get-room/:id')
   async findOne(@Param() params: any): Promise<any> {
-    return await this.ChatRoomService.findOne(params.id);
+    const roomId = params.id;
+    try {
+      // Perform the necessary logic to check if the room with the given id is created
+      const room = await this.ChatRoomService.findOne(roomId);
+      if (room) {
+        return { room };
+      } else {
+        return { status: 404, message: 'Room is not found' };
+      }
+    } catch (error) {
+      return { status: 500, message: 'An error occurred while checking for the room' };
+    }
   }
 
   @Get('get-dms/:user')

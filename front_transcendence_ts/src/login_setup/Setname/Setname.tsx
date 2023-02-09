@@ -11,7 +11,6 @@ const Setname = () => {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const token = localStorage.getItem('token');
-    console.log("Front token", token);
     instance.post('set-name', {
       name: name
     }, {

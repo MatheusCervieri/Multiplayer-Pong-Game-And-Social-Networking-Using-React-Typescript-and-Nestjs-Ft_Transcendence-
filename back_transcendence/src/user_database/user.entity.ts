@@ -29,8 +29,10 @@ export class User {
   chatRooms: ChatRoom[];
   
   @ManyToMany(type => User, user => user.blockedBy)
+  @JoinTable()
   blocks: User[];
 
   @ManyToMany(type => User, user => user.blocks)
+  @JoinTable()
   blockedBy: User[];
 }

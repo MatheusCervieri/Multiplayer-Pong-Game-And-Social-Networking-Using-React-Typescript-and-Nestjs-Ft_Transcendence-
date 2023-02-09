@@ -9,8 +9,15 @@ export default function Profile() {
   const [username, setUsername] = useState<string>('');
 
   async function getUserInformation(){
-    axios.get(serverurl + '/userdata/profile/' + name)
+    console.log(name);
+    const token = localStorage.getItem('token');
+    axios.get(serverurl + '/userdata/profile/' + name,{
+    headers: {
+      'Authorization': `Bearer ${token}`
+    }
+  })
     .then((response) => {
+      console.log(response.data);
       setUsername(response.data.name);
     })
     .catch((error) => {

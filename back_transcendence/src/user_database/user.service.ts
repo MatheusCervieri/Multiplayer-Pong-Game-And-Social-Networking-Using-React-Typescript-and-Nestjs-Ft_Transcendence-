@@ -45,7 +45,19 @@ export class UsersService {
     return users.map(user => user.name);
   }
 
+  async findByIdWithBlocks(id: number): Promise<User> {
+    return await this.usersRepository.findOne({
+      where: { id },
+      relations: ['blocks'],
+    });
+  }
+
   async remove(id: string): Promise<void> {
     await this.usersRepository.delete(id);
+  }
+
+  async blockUser(blockingUser: User, userToBlock: User): Promise<void> {
+    blockingUser.blocks.push(userToBlock);
+    await this.usersRepository.save(blockingUser);
   }
 }
