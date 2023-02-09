@@ -49,9 +49,11 @@ const ChatRoomList = (props: NewRoomProps) => {
     
   async function loadDms()
   {
+  console.log("Load dms", props.username);
   axios.get(serverurl + '/chatdata/get-dms2/' + encodeUsername(props.username))
   .then(response => {
     // handle success
+    console.log(response.data);
     props.setDms(response.data);
     })
   .catch(error => {

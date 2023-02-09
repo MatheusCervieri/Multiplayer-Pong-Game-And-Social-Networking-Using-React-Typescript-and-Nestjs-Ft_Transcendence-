@@ -47,7 +47,6 @@ async function start()
 
 useEffect(() => {
   start();
-
 }, [id, navigate]);
 
 function LoadMessages()

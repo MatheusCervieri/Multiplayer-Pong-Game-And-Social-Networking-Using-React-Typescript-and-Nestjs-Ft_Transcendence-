@@ -5,6 +5,8 @@ import axios from 'axios';
 import instance from '../confs/axios_information';
 import { serverurl } from '../confs/axios_information';
 import { useNavigate } from 'react-router-dom';
+import { collapseTextChangeRangesAcrossMultipleVersions } from 'typescript';
+import DmList from './DmList';
 
 
 
@@ -52,10 +54,12 @@ async function loadDms()
             adm: props.username,
             type: 'dm',
             password: '',
+            users: [userdm , props.username]
         }
-        const response = await instance.post('chatdata/create-room', data );
-        PostRoomUser(response.data.id, props.username);
-        PostRoomUser(response.data.id, userdm);
+        const response = await instance.post('chatdata/create-room-dm', data );
+        //PostRoomUser(response.data.id, userdm);
+        //PostRoomUser(response.data.id, props.username).then(() => navigate('/chat/' + response.data.id));
+        navigate('/chat/' + response.data.id);
         console.log(response.data);
         return 0;
         } catch (error) {
@@ -70,9 +74,10 @@ async function loadDms()
       const response = await axios.post(serverurl + `/chatdata/add-user-room/${roomid}`, {
         name: username
       });
+      console.log(username);
       return response.data;
     } catch (error) {
-      console.error(error);
+      alert(error);
     } }
 
     function findObjectsWithMatchingUserName(arrayOfObjects : any[], searchString: string) {
@@ -85,7 +90,10 @@ async function loadDms()
       }
     
     function handleUser(user: any) {
+      console.log("wtf");
+      console.log("DMS:", props.dms);
         loadDms().then(() => {
+            console.log(props.dms);
             const objects = findObjectsWithMatchingUserName(props.dms, user).length > 0;
             if (objects)
             {
@@ -93,8 +101,10 @@ async function loadDms()
                 navigate('/chat/' + dmuser[0].id);
             }
             else
+            {
                 PostNewRoom(user);
-        });
+            }
+            });
        
     }
 
