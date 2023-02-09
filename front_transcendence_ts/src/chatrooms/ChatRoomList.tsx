@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import {Room} from './ChatInterface';
 import io, {Socket} from "socket.io-client";
@@ -10,6 +10,8 @@ import axios from 'axios';
 import instance from '../confs/axios_information';
 import { serverurl } from '../confs/axios_information';
 import Blockuser from './Blockuser';
+import { Container, Title, StyledButton, BtnContainer, StyledButton2, StyledButton3 } from './Styles/ChatRoomList.style';
+
 
 interface NewRoomProps {
   newRoomName: string;
@@ -28,6 +30,7 @@ const ChatRoomList = (props: NewRoomProps) => {
   const [showForm, setShowForm] = useState(false);
   const [newDmCompoment, setNewDmCompoment] = useState(false);
   const [roomDm, setRoomDm] = useState(false);
+  const [selected, setSelected] = useState('Rooms');
 
   function handleCreateRoom(data: any) {
     setShowForm(!showForm);
@@ -35,11 +38,13 @@ const ChatRoomList = (props: NewRoomProps) => {
     props.setNewRoomName('');
   }
 
+
   function handleNewDm(){
     setNewDmCompoment(!newDmCompoment);
   }
 
   function handleRoomBtn(){
+    setSelected('Rooms');
     setRoomDm(false);
     props.btnRooms();
   }
@@ -65,23 +70,25 @@ const ChatRoomList = (props: NewRoomProps) => {
   }
 
   function handleDmBtn(){
+    setSelected('Direct Message');
     loadDms();
     setRoomDm(true);
   }
 
   return (
-    <div>
-      <h3>Chat:</h3>
-      {showForm && !roomDm && <Createroomaux handleCreateRoom={handleCreateRoom}/>}
-      {newDmCompoment && roomDm && <CreateDmAux username={props.username} setDms={props.setDms} dms={props.dms}/>}
-      {roomDm && <button onClick={handleNewDm}>New DM</button>}
-      {!roomDm && <button onClick={handleCreateRoom}>Create Room</button>}
-      <button onClick={handleRoomBtn}>Rooms</button>
-      <button onClick={handleDmBtn}>Direct Messages</button>
-      {!roomDm && <RoomList rooms={props.rooms}/>}
-      {roomDm && <DmList username={props.username} dms={props.dms}/>}
-      <Blockuser blockeduser='Roberto'/>
-    </div>
+    <Container>
+      <Title>Chat:</Title>
+      {showForm && !roomDm && <Createroomaux handleCreateRoom={handleCreateRoom} />}
+      {newDmCompoment && roomDm && <CreateDmAux username={props.username} setDms={props.setDms} dms={props.dms} />}
+      {roomDm && <StyledButton onClick={handleNewDm}>+</StyledButton>}
+      {!roomDm && <StyledButton onClick={handleCreateRoom}>+</StyledButton>}
+      <BtnContainer>
+      <StyledButton2 selected={selected} onClick={handleRoomBtn}>Rooms</StyledButton2>
+      <StyledButton3 selected={selected} onClick={handleDmBtn}>Direct Messages</StyledButton3>
+      </BtnContainer>
+      {!roomDm && <RoomList rooms={props.rooms} />}
+      {roomDm && <DmList username={props.username} dms={props.dms} />}
+    </Container>
   );
 };
 
