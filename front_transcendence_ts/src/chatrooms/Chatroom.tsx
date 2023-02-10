@@ -12,6 +12,7 @@ import GetUserData from '../utils/GetUserData';
 import Message from './Message';
 import styled from 'styled-components';
 import { useRef } from 'react';
+import Chatadm from './Chatadm';
 
 const Container = styled.div`
   display: flex;
@@ -194,6 +195,8 @@ function StartRoom()
   loadBlockedUsers();
   SetRenderPage(true);
   LoadMessages();
+  //Carregar o owner.
+  //Caregar os administradores. 
 }
 
 function handlePassword()
@@ -345,7 +348,9 @@ if (renderPage == false && promptShown == true)
 }
 else{
   return (
+    <><Chatadm />
     <Container>
+    
     <ChatHeader>{removeSubstring(data?.name, username)}</ChatHeader>
     <MessageContainer ref={messageContainerRef}>
     { messages.map((m, index) => {
@@ -354,7 +359,7 @@ else{
     else {
     console.log(blockedUsers);
     console.log(m.user);
-    return <Message username={username} index={index} user={m.user} message={m.message} />
+    return <Message username={username} index={index} user={m.user} message={m.message} setBlockedUsers={setBlockedUsers} />
     }
     
     }) }
@@ -366,6 +371,7 @@ else{
    
     {data?.type == 'private' && <UserSearch btnName="Add User To This ROOM!" handleUser={AddUserToRoom}/>}
     </Container>
+    </>
     );
 }
 }

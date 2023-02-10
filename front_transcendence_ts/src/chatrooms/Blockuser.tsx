@@ -1,13 +1,24 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import instance from '../confs/axios_information';
 import { OptionButton } from './UserOptions';
+import { useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 interface BlockuserProps {
     blockeduser : string;
+    setBlockedUsers : (blockedUsers : string[]) => void;
 }
 
 
 export default function Blockuser(props : BlockuserProps) {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [url, setUrl] = React.useState('');
+
+  useEffect(() => {
+    setUrl(location.pathname);
+  }, []);
+
     function handleBlockBtn(){
         const token = localStorage.getItem('token');
         instance.post('/userdata/block', {
@@ -18,6 +29,8 @@ export default function Blockuser(props : BlockuserProps) {
           }
         })
           .then(response => {
+            navigate(url);
+            //GetBlocked();
             console.log(response.data);
           })
           .catch(error => {
@@ -25,7 +38,7 @@ export default function Blockuser(props : BlockuserProps) {
           });
         }
 
-        function handleGetBlockkBtn(){
+        async function GetBlocked(){
             const token = localStorage.getItem('token');
             instance.get('/userdata/blocked-users', {
               headers: {
@@ -33,6 +46,8 @@ export default function Blockuser(props : BlockuserProps) {
               }
             })
               .then(response => {
+                console.log("UHULLLLL");
+                props.setBlockedUsers(response.data);
                 console.log(response.data);
               })
               .catch(error => {

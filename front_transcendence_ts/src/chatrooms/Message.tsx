@@ -7,6 +7,7 @@ interface MessageProps {
     index: number;
     user: string;
     message: string;
+    setBlockedUsers : (blockedUsers : string[]) => void;
 }
 
 const MessageContainer = styled.li`
@@ -44,7 +45,7 @@ export default function Message(props: MessageProps) {
     return (
       <MessageContainer>
         <div>
-          {props.username !== props.user && userOptions && <UserOptions user={props.user} />}
+          {props.username !== props.user && userOptions && <UserOptions setBlockedUsers={props.setBlockedUsers} user={props.user} />}
         </div>
         <div style={{ display: "flex", flexDirection: "column" }}>
           <UserName>
