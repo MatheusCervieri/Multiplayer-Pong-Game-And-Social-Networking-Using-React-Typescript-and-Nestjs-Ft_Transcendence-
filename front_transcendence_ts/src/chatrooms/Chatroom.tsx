@@ -11,22 +11,24 @@ import UserSearch from '../utils/components/Usersearch';
 import GetUserData from '../utils/GetUserData';
 import Message from './Message';
 import styled from 'styled-components';
+import { useRef } from 'react';
 
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  height: 100%;
-  width: 100%;
-  background-color: #E5E5E5;
-  padding: 20px;
-  box-sizing: border-box;
+  border: 1px solid #007bff;
+  border-radius: 5px;
+  overflow: hidden;
+  margin: 10px;
+  padding: 0;
 `;
 
 const ChatHeader = styled.h1`
-  font-size: 36px;
-  font-weight: bold;
-  margin-bottom: 20px;
-  color: #333;
+  background-color: #007bff;
+  color: white;
+  font-size: 18px;
+  padding: 16px;
+  margin: 0;
 `;
 
 const InputContainer = styled.div`
@@ -36,18 +38,11 @@ const InputContainer = styled.div`
   margin: 10px;
 `;
 
-const Label = styled.label`
-  font-size: 18px;
-  font-weight: bold;
-  margin-right: 10px;
-  color: #333;
-`;
-
 const Input = styled.input`
   font-size: 18px;
   padding: 10px;
   border-radius: 5px;
-  border: 1px solid #333;
+  border: 1px solid #007bff;
   width: 80%;
 `;
 
@@ -59,7 +54,7 @@ const MessageContainer = styled.ul`
 `;
 
 const SendButton = styled.button`
-  background-color: #333;
+  background-color: #007bff;
   color: #fff;
   font-size: 18px;
   padding: 10px 20px;
@@ -72,6 +67,42 @@ const SendButton = styled.button`
   }
 `;
 
+const FormContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+`;
+
+const Label = styled.label`
+  font-size: 18px;
+  margin-bottom: 5px;
+`;
+
+const PasswordInput = styled.input`
+  width: 300px;
+  height: 30px;
+  font-size: 18px;
+  margin-bottom: 10px;
+  padding: 5px;
+  border-radius: 5px;
+  border: none;
+`;
+
+const SubmitButton = styled.button`
+  width: 150px;
+  height: 40px;
+  font-size: 18px;
+  color: white;
+  background-color: #007bff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  &:hover {
+    background-color: lightblue;
+    color: white;
+  }
+`;
 
 const socket = io('http://localhost:8001');
 
@@ -85,8 +116,13 @@ const [renderPage, SetRenderPage] = useState<boolean>(false);
 const [promptShown, setPromptShown] = useState<boolean>(false);
 const [enteredPassowrd, setEnteredPassword] = useState<string>('');
 const [blockedUsers , setBlockedUsers] = useState<string[]>([]);
+const messageContainerRef = useRef<HTMLUListElement>(null);
 const navigate = useNavigate();
 
+useEffect(() => {
+  if(messageContainerRef.current)
+    messageContainerRef.current.scrollTop = messageContainerRef.current.scrollHeight;
+}, [messages]);
 
 const loadBlockedUsers = async () => {
   const token = localStorage.getItem('token');
@@ -300,18 +336,18 @@ const handleKeyDown = (event: any) => {
 if (renderPage == false && promptShown == true)
 {
   return (
-  <div>
-    <label>Password:</label>
-    <input type="password" id="passwordInput" onChange={(event) => setEnteredPassword(event.target.value)}/>
-    <button onClick={handlePassword} id="submitPasswordButton">Submit</button>
-  </div>
+    <FormContainer>
+      <Label htmlFor="passwordInput">Password:</Label>
+      <PasswordInput type="password" id="passwordInput" onChange={(event) => setEnteredPassword(event.target.value)} />
+      <SubmitButton onClick={handlePassword} id="submitPasswordButton">Submit</SubmitButton>
+    </FormContainer>
   );
 }
 else{
   return (
     <Container>
-    <ChatHeader>Chat - {removeSubstring(data?.name, username)} {id}</ChatHeader>
-    <MessageContainer>
+    <ChatHeader>{removeSubstring(data?.name, username)}</ChatHeader>
+    <MessageContainer ref={messageContainerRef}>
     { messages.map((m, index) => {
     if (blockedUsers.indexOf(m.user) !== -1) {
     }

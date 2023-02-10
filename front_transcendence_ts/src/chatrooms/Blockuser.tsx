@@ -1,5 +1,6 @@
 import React from 'react'
 import instance from '../confs/axios_information';
+import { OptionButton } from './UserOptions';
 
 interface BlockuserProps {
     blockeduser : string;
@@ -41,8 +42,7 @@ export default function Blockuser(props : BlockuserProps) {
 
   return (
     <>
-    <div><button onClick={handleBlockBtn}>Block User</button></div>
-    <div><button onClick={handleGetBlockkBtn}>Get Block</button></div>
+    <div><OptionButton onClick={handleBlockBtn}>Block User</OptionButton></div>
     </>
   )
 }
