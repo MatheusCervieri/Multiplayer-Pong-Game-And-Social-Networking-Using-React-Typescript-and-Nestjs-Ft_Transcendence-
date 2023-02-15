@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Delete, HttpCode, HttpStatus, Post, Req, HttpException } from '@nestjs/common';
+import { Body, Controller, Get, Delete, HttpCode, HttpStatus, Post, Req, HttpException, ForbiddenException } from '@nestjs/common';
 import { ChatRoomService } from './ChatRoom.service';
 import { UseInterceptors } from '@nestjs/common';
 import { AuthMiddleware } from '../user_database/auth.middleware'
@@ -110,6 +110,30 @@ export class ChatRoomControllerNew {
       console.error(error);
       throw new Error('Internal server error');
     }
+  }
+
+  @Post('change-type/:id')
+  async setRoomType(@Req() request: any, @Param('id') id: number, @Body() data: any): Promise<any> {
+    // Get user using request.
+    const user = await this.UsersService.findOne(request.user_id);
+    if (!user)
+      throw new Error("User not found");
+    // Get room using id.
+    const room = await this.ChatRoomService.findOwner(id);
+    console.log(room);
+    if (!room)
+      throw new Error("Room not found");
+
+    // Check if user is the owner of the room.
+   
+    if (room.owner.id !== user.id) {
+      throw new ForbiddenException('You are not authorized to change the room type.');
+    }
+
+    // If yes, change the type.
+    const updatedRoom = await this.ChatRoomService.updateRoomType(room.id, data.type, data.password);
+
+    return { message: 'Room type updated successfully.', data: updatedRoom };
   }
 }
 

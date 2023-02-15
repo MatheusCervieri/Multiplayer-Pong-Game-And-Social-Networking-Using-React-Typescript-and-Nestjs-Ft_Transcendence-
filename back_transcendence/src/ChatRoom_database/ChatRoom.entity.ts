@@ -41,6 +41,10 @@ export class ChatRoom {
   @ManyToMany(type => User, user => user.chatRooms)
   @JoinTable()
   bannedusers: User[];
+
+  @ManyToMany(type => User, user => user.chatRooms)
+  @JoinTable()
+  mutedusers: User[];
 }
 
 @Entity()

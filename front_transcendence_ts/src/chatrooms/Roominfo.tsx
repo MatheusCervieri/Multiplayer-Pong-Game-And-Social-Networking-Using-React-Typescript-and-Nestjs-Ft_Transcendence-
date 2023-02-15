@@ -38,7 +38,7 @@ export default function Roominfo(props: RoominfoProps) {
           }
         });
             setInformation(response.data);
-            console.log("Information", information);
+            console.log(information);
             setShowInfo(!showInfo);
             return 0;
             } catch (error) {
@@ -49,10 +49,8 @@ export default function Roominfo(props: RoominfoProps) {
     };
   
 
-    
     return (
     <div>
-        
         {showInfo && <Useradmin username={props.username} information={information}/>}
         <button onClick={handleClick}>Information</button>
     </div>

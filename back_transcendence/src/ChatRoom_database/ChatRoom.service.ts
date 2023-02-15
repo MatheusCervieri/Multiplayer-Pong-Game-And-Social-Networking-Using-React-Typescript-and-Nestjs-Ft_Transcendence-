@@ -46,9 +46,17 @@ export class ChatRoomService {
   async findRoomUsers(id : number): Promise<ChatRoom[]> {
     const chatRoom = await this.roomsRepository.find({
       where: { id: id },
-      relations: ['users', 'owner', 'adminusers'],
+      relations: ['users', 'owner', 'adminusers', 'bannedusers', 'mutedusers'],
     });
     return chatRoom;
+  }
+
+  async findOwner(id : number): Promise<ChatRoom> {
+    const chatRoom = await this.roomsRepository.find({
+      where: { id: id },
+      relations: ['owner'],
+    });
+    return chatRoom[0];
   }
 
   findAllDmsWithUsers(): Promise<ChatRoom[]> {
@@ -105,8 +113,17 @@ export class ChatRoomService {
     const room = await this.roomsRepository.findOne({ where: { id }, relations: ['users'] });
     return room.users;
   }
-  
 
+  async updateRoomType(id: number, type : string, password: string): Promise<ChatRoom> {
+    // Find the room with the given id
+    const room = await this.roomsRepository.findOne({ where: { id } });
+    room.type = type;
+    room.password = password;
+    return await this.roomsRepository.save(room);
+    // Check if the user is an owner of the room
+   
+  }
+  
   async deleteAll(): Promise<void> {
     await this.roomsRepository.clear();
   }

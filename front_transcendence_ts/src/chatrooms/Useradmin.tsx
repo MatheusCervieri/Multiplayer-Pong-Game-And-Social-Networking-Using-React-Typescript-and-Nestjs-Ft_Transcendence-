@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { ChatRoomDto } from './Roominfo';
 import { useEffect } from 'react';
+import SetRoomType from './SetRoomType';
 
 interface UserAdminProps {
     username: string;
@@ -18,6 +19,7 @@ const UserAdmin : any = (props : UserAdminProps) => {
   const [information, setInformation] = useState<any>(props.information);
   const [users, setUsers] = useState<any[]>(props.information.users);
   const [showOwner, setShowOwner] = useState<boolean>(false);
+  const [showSetRoomType, setShowSetRoomType] = useState<boolean>(false);
 
 
   useEffect(() => {
@@ -26,14 +28,10 @@ const UserAdmin : any = (props : UserAdminProps) => {
 
   function handlePassword(info: any)
   {
-    console.log("Wtf");
     if(info)
     {
-        console.log("info.owner.name", info.owner.name);
-        console.log("Username", props.username);
     if (info.owner.name === props.username)
     {
-        console.log("Wtf3");
       setShowOwner(true);
     }
     }
@@ -47,9 +45,15 @@ const UserAdmin : any = (props : UserAdminProps) => {
     setSearchTerm(e.target.value);
   };
 
+  function handleSetPassBtn() 
+  {
+    setShowSetRoomType(!showSetRoomType);
+  }
+
   return (
     <div>
-        {showOwner && <button>Set Password</button>}
+        {showSetRoomType && <SetRoomType setShowSetRoomType={setShowSetRoomType}/>}
+        {showOwner && <button onClick={handleSetPassBtn}>Set Password</button>}
         Owner: {information.owner.name}
         <br></br>
       <input
