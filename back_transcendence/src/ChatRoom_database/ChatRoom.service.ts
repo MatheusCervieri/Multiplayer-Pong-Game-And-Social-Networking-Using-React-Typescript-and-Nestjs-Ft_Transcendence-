@@ -121,8 +121,47 @@ export class ChatRoomService {
     room.password = password;
     return await this.roomsRepository.save(room);
     // Check if the user is an owner of the room
-   
   }
+
+  async removeParticipant(roomId: number, userId: number): Promise<void> {
+    // Find the room with the given id
+    //Observar que pode ter um erro aqui: 
+    try {
+    const room = await this.roomsRepository.findOne({ where: { id: roomId }, relations: ['users'] });
+    // Check if the user is a participant in the room
+    const participant = room.users.find((user) => user.id === userId);
+    if (!participant) {
+      throw new Error('User is not a participant in the room');
+    }
+    
+    // Remove the user from the room
+    room.users = room.users.filter((user) => user.id !== userId);
+    await this.roomsRepository.save(room);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async setNewOwner(room: ChatRoom): Promise<void> {
+  try {
+  const currentUsers = await this.getRoomUsers(room.id);
+
+  if (currentUsers.length === 0) {
+    throw new Error('Cannot set new owner - no users in room');
+  }
+
+  // Choose a random user from the current users in the room
+  const randomIndex = Math.floor(Math.random() * currentUsers.length);
+  const newOwner = currentUsers[randomIndex];
+
+  // Update the room owner
+  room.owner = newOwner;
+  await this.roomsRepository.save(room);
+}
+  catch (error) {
+
+}
+}
   
   async deleteAll(): Promise<void> {
     await this.roomsRepository.clear();

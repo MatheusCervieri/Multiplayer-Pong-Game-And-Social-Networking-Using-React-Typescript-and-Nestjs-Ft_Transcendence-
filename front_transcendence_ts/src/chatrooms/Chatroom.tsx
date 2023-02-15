@@ -13,6 +13,7 @@ import Message from './Message';
 import styled from 'styled-components';
 import { useRef } from 'react';
 import Roominfo from './Roominfo';
+import Leaveroom from './Leaveroom';
 
 const Container = styled.div`
   display: flex;
@@ -358,6 +359,7 @@ else{
   return (
     <>
     <Roominfo username={username}/>
+    <Leaveroom/>
     <Container>
     
     <ChatHeader>{removeSubstring(data?.name, username)}</ChatHeader>

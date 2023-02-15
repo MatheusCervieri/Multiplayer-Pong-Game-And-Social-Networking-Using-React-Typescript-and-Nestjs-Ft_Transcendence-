@@ -135,5 +135,39 @@ export class ChatRoomControllerNew {
 
     return { message: 'Room type updated successfully.', data: updatedRoom };
   }
+
+  @Post('leave-room/:id')
+  async LeaveRoom(@Req() request: any, @Param('id') id: number, @Body() data: any): Promise<any> {
+    // Get user using request.
+    try{
+    const user = await this.UsersService.findOne(request.user_id);
+    if (!user)
+      throw new Error("User not found");
+    // Get room using id.
+    const room = await this.ChatRoomService.findOwner(id);
+    if (!room)
+      throw new Error("Room not found");
+
+    // Check if user is the owner of the room.
+   
+    if (room.owner.id !== user.id) {
+      //Leave the room
+      this.ChatRoomService.removeParticipant(room.id, user.id);
+    }
+    else
+    {
+      //Set a new owner to the room. 
+      this.ChatRoomService.removeParticipant(room.id, user.id);
+      this.ChatRoomService.setNewOwner(room);
+      //Leave the room. 
+    }
+      return { message: 'Leave the room!', data: room };
+  }catch (error)
+  {
+    console.log(error);
+    return { message: error };
+
+  }
+  }
 }
 
