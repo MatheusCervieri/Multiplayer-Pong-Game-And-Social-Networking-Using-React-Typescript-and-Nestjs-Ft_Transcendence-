@@ -12,7 +12,7 @@ import GetUserData from '../utils/GetUserData';
 import Message from './Message';
 import styled from 'styled-components';
 import { useRef } from 'react';
-import Chatadm from './Chatadm';
+import Roominfo from './Roominfo';
 
 const Container = styled.div`
   display: flex;
@@ -209,6 +209,7 @@ function handlePassword()
   if (enteredPassowrd === data.password)
   {
     StartRoom();
+    AddUserToRoom(username);
   }
   else
   {
@@ -231,6 +232,7 @@ const InitializeRoom = (data: any, user_name? : string) => {
     if (data.type === 'public')
     {
       StartRoom();
+      AddUserToRoom(username);
     }
     if (data.type === 'protected')
     {
@@ -308,9 +310,15 @@ function handleRoom(){
 }
 
 const addUserToChatRoom = async (userName : string, roomId : string | undefined) => {
+  const token = localStorage.getItem('token');
   try {
-    const response = await axios.post(serverurl + `/chatdata/add-user-room/${roomId}`, {
+    const response = await axios.post(serverurl + `/room/add-user-room/${roomId}`, {
       name: userName
+    }, 
+    {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
     });
     return response.data;
   } catch (error) {
@@ -348,7 +356,8 @@ if (renderPage == false && promptShown == true)
 }
 else{
   return (
-    <><Chatadm />
+    <>
+    <Roominfo username={username}/>
     <Container>
     
     <ChatHeader>{removeSubstring(data?.name, username)}</ChatHeader>

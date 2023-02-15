@@ -9,6 +9,7 @@ import io, {Socket} from "socket.io-client";
 import GetToken from '../utils/GetToken';
 import { serverurl } from '../confs/axios_information';
 import axios from 'axios';
+import {postReq} from '../utils/Httprequests';
 
 export interface Room {
     id: number;
@@ -44,15 +45,22 @@ const ChatInterface: React.FC = () => {
 
 
     const handleCreateRoom = (data: any) => {
-        console.log(newRoomName);
+        console.log(newRoomName); 
         PostNewRoom(data);
         setNewRoomName('');
       };
 
     async function PostNewRoom(data: any): Promise<number>{
+      const token = localStorage.getItem('token');
         try {
         data.adm = username;
-        const response = await instance.post('chatdata/create-room', data );
+        const response = await instance.post('room/create-room', data , 
+        {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        }
+        );
         setRooms([...rooms, response.data]);
         PostRoomUser(response.data.id).then((data) => {
           navigate('/chat/' + response.data.id);
@@ -66,9 +74,16 @@ const ChatInterface: React.FC = () => {
     }
 
     async function PostRoomUser(roomid: number)
-    { try {
-      const response = await axios.post(serverurl + `/chatdata/add-user-room/${roomid}`, {
+    { 
+      const token = localStorage.getItem('token');
+      try {
+      const response = await axios.post(serverurl + `/room/add-user-room/${roomid}`, {
         name: username
+      }, 
+      {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
       });
       return response.data;
     } catch (error) {

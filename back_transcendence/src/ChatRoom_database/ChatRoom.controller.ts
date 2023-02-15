@@ -98,6 +98,8 @@ export class ChatRoomController {
     new_ChatRoom.password = data.password;
     new_ChatRoom.adm = data.adm;
     return await this.ChatRoomService.create(new_ChatRoom);
+
+    //quando o room é criado a gente precisa adicionar o owner. 
   }
 
   @Post('create-room-dm')
@@ -138,6 +140,7 @@ export class ChatRoomController {
     room.users = await this.ChatRoomService.findUsers(room.id);
   
     room.users.push(user);
+    
     return await this.ChatRoomService.save(room);
   }
 

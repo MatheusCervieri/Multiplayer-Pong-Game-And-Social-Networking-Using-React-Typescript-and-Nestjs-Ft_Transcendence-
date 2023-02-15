@@ -35,4 +35,7 @@ export class User {
   @ManyToMany(type => User, user => user.blocks)
   @JoinTable()
   blockedBy: User[];
+
+  @OneToMany(type => ChatRoom, chatRoom => chatRoom.owner)
+  ownedChatRooms: ChatRoom[];
 }

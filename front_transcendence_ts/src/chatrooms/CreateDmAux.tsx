@@ -71,7 +71,7 @@ async function loadDms()
     async function PostRoomUser(roomid: number, username: string)
     { try {
         console.log("Room User Name", username);
-      const response = await axios.post(serverurl + `/chatdata/add-user-room/${roomid}`, {
+      const response = await axios.post(serverurl + `/room/add-user-room/${roomid}`, {
         name: username
       });
       console.log(username);

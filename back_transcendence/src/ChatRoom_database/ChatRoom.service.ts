@@ -43,6 +43,14 @@ export class ChatRoomService {
     return this.roomsRepository.find({relations: ['users']});
   }
 
+  async findRoomUsers(id : number): Promise<ChatRoom[]> {
+    const chatRoom = await this.roomsRepository.find({
+      where: { id: id },
+      relations: ['users', 'owner', 'adminusers'],
+    });
+    return chatRoom;
+  }
+
   findAllDmsWithUsers(): Promise<ChatRoom[]> {
     return this.roomsRepository.find({where: {type: 'dm'} ,relations: ['users']});
   }
@@ -75,6 +83,12 @@ export class ChatRoomService {
     return room.users;
   }
 
+  async findAdminUsers(id: number): Promise<User[]> {
+    const chatRoom = await this.roomsRepository.findOne({ where: { id }, 
+      relations: ['adminusers'],
+    });
+    return chatRoom.adminusers || [];
+  }
   findOne(id: number): Promise<ChatRoom> {
     return this.roomsRepository.findOneBy({ id });
   }
@@ -92,6 +106,7 @@ export class ChatRoomService {
     return room.users;
   }
   
+
   async deleteAll(): Promise<void> {
     await this.roomsRepository.clear();
   }

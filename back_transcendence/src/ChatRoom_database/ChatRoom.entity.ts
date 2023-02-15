@@ -1,7 +1,7 @@
 import { User } from 'src/user_database/user.entity';
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany , ManyToOne } from 'typeorm';
-import { ManyToMany } from 'typeorm';
-import { JoinTable } from 'typeorm'
+import { ManyToMany, OneToOne } from 'typeorm';
+import { JoinTable, JoinColumn } from 'typeorm'
 
 @Entity()
 export class ChatRoom {
@@ -20,6 +20,10 @@ export class ChatRoom {
   @Column({ nullable: true })
   password: string;
 
+  @ManyToOne(() => User, user => user.ownedChatRooms)
+  @JoinColumn()
+  owner: User;
+  
   @Column({ default: true })
   isActive: boolean;
 
@@ -29,9 +33,6 @@ export class ChatRoom {
   @ManyToMany(type => User, user => user.chatRooms)
   @JoinTable()
   users: User[];
-
-  @Column()
-  owner: User;
 
   @ManyToMany(type => User, user => user.chatRooms)
   @JoinTable()

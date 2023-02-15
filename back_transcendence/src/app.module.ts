@@ -22,6 +22,7 @@ import { ChatRoomModule } from './ChatRoom_database/ChatRoom.module';
 import { MessageModule } from './ChatRoom_database/Message.module';
 import { MessageService } from './ChatRoom_database/Message.service';
 import { UsersInformationController } from './user_database/usersinformation.controller';
+import { ChatRoomControllerNew } from './ChatRoom_database/ChatRoomNew.controller';
 
 @Module({
   imports: [
@@ -36,14 +37,14 @@ import { UsersInformationController } from './user_database/usersinformation.con
       autoLoadEntities: true,
       synchronize: true,
     }), EmailModule, UserModule, ChatRoomModule, MessageModule],
-  controllers: [AppController, SimpleGetController, SimplePostController, SingUpController, NameSetController, UserController, LoginController, ChatRoomController, UsersInformationController],
+  controllers: [AppController, SimpleGetController, SimplePostController, SingUpController, NameSetController, UserController, LoginController, ChatRoomController, ChatRoomControllerNew, UsersInformationController],
   providers: [AppService, EmailService, UsersService, ChatRoomService, ChatGateway, MessageService],
 })
 export class AppModule implements NestModule{
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(AuthMiddleware)
-      .forRoutes({ path: 'set-name', method: RequestMethod.POST }, UserController);
+      .forRoutes({ path: 'set-name', method: RequestMethod.POST }, UserController, ChatRoomControllerNew);
   }
 
 }
