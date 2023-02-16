@@ -5,6 +5,12 @@ import SetRoomType from './SetRoomType';
 import SetAdmBtn from './AdminBtns/SetAdmBtn';
 import BlockUserBtn from './AdminBtns/BlockUserBtn';
 import MuteUserBtn from './AdminBtns/MuteUserBtn';
+import instance from '../confs/axios_information';
+import { useParams } from 'react-router-dom';
+import UndoAdmBtn from './AdminBtns/UndoAdmBtn';
+import UnmuteUserBtn from './AdminBtns/UnMuteUserBtn';
+import UnblockUserBtn from './AdminBtns/UnBlockUserBtn';
+import UnMuteUserBtn from './AdminBtns/UnMuteUserBtn';
 
 interface UserAdminProps {
     username: string;
@@ -23,6 +29,7 @@ const UserAdmin : any = (props : UserAdminProps) => {
   const [users, setUsers] = useState<any[]>(props.information.users);
   const [showOwner, setShowOwner] = useState<boolean>(false);
   const [showSetRoomType, setShowSetRoomType] = useState<boolean>(false);
+  const { id } = useParams<{ id: string | undefined }>();
 
 
   useEffect(() => {
@@ -57,17 +64,125 @@ const UserAdmin : any = (props : UserAdminProps) => {
 
   //Handle buttons click!
 
-  function setAdmButtonClick(username: string) {
-    console.log("setAdmButtonClick");
+  async function setAdmButtonClick(username: string) {
+    //Create a axios post requisition to this 'make-admin-room/:id'
+    const data = { name: username};
+    const token = localStorage.getItem('token');
+        try {
+            const response = await instance.post('room/make-admin-room/' + id, data, 
+        {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+            console.log("Response from setAdmButtonClick: " + response.data);
+            return 0;
+            } catch (error) {
+            console.log(error);
+            return 1;
+            }
+
   }
 
-  function BlockUserClick(username: string)
+  async function undoAdmBtnClick(username: string)
   {
+    //Create a axios post requisition to this 'make-admin-room/:id'
+    const data = { name: username};
+    const token = localStorage.getItem('token');
+        try {
+            const response = await instance.post('room/remove-admin-room/' + id, data, 
+        {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+            console.log("Response from undoAdmBtnClick: " + response.data);
+            return 0;
+            } catch (error) {
+            console.log(error);
+            return 1;
+            }
+  }
+
+  async function BlockUserClick(username: string)
+  {
+    const data = { name: username};
+    const token = localStorage.getItem('token');
+        try {
+            const response = await instance.post('room/block-user-room/' + id, data, 
+        {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+            console.log("Response from setAdmButtonClick: " + response.data);
+            return 0;
+            } catch (error) {
+            console.log(error);
+            return 1;
+            }
+
     console.log("BlockUserClick");
   }
 
-  function MuteUserClick(username: string)
+  async function UnblockUserClick(username: string)
   {
+    const data = { name: username};
+    const token = localStorage.getItem('token');
+        try {
+            const response = await instance.post('room/unblock-user-room/' + id, data, 
+        {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+            console.log("Response from undoAdmBtnClick: " + response.data);
+            return 0;
+            } catch (error) {
+            console.log(error);
+            return 1;
+            }
+    console.log("UnBlockUserClick");
+  }
+
+  async function MuteUserClick(username: string)
+  {
+    const data = { name: username};
+    const token = localStorage.getItem('token');
+        try {
+            const response = await instance.post('room/mute-user-room/' + id, data, 
+        {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+            console.log("Response from setAdmButtonClick: " + response.data);
+            return 0;
+            } catch (error) {
+            console.log(error);
+            return 1;
+            }
+    console.log("BlockUserClick");
+  }
+
+  async function UnMuteUserClick(username: string)
+  {
+    const data = { name: username};
+    const token = localStorage.getItem('token');
+        try {
+            const response = await instance.post('room/unmute-user-room/' + id, data, 
+        {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+            console.log("Response from undoAdmBtnClick: " + response.data);
+            return 0;
+            } catch (error) {
+            console.log(error);
+            return 1;
+            }
+    console.log("UnBlockUserClick");
     console.log("BlockUserClick");
   }
 
@@ -88,8 +203,11 @@ const UserAdmin : any = (props : UserAdminProps) => {
           {filteredUsers.map((user: User) => (
             <li key={user.id}>{user.name} 
             <SetAdmBtn username={user.name} AdmBtnClick={setAdmButtonClick}/>
+            <UndoAdmBtn username={user.name} onUndoAdmClick={undoAdmBtnClick}/>
             <BlockUserBtn username={user.name} onBlockUserClick={BlockUserClick}/>
+            <UnblockUserBtn username={user.name} onUnblockUserClick={UnblockUserClick}/>
             <MuteUserBtn username={user.name} onMuteUserClick={MuteUserClick}/>
+            <UnMuteUserBtn username={user.name} onUnmuteUserClick={UnMuteUserClick}/>
             </li>
           ))}
         </ul>

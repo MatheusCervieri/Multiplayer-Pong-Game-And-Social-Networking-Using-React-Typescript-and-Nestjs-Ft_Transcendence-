@@ -169,5 +169,296 @@ export class ChatRoomControllerNew {
 
   }
   }
+
+  @Post('make-admin-room/:id')
+  async MakeAdmin(@Req() request: any, @Param('id') id: number, @Body() data: any): Promise<any> {
+    try{
+      const user = await this.UsersService.findOne(request.user_id);
+      if (!user)
+        throw new Error("User not found");
+      // Get room using id.
+      const room = await this.ChatRoomService.findOwner(id);
+      if (!room)
+        throw new Error("Room not found");
+  
+      // Check if user is the owner of the room.
+      if (room.owner.id !== user.id) {
+        throw new ForbiddenException('You are not authorized to change the room type.');
+      }
+
+      const userToMakeAdmin = await this.UsersService.findOneByName(data.name);
+      if (!userToMakeAdmin)
+        throw new Error("User to make admin not found");
+      //Check if the user is in the room.
+      const roomUsers = await this.ChatRoomService.findUsers(room.id);
+      if (!roomUsers.some(u => u.id === userToMakeAdmin.id))
+        throw new Error("User to make admin is not in the room");
+      //Check if the user is admin.
+      const roomAdmin = await this.ChatRoomService.findAdminUsers(room.id);
+      if (roomAdmin.some(u => u.id === userToMakeAdmin.id))
+        throw new Error("User to make admin is already admin");
+      //If not, make him admin. 
+      room.adminusers = roomAdmin;
+      room.adminusers.push(userToMakeAdmin);
+      await this.ChatRoomService.save(room);
+      return { message: 'User is now admin!', data: room };
+    }catch (error)
+    {
+      console.log(error);
+      return { message: error };
+    }
+  }
+
+  @Post('remove-admin-room/:id')
+  async RemoveAdmin(@Req() request: any, @Param('id') id: number, @Body() data: any): Promise<any> {
+      try{
+      const user = await this.UsersService.findOne(request.user_id);
+      if (!user)
+        throw new Error("User not found");
+      // Get room using id.
+      const room = await this.ChatRoomService.findOwner(id);
+      if (!room)
+        throw new Error("Room not found");
+  
+      // Check if user is the owner of the room.
+      if (room.owner.id !== user.id) {
+        throw new ForbiddenException('You are not authorized to change the room type.');
+      }
+
+      const userToRemoveAdmin = await this.UsersService.findOneByName(data.name);
+      if (!userToRemoveAdmin)
+        throw new Error("User to remove admin not found");
+      //Check if the user is in the room.
+      const roomUsers = await this.ChatRoomService.findUsers(room.id);
+      if (!roomUsers.some(u => u.id === userToRemoveAdmin.id))
+        throw new Error("User to remove admin is not in the room");
+      //Check if the user is admin.
+      const roomAdmin = await this.ChatRoomService.findAdminUsers(room.id);
+      if (!roomAdmin.some(u => u.id === userToRemoveAdmin.id))
+        throw new Error("User to remove admin is not admin");
+      //Check if the user is owner
+      if (room.owner.id === userToRemoveAdmin.id)
+        throw new Error("User to remove admin is owner");
+      
+      //If it is, remove admin permission from him.
+      room.adminusers = roomAdmin;
+      room.adminusers = room.adminusers.filter(u => u.id !== userToRemoveAdmin.id);
+      await this.ChatRoomService.save(room);
+      return { message: 'User is now admin!', data: room };
+    }catch (error)
+    {
+      console.log(error);
+      return { message: error };
+    } 
+   
+  }
+
+  @Post('block-user-room/:id')
+  async BlockUser(@Req() request: any, @Param('id') id: number, @Body() data: any): Promise<any> {
+    //Get user making the request using request;  
+    //Get room using id;
+    //Check if user making the request is the owner of the room or if user is a admin.
+    //Check if user to block is in the room.
+    //Check if user to block is already blocked.
+    //If not, block him.
+    //If yes, throw error.
+    try{
+      const user = await this.UsersService.findOne(request.user_id);
+      if (!user)
+        throw new Error("User not found");
+      // Get room using id.
+      const room = await this.ChatRoomService.findOwner(id);
+      if (!room)
+        throw new Error("Room not found");
+  
+      // Check if user is the owner of the room or if user is a admin. If it is a admin or owner, he can block users.
+      if (room.owner.id !== user.id) {
+        const roomAdmin = await this.ChatRoomService.findAdminUsers(room.id);
+        if (!roomAdmin.some(u => u.id === user.id))
+          throw new ForbiddenException('You are not authorized to change the room type.');
+      }
+
+      const userToBlock = await this.UsersService.findOneByName(data.name);
+      if (!userToBlock)
+        throw new Error("User to block not found");
+      //Check if the user is in the room.
+      const roomUsers = await this.ChatRoomService.findUsers(room.id);
+      if (!roomUsers.some(u => u.id === userToBlock.id))
+        throw new Error("User to block is not in the room");
+      //Check if the user is blocked.
+      const roomBlocked = await this.ChatRoomService.findBlockedUsers(room.id);
+      if (roomBlocked.some(u => u.id === userToBlock.id))
+        throw new Error("User to block is already blocked");
+      //Check if the user is owner
+      if (room.owner.id === userToBlock.id)
+        throw new Error("You can´t block the owner");
+
+      //If not, block him. 
+      room.bannedusers = roomBlocked;
+      room.bannedusers.push(userToBlock);
+      await this.ChatRoomService.save(room);
+      return { message: 'User is now blocked!', data: room };
+    }catch (error)
+    {
+      console.log(error);
+      return { message: error };
+    }
+  }
+
+  @Post('unblock-user-room/:id')
+  async UnBlockUser(@Req() request: any, @Param('id') id: number, @Body() data: any): Promise<any> {
+    //Get user making the request using request;  
+    //Get room using id;
+    //Check if user making the request is the owner of the room or if user is a admin.
+    //Check if user to unblock is in the room.
+    //Check if user to unblock is already blocked.
+    //If yes, unblock him.
+    //If not, throw error.
+    try{
+      const user = await this.UsersService.findOne(request.user_id);
+      if (!user)
+        throw new Error("User not found");
+      // Get room using id.
+      const room = await this.ChatRoomService.findOwner(id);
+      if (!room)
+        throw new Error("Room not found");
+  
+      // Check if user is the owner of the room or if user is a admin. If it is a admin or owner, he can block users.
+      if (room.owner.id !== user.id) {
+        const roomAdmin = await this.ChatRoomService.findAdminUsers(room.id);
+        if (!roomAdmin.some(u => u.id === user.id))
+          throw new ForbiddenException('You are not authorized to change the room type.');
+      }
+
+      const userToUnBlock = await this.UsersService.findOneByName(data.name);
+      if (!userToUnBlock)
+        throw new Error("User to unblock not found");
+      //Check if the user is in the room.
+      const roomUsers = await this.ChatRoomService.findUsers(room.id);
+      if (!roomUsers.some(u => u.id === userToUnBlock.id))
+        throw new Error("User to unblock is not in the room");
+      //Check if the user is blocked.
+      const roomBlocked = await this.ChatRoomService.findBlockedUsers(room.id);
+      if (!roomBlocked.some(u => u.id === userToUnBlock.id))
+        throw new Error("User to unblock is not blocked");
+      //Check if the user is owner
+      if (room.owner.id === userToUnBlock.id)
+        throw new Error("You can´t unblock the owner");
+
+      //If yes, unblock him.
+      room.bannedusers = roomBlocked;
+      room.bannedusers = room.bannedusers.filter(u => u.id !== userToUnBlock.id);
+      await this.ChatRoomService.save(room);
+      return { message: 'User is now unblocked!', data: room };
+    }catch (error)
+    {
+      console.log(error);
+  }
 }
 
+@Post('mute-user-room/:id')
+async MuteUser(@Req() request: any, @Param('id') id: number, @Body() data: any): Promise<any> {
+   //Get user making the request using request;  
+    //Get room using id;
+    //Check if user making the request is the owner of the room or if user is a admin.
+    //Check if user to mute is in the room.
+    //Check if user to mute is already muted.
+    //If not, mute him.
+    //If yes, throw error.
+    try{
+      const user = await this.UsersService.findOne(request.user_id);
+      if (!user)
+        throw new Error("User not found");
+      // Get room using id.
+      const room = await this.ChatRoomService.findOwner(id);
+      if (!room)
+        throw new Error("Room not found");
+  
+      // Check if user is the owner of the room or if user is a admin. If it is a admin or owner, he can block users.
+      if (room.owner.id !== user.id) {
+        const roomAdmin = await this.ChatRoomService.findAdminUsers(room.id);
+        if (!roomAdmin.some(u => u.id === user.id))
+          throw new ForbiddenException('You are not authorized to change the room type.');
+      }
+
+      const userToMute = await this.UsersService.findOneByName(data.name);
+      if (!userToMute)
+        throw new Error("User to mute not found");
+      //Check if the user is in the room.
+      const roomUsers = await this.ChatRoomService.findUsers(room.id);
+      if (!roomUsers.some(u => u.id === userToMute.id))
+        throw new Error("User to mute is not in the room");
+      //Check if the user is muted.
+      const roomMuted = await this.ChatRoomService.findMutedUsers(room.id);
+      if (roomMuted.some(u => u.id === userToMute.id))
+        throw new Error("User to mute is already muted");
+      //Check if the user is owner
+      if (room.owner.id === userToMute.id)
+        throw new Error("You can´t mute the owner");
+
+      //If not, mute him.
+      room.mutedusers = roomMuted;
+      room.mutedusers.push(userToMute);
+      await this.ChatRoomService.save(room);
+      return { message: 'User is now muted!', data: room };
+    }catch (error)
+    {
+      console.log(error);
+      return { message: error };
+    }
+}
+
+@Post('unmute-user-room/:id')
+async UnMuteUser(@Req() request: any, @Param('id') id: number, @Body() data: any): Promise<any> {
+   //Get user making the request using request;  
+    //Get room using id;
+    //Check if user making the request is the owner of the room or if user is a admin.
+    //Check if user to unmute is in the room.
+    //Check if user to unmute is already muted.
+    //If yes, mute him.
+    //If yes, throw error.
+    try{
+      const user = await this.UsersService.findOne(request.user_id);
+      if (!user)
+        throw new Error("User not found");
+      // Get room using id.
+      const room = await this.ChatRoomService.findOwner(id);
+      if (!room)
+        throw new Error("Room not found");
+  
+      // Check if user is the owner of the room or if user is a admin. If it is a admin or owner, he can block users.
+      if (room.owner.id !== user.id) {
+        const roomAdmin = await this.ChatRoomService.findAdminUsers(room.id);
+        if (!roomAdmin.some(u => u.id === user.id))
+          throw new ForbiddenException('You are not authorized to change the room type.');
+      }
+
+      const userToUnMute = await this.UsersService.findOneByName(data.name);
+      if (!userToUnMute)
+        throw new Error("User to unmute not found");
+      //Check if the user is in the room.
+      const roomUsers = await this.ChatRoomService.findUsers(room.id);
+      if (!roomUsers.some(u => u.id === userToUnMute.id))
+        throw new Error("User to unmute is not in the room");
+      //Check if the user is muted.
+      const roomMuted = await this.ChatRoomService.findMutedUsers(room.id);
+      if (!roomMuted.some(u => u.id === userToUnMute.id))
+        throw new Error("User to unmute is not muted");
+      //Check if the user is owner
+      if (room.owner.id === userToUnMute.id)
+        throw new Error("You can´t unmute the owner");
+
+      //If yes, mute him.
+      room.mutedusers = roomMuted;
+      room.mutedusers = room.mutedusers.filter(u => u.id !== userToUnMute.id);
+      await this.ChatRoomService.save(room);
+      return { message: 'User is now unmuted!', data: room };
+    }catch (error)
+    {
+      console.log(error);
+      return { message: error };
+    }
+    
+}
+
+}

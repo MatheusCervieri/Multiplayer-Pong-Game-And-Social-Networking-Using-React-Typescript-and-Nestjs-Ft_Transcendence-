@@ -162,6 +162,20 @@ export class ChatRoomService {
 
 }
 }
+
+async findBlockedUsers(id: number): Promise<User[]> {
+  const chatRoom = await this.roomsRepository.findOne({ where: { id }, 
+    relations: ['bannedusers'],
+  });
+  return chatRoom.bannedusers || [];
+}
+
+async findMutedUsers(id: number): Promise<User[]> {
+  const chatRoom = await this.roomsRepository.findOne({ where: { id }, 
+    relations: ['mutedusers'],
+  });
+  return chatRoom.mutedusers || [];  
+}
   
   async deleteAll(): Promise<void> {
     await this.roomsRepository.clear();
