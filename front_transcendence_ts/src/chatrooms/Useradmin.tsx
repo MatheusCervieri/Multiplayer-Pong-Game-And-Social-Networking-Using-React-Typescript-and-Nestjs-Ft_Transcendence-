@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { ChatRoomDto } from './Roominfo';
 import { useEffect } from 'react';
 import SetRoomType from './SetRoomType';
+import SetAdmBtn from './AdminBtns/SetAdmBtn';
+import BlockUserBtn from './AdminBtns/BlockUserBtn';
+import MuteUserBtn from './AdminBtns/MuteUserBtn';
 
 interface UserAdminProps {
     username: string;
@@ -24,6 +27,7 @@ const UserAdmin : any = (props : UserAdminProps) => {
 
   useEffect(() => {
     handlePassword(information);
+    setUsers(props.information.users);
   },[information]);
 
   function handlePassword(info: any)
@@ -50,6 +54,23 @@ const UserAdmin : any = (props : UserAdminProps) => {
     setShowSetRoomType(!showSetRoomType);
   }
 
+
+  //Handle buttons click!
+
+  function setAdmButtonClick(username: string) {
+    console.log("setAdmButtonClick");
+  }
+
+  function BlockUserClick(username: string)
+  {
+    console.log("BlockUserClick");
+  }
+
+  function MuteUserClick(username: string)
+  {
+    console.log("BlockUserClick");
+  }
+
   return (
     <div>
         {showSetRoomType && <SetRoomType setShowSetRoomType={setShowSetRoomType}/>}
@@ -65,7 +86,11 @@ const UserAdmin : any = (props : UserAdminProps) => {
       <div style={{ overflowY: 'scroll', height: '10em' }}>
         <ul>
           {filteredUsers.map((user: User) => (
-            <li key={user.id}>{user.name}</li>
+            <li key={user.id}>{user.name} 
+            <SetAdmBtn username={user.name} AdmBtnClick={setAdmButtonClick}/>
+            <BlockUserBtn username={user.name} onBlockUserClick={BlockUserClick}/>
+            <MuteUserBtn username={user.name} onMuteUserClick={MuteUserClick}/>
+            </li>
           ))}
         </ul>
       </div>
