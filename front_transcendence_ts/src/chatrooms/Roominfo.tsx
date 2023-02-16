@@ -3,6 +3,22 @@ import { useParams } from 'react-router-dom';
 import instance from '../confs/axios_information';
 import { useState } from 'react';
 import Useradmin from './Useradmin';
+import styled from 'styled-components';
+
+const RoomImfoButton = styled.button`
+  background-color: #ff8800;
+  color: #fff;
+  font-size: 14px;
+  padding: 10px 20px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  width: fit-content;
+  margin: 10px;
+  &:hover {
+    background-color: #ff7300;
+  }
+`;
 
 export interface ChatRoomDto {
   id: number;
@@ -17,13 +33,18 @@ export interface ChatRoomDto {
 
 interface RoominfoProps {
   username: string; 
+  setShowInfo: React.Dispatch<React.SetStateAction<boolean>>;
+  showInfo: boolean;
+  UserInformation: any;
+  setUserInformation: React.Dispatch<React.SetStateAction<any>>;
 }
+
+
 
 
 export default function Roominfo(props: RoominfoProps) {
     const { id } = useParams<{ id: string | undefined }>();
-    const [information, setInformation] = useState<any>();
-    const [showInfo, setShowInfo] = useState<boolean>(false);
+    
 
 
    
@@ -37,13 +58,13 @@ export default function Roominfo(props: RoominfoProps) {
             'Authorization': `Bearer ${token}`
           }
         });
-            setInformation(response.data);
-            console.log(information);
-            setShowInfo(!showInfo);
+            props.setUserInformation(response.data);
+            console.log(props.UserInformation);
+            props.setShowInfo(!props.showInfo);
             return 0;
             } catch (error) {
             console.log(error);
-            setShowInfo(!showInfo);
+            props.setShowInfo(!props.showInfo);
             return 1;
             }
     };
@@ -51,8 +72,8 @@ export default function Roominfo(props: RoominfoProps) {
 
     return (
     <div>
-        {showInfo && <Useradmin username={props.username} information={information}/>}
-        <button onClick={handleClick}>Information</button>
+        
+        <RoomImfoButton onClick={handleClick}>Information</RoomImfoButton>
     </div>
   )
 }

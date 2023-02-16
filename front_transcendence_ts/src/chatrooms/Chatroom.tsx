@@ -14,6 +14,7 @@ import styled from 'styled-components';
 import { useRef } from 'react';
 import Roominfo from './Roominfo';
 import Leaveroom from './Leaveroom';
+import Useradmin from './Useradmin';
 
 const Container = styled.div`
   display: flex;
@@ -26,11 +27,26 @@ const Container = styled.div`
 `;
 
 const ChatHeader = styled.h1`
+  display: flex;
+  justify-content: space-between;
   background-color: #007bff;
   color: white;
-  font-size: 18px;
+  font-size: 24px;
   padding: 16px;
   margin: 0;
+`;
+
+const Titlediv = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+`;
+
+
+const ChatButtons = styled.div`
+  display: flex;
+  
 `;
 
 const InputContainer = styled.div`
@@ -119,6 +135,8 @@ const [promptShown, setPromptShown] = useState<boolean>(false);
 const [enteredPassowrd, setEnteredPassword] = useState<string>('');
 const [blockedUsers , setBlockedUsers] = useState<string[]>([]);
 const messageContainerRef = useRef<HTMLUListElement>(null);
+const [showInfo, setShowInfo] = useState<boolean>(false);
+const [UserInformation, setUserInformation] = useState<any>();
 const navigate = useNavigate();
 
 useEffect(() => {
@@ -358,11 +376,18 @@ if (renderPage == false && promptShown == true)
 else{
   return (
     <>
-    <Roominfo username={username}/>
-    <Leaveroom/>
+    {showInfo && <Useradmin username={username} information={UserInformation}/>}
     <Container>
     
-    <ChatHeader>{removeSubstring(data?.name, username)}</ChatHeader>
+    <ChatHeader>
+    <Titlediv>
+      {removeSubstring(data?.name, username)}
+    </Titlediv>
+    <ChatButtons>
+    <Roominfo setShowInfo={setShowInfo} showInfo={showInfo} username={username} UserInformation={UserInformation} setUserInformation={setUserInformation}/>
+    <Leaveroom/>
+    </ChatButtons>
+    </ChatHeader>
     <MessageContainer ref={messageContainerRef}>
     { messages.map((m, index) => {
     if (blockedUsers.indexOf(m.user) !== -1) {
