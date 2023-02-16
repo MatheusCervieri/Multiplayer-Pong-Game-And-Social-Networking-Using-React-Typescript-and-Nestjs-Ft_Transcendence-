@@ -136,8 +136,28 @@ const [enteredPassowrd, setEnteredPassword] = useState<string>('');
 const [blockedUsers , setBlockedUsers] = useState<string[]>([]);
 const messageContainerRef = useRef<HTMLUListElement>(null);
 const [showInfo, setShowInfo] = useState<boolean>(false);
-const [UserInformation, setUserInformation] = useState<any>();
+const [UserInformation, setUserInformation] = useState<any[]>();
 const navigate = useNavigate();
+
+
+async function GetUsersRoomStatus()
+{
+  //Create a get request to this url 'room/users-and-status/ using instance
+  const token = localStorage.getItem('token');
+  instance.get('/room/users-and-status/' + id, {
+    headers: {
+      'Authorization': `Bearer ${token}`
+    }
+  })
+    .then(response => {
+      console.log(response.data);
+      //setUserInformation(response.data);
+    })
+    .catch(error => {
+      console.error(error);
+    });
+  
+}
 
 useEffect(() => {
   if(messageContainerRef.current)

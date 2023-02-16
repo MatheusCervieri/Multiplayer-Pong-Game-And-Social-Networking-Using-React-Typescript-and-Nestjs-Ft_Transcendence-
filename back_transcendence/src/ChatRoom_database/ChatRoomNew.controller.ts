@@ -461,4 +461,53 @@ async UnMuteUser(@Req() request: any, @Param('id') id: number, @Body() data: any
     
 }
 
+@Get('users-and-status/:id')
+async GetRoomUsersStatus(@Req() request: any, @Param('id') id: number): Promise<any> {
+    //Return a list of users in the room with a status array that shows: if the users is blocked, if the users is the admin, if the user is the owner, if the user is muted.
+    
+    try{
+      const user = await this.UsersService.findOne(request.user_id);
+      if (!user)
+        throw new Error("User not found");
+      // Get room using id.
+      const room = await this.ChatRoomService.findOwner(id);
+      if (!room)
+        throw new Error("Room not found");
+
+      //Check if the user that make the request is in the room
+      const roomUsers = await this.ChatRoomService.findUsers(room.id);
+      if (!roomUsers.some(u => u.id === user.id))
+        throw new Error("You are not in the room");
+
+      const roomBlocked = await this.ChatRoomService.findBlockedUsers(room.id);
+      const roomMuted = await this.ChatRoomService.findMutedUsers(room.id);
+      const roomAdmin = await this.ChatRoomService.findAdminUsers(room.id);
+
+      const usersStatus = roomUsers.map(u => {
+        let isBlocked = false;
+        let isMuted = false;
+        let isAdmin = false;
+        let isOwner = false;
+        if (roomBlocked.some(bu => bu.id === u.id))
+          isBlocked = true;
+        if (roomMuted.some(mu => mu.id === u.id))
+          isMuted = true;
+        if (roomAdmin.some(au => au.id === u.id))
+          isAdmin = true;
+        if (room.owner.id === u.id)
+          isOwner = true;
+        return { user: u, status: { isBlocked, isMuted, isAdmin, isOwner } };
+      })
+      return { message: 'Users and their status in the room', data: usersStatus };
+    }catch (error)
+    {
+      console.log(error);
+      return { message: error };
+    }
+    
+
+
+
+}
+
 }

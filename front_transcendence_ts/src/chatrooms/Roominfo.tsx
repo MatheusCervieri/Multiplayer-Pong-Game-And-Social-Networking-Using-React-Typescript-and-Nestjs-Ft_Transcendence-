@@ -4,6 +4,7 @@ import instance from '../confs/axios_information';
 import { useState } from 'react';
 import Useradmin from './Useradmin';
 import styled from 'styled-components';
+import { waitForDebugger } from 'inspector';
 
 const RoomImfoButton = styled.button`
   background-color: #ff8800;
@@ -36,7 +37,7 @@ interface RoominfoProps {
   setShowInfo: React.Dispatch<React.SetStateAction<boolean>>;
   showInfo: boolean;
   UserInformation: any;
-  setUserInformation: React.Dispatch<React.SetStateAction<any>>;
+  setUserInformation: any;
 }
 
 
@@ -46,20 +47,19 @@ export default function Roominfo(props: RoominfoProps) {
     const { id } = useParams<{ id: string | undefined }>();
     
 
-
-   
     
     async function handleClick() {
         const token = localStorage.getItem('token');
         try {
-            const response = await instance.get('room/room-user-info/' + id, 
+            const response = await instance.get('/room/users-and-status/' + id, 
         {
           headers: {
             'Authorization': `Bearer ${token}`
           }
         });
-            props.setUserInformation(response.data);
-            console.log(props.UserInformation);
+            console.log("Response data ", response.data.data);
+            props.setUserInformation(response.data.data);
+            console.log("Information", props.UserInformation);
             props.setShowInfo(!props.showInfo);
             return 0;
             } catch (error) {

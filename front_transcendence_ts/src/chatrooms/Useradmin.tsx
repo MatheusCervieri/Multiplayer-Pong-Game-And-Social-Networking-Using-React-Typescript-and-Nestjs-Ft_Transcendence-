@@ -30,7 +30,7 @@ const UserAdmin : any = (props : UserAdminProps) => {
   const [showOwner, setShowOwner] = useState<boolean>(false);
   const [showSetRoomType, setShowSetRoomType] = useState<boolean>(false);
   const { id } = useParams<{ id: string | undefined }>();
-
+  
 
   useEffect(() => {
     handlePassword(information);
