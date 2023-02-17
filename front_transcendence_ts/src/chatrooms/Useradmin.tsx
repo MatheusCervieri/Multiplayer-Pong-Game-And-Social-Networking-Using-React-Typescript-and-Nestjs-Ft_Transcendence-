@@ -30,6 +30,7 @@ const UserAdmin : any = (props : UserAdminProps) => {
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [information, setInformation] = useState<any>();
   const [users, setUsers] = useState<any[]>();
+  const [userPrivilleges, setuserPrivilleges] = useState<any>([]);
   const [filteredUsers2, setFilteredUsers2] = useState<any[]>([]);
   const [showOwner, setShowOwner] = useState<boolean>(false);
   const [showSetRoomType, setShowSetRoomType] = useState<boolean>(false);
@@ -37,11 +38,13 @@ const UserAdmin : any = (props : UserAdminProps) => {
   
   useEffect(() => {
     setInformation(props.information);
+    GetMyStatusInTheRoom();
   },[]);
 
   useEffect(() => {
     handlePassword(props.information.room);
     setUsers(props.information.users);
+    console.log("USERSSSSSSSSS", users);
   },[information]);
 
   useEffect(() => {
@@ -203,6 +206,26 @@ const UserAdmin : any = (props : UserAdminProps) => {
     console.log("BlockUserClick");
   }
 
+  async function GetMyStatusInTheRoom()
+  {
+    const token = localStorage.getItem('token');
+        try {
+            const response = await instance.get('room/myprivillegesatrroom/' + id, 
+        {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+            console.log("Response from GetMyStatusInTheRoom: ");
+            console.log(response.data.status);
+            setuserPrivilleges(response.data.status);
+            return 0;
+            } catch (error) {
+            console.log(error);
+            return 1;
+            }
+  }
+
   return (
     <div>
         {showSetRoomType && <SetRoomType setShowSetRoomType={setShowSetRoomType}/>}
@@ -219,12 +242,28 @@ const UserAdmin : any = (props : UserAdminProps) => {
         <ul>
           {filteredUsers2.map((user: any) => (
             <li key={user.id}>{user.name} 
-            <SetAdmBtn username={user.name} AdmBtnClick={setAdmButtonClick}/>
-            <UndoAdmBtn username={user.name} onUndoAdmClick={undoAdmBtnClick}/>
-            <BlockUserBtn username={user.name} onBlockUserClick={BlockUserClick}/>
-            <UnblockUserBtn username={user.name} onUnblockUserClick={UnblockUserClick}/>
-            <MuteUserBtn username={user.name} onMuteUserClick={MuteUserClick}/>
-            <UnMuteUserBtn username={user.name} onUnmuteUserClick={UnMuteUserClick}/>
+            {userPrivilleges.name !== user.name && (            
+            <>
+            {userPrivilleges.isOwner === true && (
+            <>
+            {user.status.isAdmin === false && <SetAdmBtn username={user.name} AdmBtnClick={setAdmButtonClick}/>}
+            {user.status.isAdmin === true && <UndoAdmBtn username={user.name} onUndoAdmClick={undoAdmBtnClick}/>}
+            </>
+            )}
+            {(userPrivilleges.isOwner === true || userPrivilleges.isAdmin === true )  && (
+            <>
+            {user.status.isBlocked === false && <BlockUserBtn username={user.name} onBlockUserClick={BlockUserClick}/>}
+            {user.status.isBlocked === true && <UnblockUserBtn username={user.name} onUnblockUserClick={UnblockUserClick}/>}
+            {user.status.isMuted === false && <MuteUserBtn username={user.name} onMuteUserClick={MuteUserClick}/>}
+            {user.status.isMuted === true && <UnMuteUserBtn username={user.name} onUnmuteUserClick={UnMuteUserClick}/>}
+            </>
+            )}
+           
+            </>)}
+            {
+            
+
+           }
             </li>
           ))}
         </ul>

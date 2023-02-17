@@ -52,6 +52,13 @@ export class UsersService {
     });
   }
 
+  async findUserPrivilleges(id: number): Promise<User> {
+    return await this.usersRepository.findOne({
+      where: { id },
+      relations: ['blocks'],
+    });
+  }
+
   async remove(id: string): Promise<void> {
     await this.usersRepository.delete(id);
   }
