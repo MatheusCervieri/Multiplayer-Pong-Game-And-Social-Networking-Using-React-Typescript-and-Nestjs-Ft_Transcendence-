@@ -41,16 +41,7 @@ const UserAdmin : any = (props : UserAdminProps) => {
 
   useEffect(() => {
     handlePassword(props.information.room);
-    setUsers(props.information.usersStatus);
-    /*usersStatus
-: 
-Array(2)
-0
-: 
-{user: {…}, status: {…}}
-1
-: 
-{user: {…}, status: {…}}*/
+    setUsers(props.information.users);
   },[information]);
 
   useEffect(() => {
@@ -73,7 +64,7 @@ Array(2)
     if(users)
     {
       setFilteredUsers2(users.filter((user: any) =>
-      user.user.name.toLowerCase().includes(searchTerm.toLowerCase())
+      user.name.toLowerCase().includes(searchTerm.toLowerCase())
     ));
     }
   }
@@ -227,13 +218,13 @@ Array(2)
       <div style={{ overflowY: 'scroll', height: '10em' }}>
         <ul>
           {filteredUsers2.map((user: any) => (
-            <li key={user.user.id}>{user.user.name} 
-            <SetAdmBtn username={user.user.name} AdmBtnClick={setAdmButtonClick}/>
-            <UndoAdmBtn username={user.user.name} onUndoAdmClick={undoAdmBtnClick}/>
-            <BlockUserBtn username={user.user.name} onBlockUserClick={BlockUserClick}/>
-            <UnblockUserBtn username={user.user.name} onUnblockUserClick={UnblockUserClick}/>
-            <MuteUserBtn username={user.user.name} onMuteUserClick={MuteUserClick}/>
-            <UnMuteUserBtn username={user.user.name} onUnmuteUserClick={UnMuteUserClick}/>
+            <li key={user.id}>{user.name} 
+            <SetAdmBtn username={user.name} AdmBtnClick={setAdmButtonClick}/>
+            <UndoAdmBtn username={user.name} onUndoAdmClick={undoAdmBtnClick}/>
+            <BlockUserBtn username={user.name} onBlockUserClick={BlockUserClick}/>
+            <UnblockUserBtn username={user.name} onUnblockUserClick={UnblockUserClick}/>
+            <MuteUserBtn username={user.name} onMuteUserClick={MuteUserClick}/>
+            <UnMuteUserBtn username={user.name} onUnmuteUserClick={UnMuteUserClick}/>
             </li>
           ))}
         </ul>

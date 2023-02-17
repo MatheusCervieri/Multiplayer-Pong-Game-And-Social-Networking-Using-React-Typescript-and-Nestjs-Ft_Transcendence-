@@ -484,7 +484,7 @@ async GetRoomUsersStatus(@Req() request: any, @Param('id') id: number): Promise<
       const roomMuted = await this.ChatRoomService.findMutedUsers(room.id);
       const roomAdmin = await this.ChatRoomService.findAdminUsers(room.id);
 
-      const usersStatus = roomUsers.map(u => {
+      const users = roomUsers.map(u => {
         let isBlocked = false;
         let isMuted = false;
         let isAdmin = false;
@@ -498,15 +498,16 @@ async GetRoomUsersStatus(@Req() request: any, @Param('id') id: number): Promise<
         if (room.owner.id === u.id)
           isOwner = true;
 
-        const users = { 
+        const user = { 
           name: u.name,
           email: u.email,
           id: u.id,
           status: { isBlocked, isMuted, isAdmin, isOwner }
         };
-        return { user: u, status: { isBlocked, isMuted, isAdmin, isOwner } };
+        
+        return user;
       })
-      return { message: 'Users and their status in the room', data: {room, usersStatus} };
+      return { message: 'Users and their status in the room', data: {room, users} };
     }catch (error)
     {
       console.log(error);
