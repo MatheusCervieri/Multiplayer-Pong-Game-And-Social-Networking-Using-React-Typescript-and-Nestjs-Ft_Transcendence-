@@ -471,6 +471,7 @@ async GetRoomUsersStatus(@Req() request: any, @Param('id') id: number): Promise<
         throw new Error("User not found");
       // Get room using id.
       const room = await this.ChatRoomService.findOwner(id);
+      console.log(room);
       if (!room)
         throw new Error("Room not found");
 
@@ -496,18 +497,20 @@ async GetRoomUsersStatus(@Req() request: any, @Param('id') id: number): Promise<
           isAdmin = true;
         if (room.owner.id === u.id)
           isOwner = true;
+
+        const users = { 
+          name: u.name,
+          email: u.email,
+          id: u.id,
+          status: { isBlocked, isMuted, isAdmin, isOwner }
+        };
         return { user: u, status: { isBlocked, isMuted, isAdmin, isOwner } };
       })
-      return { message: 'Users and their status in the room', data: usersStatus };
+      return { message: 'Users and their status in the room', data: {room, usersStatus} };
     }catch (error)
     {
       console.log(error);
       return { message: error };
     }
-    
-
-
-
 }
-
 }

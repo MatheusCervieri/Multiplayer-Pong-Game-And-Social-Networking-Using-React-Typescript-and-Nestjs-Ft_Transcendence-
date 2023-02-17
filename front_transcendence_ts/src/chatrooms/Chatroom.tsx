@@ -396,7 +396,9 @@ if (renderPage == false && promptShown == true)
 else{
   return (
     <>
+    
     {showInfo && <Useradmin username={username} information={UserInformation}/>}
+  
     <Container>
     
     <ChatHeader>

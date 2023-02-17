@@ -22,20 +22,40 @@ interface User {
   name: string;
 }
 
+//Actually we need to pass one more information in the backend that is the 
+//room information. I am just passing the users informations of the room. 
+
 
 const UserAdmin : any = (props : UserAdminProps) => {
   const [searchTerm, setSearchTerm] = useState<string>('');
-  const [information, setInformation] = useState<any>(props.information);
-  const [users, setUsers] = useState<any[]>(props.information.users);
+  const [information, setInformation] = useState<any>();
+  const [users, setUsers] = useState<any[]>();
+  const [filteredUsers2, setFilteredUsers2] = useState<any[]>([]);
   const [showOwner, setShowOwner] = useState<boolean>(false);
   const [showSetRoomType, setShowSetRoomType] = useState<boolean>(false);
   const { id } = useParams<{ id: string | undefined }>();
   
+  useEffect(() => {
+    setInformation(props.information);
+  },[]);
 
   useEffect(() => {
-    handlePassword(information);
-    setUsers(props.information.users);
+    handlePassword(props.information.room);
+    setUsers(props.information.usersStatus);
+    /*usersStatus
+: 
+Array(2)
+0
+: 
+{user: {…}, status: {…}}
+1
+: 
+{user: {…}, status: {…}}*/
   },[information]);
+
+  useEffect(() => {
+    filterUsers2();
+  },[searchTerm, users]);
 
   function handlePassword(info: any)
   {
@@ -47,10 +67,16 @@ const UserAdmin : any = (props : UserAdminProps) => {
     }
     }
   }
-
-  const filteredUsers = users.filter((user: User) =>
-    user.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  
+  function filterUsers2()
+  {
+    if(users)
+    {
+      setFilteredUsers2(users.filter((user: any) =>
+      user.user.name.toLowerCase().includes(searchTerm.toLowerCase())
+    ));
+    }
+  }
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
@@ -190,7 +216,7 @@ const UserAdmin : any = (props : UserAdminProps) => {
     <div>
         {showSetRoomType && <SetRoomType setShowSetRoomType={setShowSetRoomType}/>}
         {showOwner && <button onClick={handleSetPassBtn}>Set Password</button>}
-        Owner: {information.owner.name}
+        Owner: {props.information.room.owner.name}
         <br></br>
       <input
         type="text"
@@ -200,14 +226,14 @@ const UserAdmin : any = (props : UserAdminProps) => {
       />
       <div style={{ overflowY: 'scroll', height: '10em' }}>
         <ul>
-          {filteredUsers.map((user: User) => (
-            <li key={user.id}>{user.name} 
-            <SetAdmBtn username={user.name} AdmBtnClick={setAdmButtonClick}/>
-            <UndoAdmBtn username={user.name} onUndoAdmClick={undoAdmBtnClick}/>
-            <BlockUserBtn username={user.name} onBlockUserClick={BlockUserClick}/>
-            <UnblockUserBtn username={user.name} onUnblockUserClick={UnblockUserClick}/>
-            <MuteUserBtn username={user.name} onMuteUserClick={MuteUserClick}/>
-            <UnMuteUserBtn username={user.name} onUnmuteUserClick={UnMuteUserClick}/>
+          {filteredUsers2.map((user: any) => (
+            <li key={user.user.id}>{user.user.name} 
+            <SetAdmBtn username={user.user.name} AdmBtnClick={setAdmButtonClick}/>
+            <UndoAdmBtn username={user.user.name} onUndoAdmClick={undoAdmBtnClick}/>
+            <BlockUserBtn username={user.user.name} onBlockUserClick={BlockUserClick}/>
+            <UnblockUserBtn username={user.user.name} onUnblockUserClick={UnblockUserClick}/>
+            <MuteUserBtn username={user.user.name} onMuteUserClick={MuteUserClick}/>
+            <UnMuteUserBtn username={user.user.name} onUnmuteUserClick={UnMuteUserClick}/>
             </li>
           ))}
         </ul>
