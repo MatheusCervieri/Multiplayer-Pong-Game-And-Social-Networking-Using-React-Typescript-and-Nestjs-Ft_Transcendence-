@@ -229,6 +229,18 @@ export class ChatRoomControllerNew {
    
   }
 
+  @Get('get-i-blocked-room/:id')
+  async GetBlocked(@Req() request: any, @Param('id') id: number, @Body() data: any): Promise<any> {
+    // Get the room with the banned users using ID
+    const room = await this.ChatRoomService.findRoomWithBlockedUsers(id);
+    //Check if the user that make the request is banned.
+    if (room.bannedusers.some(u => u.id === request.user_id))
+      return { isbanned: true , data: room.bannedusers };
+    
+    // Return the banned users
+    return { isbanned: false , data: room.bannedusers };
+  }
+
   @Post('block-user-room/:id')
   async BlockUser(@Req() request: any, @Param('id') id: number, @Body() data: any): Promise<any> {
     //Get user making the request using request;  

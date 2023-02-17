@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { ChatRoom } from './ChatRoom.entity';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -192,6 +192,16 @@ async findMutedUsers(id: number): Promise<User[]> {
     relations: ['mutedusers'],
   });
   return chatRoom.mutedusers || [];  
+}
+async findRoomWithBlockedUsers(id: number): Promise<ChatRoom> {
+  const room = await this.roomsRepository.findOne({ 
+    where: { id },
+    relations: ['bannedusers']
+  });
+  if (!room) {
+    throw new NotFoundException(`Room with id ${id} not found`);
+  }
+  return room;
 }
   
   async deleteAll(): Promise<void> {

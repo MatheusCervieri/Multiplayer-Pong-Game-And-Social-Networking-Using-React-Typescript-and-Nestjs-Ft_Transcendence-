@@ -229,13 +229,33 @@ function LoadMessages()
     });
 }
 
+async function CheckIfIAmBanned()
+{
+  const token = localStorage.getItem('token');
+  instance.get('room/get-i-blocked-room/' + id, {
+    headers: {
+      'Authorization': `Bearer ${token}`
+    }
+  })
+    .then(response => {
+      if(response.data.isbanned === true)
+      {
+        alert("You are banned from this room!");
+        navigate('/chat');
+      }
+    })
+    .catch(error => {
+      console.error(error);
+    });
+}
+
 function StartRoom()
 {
+  //Check if the user is a banned user.
+  CheckIfIAmBanned();
   loadBlockedUsers();
   SetRenderPage(true);
   LoadMessages();
-  //Carregar o owner.
-  //Caregar os administradores. 
 }
 
 function handlePassword()
@@ -397,7 +417,7 @@ if (renderPage == false && promptShown == true)
 else{
   return (
     <>
-
+    <button onClick={CheckIfIAmBanned}>Check Banned</button>
     {showInfo && <Useradmin username={username} information={UserInformation}/>}
   
     <Container>
