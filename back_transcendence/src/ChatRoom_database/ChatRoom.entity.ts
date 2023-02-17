@@ -34,15 +34,15 @@ export class ChatRoom {
   @JoinTable()
   users: User[];
 
-  @ManyToMany(type => User, user => user.chatRooms)
+  @ManyToMany(type => User, user => user.adminrooms)
   @JoinTable()
   adminusers: User[];
 
-  @ManyToMany(type => User, user => user.chatRooms)
+  @ManyToMany(type => User, user => user.bannedrooms)
   @JoinTable()
   bannedusers: User[];
 
-  @ManyToMany(type => User, user => user.chatRooms)
+  @ManyToMany(type => User, user => user.mutedrooms)
   @JoinTable()
   mutedusers: User[];
 }

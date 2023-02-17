@@ -51,6 +51,23 @@ export class ChatRoomService {
     return chatRoom;
   }
 
+
+  async findRoomWithUsers(id: number): Promise<any> {
+    const chatRoom = await this.roomsRepository.findOne({
+      where: { id },
+      relations: ['users', 'owner', 'adminusers', 'bannedusers', 'mutedusers'],
+    });
+    return chatRoom;
+  }
+
+  async findRoomWithJustUsers(id: number): Promise<any> {
+    const chatRoom = await this.roomsRepository.findOne({
+      where: { id },
+      relations: ['users'],
+    });
+    return chatRoom;
+  }
+  
   async findOwner(id : number): Promise<ChatRoom> {
     const chatRoom = await this.roomsRepository.find({
       where: { id: id },

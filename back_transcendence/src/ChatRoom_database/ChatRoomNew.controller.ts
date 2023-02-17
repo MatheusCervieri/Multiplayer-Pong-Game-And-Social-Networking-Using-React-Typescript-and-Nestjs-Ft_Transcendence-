@@ -56,46 +56,22 @@ export class ChatRoomControllerNew {
   //Teria que ser feito umas validações aqui. 
   @Post('add-user-room/:id')
   async addUserToChatRoom(@Req() request: any, @Param() params: any, @Body() userToAdd: any): Promise<any> {
-    try {
-      const user = await this.UsersService.findOneByName(userToAdd.name);
-      if (!user) {
-        return {
-          success: false,
-          message: 'User not found',
-        };
-      }
+    const user = await this.UsersService.findOne(request.user_id);
+    const room = await this.ChatRoomService.findRoomWithJustUsers(params.id);
+    console.log(room);
   
-      const room = await this.ChatRoomService.findOne(params.id);
-      if (!room) {
-        return {
-          success: false,
-          message: 'Chat room not found',
-        };
-      }
-  
-      room.users = await this.ChatRoomService.findUsers(room.id);
-      if (room.users.some(u => u.id === user.id)) {
-        return {
-          success: false,
-          message: 'User is already in the chat room',
-        };
-      }
-  
-      room.users.push(user);
-      await this.ChatRoomService.save(room);
-  
-      return {
-        success: true,
-        message: 'User added to chat room successfully',
-      };
-    } catch (error) {
-      console.error('Error adding user to chat room:', error);
-      return {
-        success: false,
-        message: 'Failed to add user to chat room',
-      };
+    // Check if the user is already in the room
+    const isUserInRoom = room.users.some(u => u.id === user.id);
+    if (isUserInRoom) {
+      console.log('User is already in the room');
+      return room;
     }
+  
+    // Add the user to the room and save it
+    room.users.push(user);
+    return await this.ChatRoomService.save(room);
   }
+  
 
   @Get('room-user-info/:id')
   async getChatRoomInfo(@Param('id') id: number): Promise<any> {

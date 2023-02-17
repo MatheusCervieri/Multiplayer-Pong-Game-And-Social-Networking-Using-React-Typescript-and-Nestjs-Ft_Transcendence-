@@ -359,6 +359,7 @@ const addUserToChatRoom = async (userName : string, roomId : string | undefined)
         'Authorization': `Bearer ${token}`
       }
     });
+    console.log("ADDED USER TO CHAT ROOM", response.data);
     return response.data;
   } catch (error) {
     console.error(error);
@@ -396,7 +397,7 @@ if (renderPage == false && promptShown == true)
 else{
   return (
     <>
-    
+
     {showInfo && <Useradmin username={username} information={UserInformation}/>}
   
     <Container>

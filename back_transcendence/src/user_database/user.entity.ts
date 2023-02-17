@@ -27,6 +27,15 @@ export class User {
 
   @ManyToMany(type => ChatRoom, chatRoom => chatRoom.users)
   chatRooms: ChatRoom[];
+
+  @ManyToMany(type => ChatRoom, chatRoom => chatRoom.bannedusers)
+  bannedrooms: ChatRoom[];
+
+  @ManyToMany(type => ChatRoom, chatRoom => chatRoom.mutedusers)
+  mutedrooms: ChatRoom[];
+
+  @ManyToMany(type => ChatRoom, chatRoom => chatRoom.adminusers)
+  adminrooms: ChatRoom[];
   
   @ManyToMany(type => User, user => user.blockedBy)
   @JoinTable()
