@@ -3,6 +3,8 @@ import game from './confs/game_information';
 import Displayroute from './Displayroute';
 import Header from './login_setup/header_setup/header_setup';
 import { createGlobalStyle } from 'styled-components';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 console.log(game);
 const GlobalStyle = createGlobalStyle`
@@ -19,6 +21,7 @@ function App() {
     <>
     <GlobalStyle />
     <Header game={game} />
+    <ToastContainer />
     <br></br>
     <Displayroute />
     </>

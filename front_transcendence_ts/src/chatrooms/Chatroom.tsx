@@ -15,6 +15,7 @@ import { useRef } from 'react';
 import Roominfo from './Roominfo';
 import Leaveroom from './Leaveroom';
 import Useradmin from './Useradmin';
+import { ToastContainer, toast } from 'react-toastify';
 
 const Container = styled.div`
   display: flex;
@@ -240,7 +241,7 @@ async function CheckIfIAmBanned()
     .then(response => {
       if(response.data.isbanned === true)
       {
-        alert("You are banned from this room!");
+        toast.error("You are banned from this room!");
         navigate('/chat');
       }
     })
