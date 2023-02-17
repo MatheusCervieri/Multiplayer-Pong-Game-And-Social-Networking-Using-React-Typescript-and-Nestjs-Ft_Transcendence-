@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Delete, HttpCode, HttpStatus, Post, Req, HttpException, ForbiddenException } from '@nestjs/common';
+import { Body, Controller, Get, Delete, HttpCode, HttpStatus, Post, Req, HttpException, ForbiddenException, Inject } from '@nestjs/common';
 import { ChatRoomService } from './ChatRoom.service';
 import { UseInterceptors } from '@nestjs/common';
 import { AuthMiddleware } from '../user_database/auth.middleware'
@@ -6,12 +6,15 @@ import { ChatRoom } from './ChatRoom.entity';
 import { Param } from '@nestjs/common';
 import { UsersService } from '../user_database/user.service';
 import { RouterModule } from '@nestjs/core';
+import { ChatGateway } from 'src/chat/chat.gateway';
 
 @Controller('room')
 @UseInterceptors(AuthMiddleware)
 export class ChatRoomControllerNew {
-  constructor(private readonly ChatRoomService: ChatRoomService,
+  constructor(
+    private readonly ChatRoomService: ChatRoomService,
     private readonly UsersService: UsersService
+    //@Inject('ChatGateway') private readonly ChatGateway: ChatGateway
     ) {}
 
   @Post('create-room')
@@ -177,6 +180,8 @@ export class ChatRoomControllerNew {
       room.adminusers = roomAdmin;
       room.adminusers.push(userToMakeAdmin);
       await this.ChatRoomService.save(room);
+      //const data1 = { message: "updateroom", roomid: room.id};
+      //this.ChatGateway.server.to(room.id).emit('update-room', data1);
       return { message: 'User is now admin!', data: room };
     }catch (error)
     {
@@ -220,6 +225,8 @@ export class ChatRoomControllerNew {
       room.adminusers = roomAdmin;
       room.adminusers = room.adminusers.filter(u => u.id !== userToRemoveAdmin.id);
       await this.ChatRoomService.save(room);
+      //const data1 = { message: "updateroom", roomid: room.id};
+     // this.ChatGateway.server.to(room.id).emit('update-room', data1);
       return { message: 'User is now admin!', data: room };
     }catch (error)
     {

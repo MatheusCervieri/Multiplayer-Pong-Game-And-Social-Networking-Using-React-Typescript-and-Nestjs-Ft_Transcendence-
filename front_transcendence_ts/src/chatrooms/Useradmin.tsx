@@ -15,6 +15,7 @@ import UnMuteUserBtn from './AdminBtns/UnMuteUserBtn';
 interface UserAdminProps {
     username: string;
     information: any;
+    myStatus: any;
 }
 
 interface User {
@@ -38,14 +39,15 @@ const UserAdmin : any = (props : UserAdminProps) => {
   
   useEffect(() => {
     setInformation(props.information);
-    GetMyStatusInTheRoom();
+
   },[]);
 
   useEffect(() => {
     handlePassword(props.information.room);
+    setuserPrivilleges(props.myStatus);
     setUsers(props.information.users);
     console.log("USERSSSSSSSSS", users);
-  },[information]);
+  },[information, props.information, props.myStatus]);
 
   useEffect(() => {
     filterUsers2();
@@ -206,25 +208,7 @@ const UserAdmin : any = (props : UserAdminProps) => {
     console.log("BlockUserClick");
   }
 
-  async function GetMyStatusInTheRoom()
-  {
-    const token = localStorage.getItem('token');
-        try {
-            const response = await instance.get('room/myprivillegesatrroom/' + id, 
-        {
-          headers: {
-            'Authorization': `Bearer ${token}`
-          }
-        });
-            console.log("Response from GetMyStatusInTheRoom: ");
-            console.log(response.data.status);
-            setuserPrivilleges(response.data.status);
-            return 0;
-            } catch (error) {
-            console.log(error);
-            return 1;
-            }
-  }
+
 
   return (
     <div>

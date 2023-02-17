@@ -138,12 +138,17 @@ const [blockedUsers , setBlockedUsers] = useState<string[]>([]);
 const messageContainerRef = useRef<HTMLUListElement>(null);
 const [showInfo, setShowInfo] = useState<boolean>(false);
 const [UserInformation, setUserInformation] = useState<any[]>();
+const [myStatus, setMyStatus] = useState<any>();
 const navigate = useNavigate();
 
 useEffect(() => {
   if(messageContainerRef.current)
     messageContainerRef.current.scrollTop = messageContainerRef.current.scrollHeight;
 }, [messages]);
+
+useEffect(() => {
+  GetMyStatusInTheRoom();
+}, []);
 
 const loadBlockedUsers = async () => {
   const token = localStorage.getItem('token');
@@ -232,7 +237,6 @@ async function CheckIfIAmBanned()
 
 function StartRoom()
 {
-  //Check if the user is a banned user.
   CheckIfIAmBanned();
   loadBlockedUsers();
   SetRenderPage(true);
@@ -327,6 +331,16 @@ const InitializeRoom = (data: any, user_name? : string) => {
 }
 
 useEffect(() => {
+  socket.on('update-room', (data) => {
+    console.log("update-room", data);
+    UpdateUserInformation();
+    GetMyStatusInTheRoom();
+  });
+  return () => {
+    socket.off('update-room');
+  };
+},[]);
+useEffect(() => {
   if (renderPage == true)
   {
     handleRoom();
@@ -379,11 +393,58 @@ function removeSubstring(str: string | undefined, substring: string) {
   return str.replace(substring, '');
 }
 
+function updatetest()
+{
+  const data = { message: "update-room", roomid: id };
+  socket.emit('update-room', data);
+}
+
 const handleKeyDown = (event: any) => {
   if (event.keyCode === 13) {
     handleSendMessage();
   }
 };
+
+async function GetMyStatusInTheRoom()
+  {
+    const token = localStorage.getItem('token');
+        try {
+            const response = await instance.get('room/myprivillegesatrroom/' + id, 
+        {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+            console.log("Response from GetMyStatusInTheRoom: ");
+            console.log(response.data.status);
+            setMyStatus(response.data.status);
+            return 0;
+            } catch (error) {
+            console.log(error);
+            return 1;
+            }
+  }
+
+  async function UpdateUserInformation() {
+    const token = localStorage.getItem('token');
+    try {
+        const response = await instance.get('/room/users-and-status/' + id, 
+    {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+        console.log("Response data ", response.data.data);
+        setUserInformation(response.data.data); //room, userStatus: {user, userStatus}
+        console.log("Information", UserInformation);
+    
+        return 0;
+        } catch (error) {
+        console.log(error);
+        return 1;
+        }
+};
+
 
 if (renderPage == false && promptShown == true)
 {
@@ -398,7 +459,8 @@ if (renderPage == false && promptShown == true)
 else{
   return (
     <>
-    {showInfo && <Useradmin username={username} information={UserInformation}/>}
+    <button onClick={updatetest}>Update Room</button>
+    {showInfo && <Useradmin username={username} information={UserInformation} myStatus={myStatus}/>}
   
     <Container>
     
