@@ -42,7 +42,7 @@ const SetProfileImage: React.FC = () => {
   {
     const token = localStorage.getItem('token');
     try {
-        const response = await instance.get('/image/all', {
+        const response = await instance.get('/image/profileimage/' + 72, {
           headers: {
             'Content-Type': 'multipart/form-data',
             'Authorization': `Bearer ${token}`
@@ -62,6 +62,7 @@ const SetProfileImage: React.FC = () => {
       <button type="submit">Upload Image</button>
     </form>
     <button onClick={getfiles}>Get files</button>
+    <img src="http://localhost:3001/publicimage/profileimage/72" alt="User profile image"></img>
     </>
   );
 };

@@ -27,6 +27,7 @@ import { ImageController } from './image/image.controller';
 import { ImageService } from './image/image.service';
 import { ImageModule } from './image/image.module';
 import { MulterModule } from '@nestjs/platform-express';
+import { PublicImageController } from './image/publicimage.controller';
 
 @Module({
   imports: [
@@ -42,7 +43,7 @@ import { MulterModule } from '@nestjs/platform-express';
       autoLoadEntities: true,
       synchronize: true,
     }), EmailModule, UserModule, ChatRoomModule, MessageModule, ImageModule],
-  controllers: [AppController, SimpleGetController, SimplePostController, SingUpController, NameSetController, UserController, LoginController, ChatRoomController, ChatRoomControllerNew, UsersInformationController, ImageController],
+  controllers: [AppController, SimpleGetController, SimplePostController, SingUpController, NameSetController, UserController, LoginController, ChatRoomController, ChatRoomControllerNew, UsersInformationController, ImageController, PublicImageController],
   providers: [AppService, EmailService, UsersService, ChatRoomService, ChatGateway, MessageService, ImageService],
 })
 export class AppModule implements NestModule{

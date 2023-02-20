@@ -52,6 +52,13 @@ export class UsersService {
     });
   }
 
+  async findWithImage(id: number): Promise<User> {
+    return await this.usersRepository.findOne({
+      where: { id },
+      relations: ['image'],
+    });
+  }
+
   async findUserPrivilleges(id: number): Promise<User> {
     return await this.usersRepository.findOne({
       where: { id },

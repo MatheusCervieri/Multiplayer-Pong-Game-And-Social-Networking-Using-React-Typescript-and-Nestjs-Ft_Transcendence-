@@ -9,6 +9,9 @@ export class Image {
   id: number;
 
   @Column()
+  path: string;
+
+  @Column()
   filename: string;
 
   @Column()
