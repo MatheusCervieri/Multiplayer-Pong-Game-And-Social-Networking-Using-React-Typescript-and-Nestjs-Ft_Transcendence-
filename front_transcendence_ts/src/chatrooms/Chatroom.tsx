@@ -123,6 +123,21 @@ const SubmitButton = styled.button`
   }
 `;
 
+const AddUserBtn = styled.button`
+  background-color: #ff8800;
+  color: #fff;
+  font-size: 14px;
+  padding: 10px 20px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  width: fit-content;
+  margin: 10px;
+  &:hover {
+    background-color: #ff7300;
+  }
+`;
+
 const socket = io('http://localhost:8001');
 
 const Chatroom: React.FC = () => {
@@ -137,6 +152,7 @@ const [enteredPassowrd, setEnteredPassword] = useState<string>('');
 const [blockedUsers , setBlockedUsers] = useState<string[]>([]);
 const messageContainerRef = useRef<HTMLUListElement>(null);
 const [showInfo, setShowInfo] = useState<boolean>(false);
+const [showAddUser, setShowAddUser] = useState<boolean>(false);
 const [UserInformation, setUserInformation] = useState<any[]>();
 const [myStatus, setMyStatus] = useState<any>();
 const navigate = useNavigate();
@@ -441,6 +457,12 @@ async function GetMyStatusInTheRoom()
         }
 };
 
+function addUserBtn(){
+  setShowAddUser(!showAddUser);
+  if(showInfo === true)
+    setShowInfo(false);
+}
+
 
 if (renderPage == false && promptShown == true)
 {
@@ -456,7 +478,7 @@ else{
   return (
     <>
     {showInfo && <Useradmin username={username} information={UserInformation} myStatus={myStatus}/>}
-  
+    {showAddUser && data?.type == 'private' && <UserSearch btnName="Add User To This ROOM!" handleUser={AddUserToRoom}/>}
     <Container>
     
     <ChatHeader>
@@ -464,6 +486,7 @@ else{
       {removeSubstring(data?.name, username)}
     </Titlediv>
     <ChatButtons>
+    <AddUserBtn onClick={addUserBtn}>Add User</AddUserBtn>
     <Roominfo setShowInfo={setShowInfo} showInfo={showInfo} username={username} UserInformation={UserInformation} setUserInformation={setUserInformation}/>
     <Leaveroom/>
     </ChatButtons>
@@ -484,8 +507,6 @@ else{
     <Input type="text" id="message" value={message} onChange={(e) => setMessage(e.target.value)} onKeyDown={handleKeyDown}/>
     <SendButton onClick={handleSendMessage}>Send!</SendButton>
     </InputContainer>
-   
-    {data?.type == 'private' && <UserSearch btnName="Add User To This ROOM!" handleUser={AddUserToRoom}/>}
     </Container>
     </>
     );
