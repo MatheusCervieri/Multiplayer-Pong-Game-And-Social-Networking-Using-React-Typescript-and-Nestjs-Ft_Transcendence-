@@ -3,6 +3,8 @@ sudo chmod -R 777 pgdata
 sudo chmod -R 777 pgdata
 sudo chmod -R 777 pgdata
 
+//"start": "nest start",
+
 HOW TO CONNECT DATABASE - MUITO IMPORTANTE: 
 https://docs.nestjs.com/techniques/database 
 

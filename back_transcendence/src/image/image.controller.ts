@@ -40,7 +40,7 @@ export class ImageController {
 
   @Get('all')
   getAllFiles(): string[] {
-    const filesDir = join(__dirname, '..', 'uploads');
+    const filesDir = join(__dirname, 'uploads');
     const files = readdirSync(filesDir);
     return files;
   }
