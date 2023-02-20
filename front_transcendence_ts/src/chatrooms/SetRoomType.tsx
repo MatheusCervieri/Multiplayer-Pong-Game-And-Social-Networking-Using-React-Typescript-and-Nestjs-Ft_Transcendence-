@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
+import { toast } from "react-toastify";
+import styled from "styled-components";
 import instance from '../confs/axios_information';
 
 type RoomType = "public" | "protected";
@@ -7,6 +9,61 @@ type RoomType = "public" | "protected";
 interface SetRoomTypeProps {
     setShowSetRoomType: (show: boolean) => void;
 }
+
+const FormContainer = styled.form`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 1em;
+  background-color: #f2f2f2;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+`;
+
+const Label = styled.label`
+  margin: 0.5em 0;
+  font-size: 1em;
+  font-weight: 600;
+`;
+
+const Select = styled.select`
+  margin: 0.5em 0;
+  padding: 0.5em;
+  border-radius: 5px;
+  border: none;
+  background-color: #fff;
+  font-size: 1em;
+  font-weight: 400;
+`;
+
+const Input = styled.input`
+  margin: 0.5em 0;
+  padding: 0.5em;
+  border-radius: 5px;
+  border: none;
+  background-color: #fff;
+  font-size: 1em;
+  font-weight: 400;
+`;
+
+const Button = styled.button`
+  margin: 1em 0 0.5em 0;
+  padding: 0.5em;
+  border-radius: 5px;
+  border: none;
+  background-color: #5d5dff;
+  color: #fff;
+  font-size: 1em;
+  font-weight: 600;
+  text-transform: uppercase;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #3333ff;
+  }
+`;
 
 const SetRoomType = (props: SetRoomTypeProps) => {
   const [roomType, setRoomType] = useState<RoomType>("public");
@@ -33,7 +90,7 @@ const SetRoomType = (props: SetRoomTypeProps) => {
       }
     });
         console.log(response.data);
-        alert("Room type changed!");
+        toast.success("Room type changed!");
         props.setShowSetRoomType(false);
         return 0;
         } catch (error) {
@@ -44,22 +101,25 @@ const SetRoomType = (props: SetRoomTypeProps) => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <label>
+    <>
+    <FormContainer onSubmit={handleSubmit}>
+      <Label>
         Room Type:
-        <select value={roomType} onChange={handleRoomTypeChange}>
+        <Select value={roomType} onChange={handleRoomTypeChange}>
           <option value="public">Public</option>
           <option value="protected">Protected</option>
-        </select>
-      </label>
-      {roomType === "protected" && (
-        <label>
+        </Select>
+      </Label>
+      {roomType === 'protected' && (
+        <Label>
           Password:
-          <input type="password" value={password} onChange={handlePasswordChange} />
-        </label>
+          <Input type="password" value={password} onChange={handlePasswordChange} />
+        </Label>
       )}
-      <button type="submit">Submit</button>
-    </form>
+      <Button type="submit">Change Password!</Button>
+    </FormContainer>
+    <br></br>
+    </>
   );
 };
 

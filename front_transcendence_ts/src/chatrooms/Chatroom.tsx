@@ -486,7 +486,7 @@ else{
       {removeSubstring(data?.name, username)}
     </Titlediv>
     <ChatButtons>
-    <AddUserBtn onClick={addUserBtn}>Add User</AddUserBtn>
+    {data?.type == 'private' && <AddUserBtn onClick={addUserBtn}>Add User</AddUserBtn>}
     <Roominfo setShowInfo={setShowInfo} showInfo={showInfo} username={username} UserInformation={UserInformation} setUserInformation={setUserInformation}/>
     <Leaveroom/>
     </ChatButtons>

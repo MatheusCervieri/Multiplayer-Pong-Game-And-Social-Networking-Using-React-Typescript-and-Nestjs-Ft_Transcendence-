@@ -11,6 +11,61 @@ import UndoAdmBtn from './AdminBtns/UndoAdmBtn';
 import UnmuteUserBtn from './AdminBtns/UnMuteUserBtn';
 import UnblockUserBtn from './AdminBtns/UnBlockUserBtn';
 import UnMuteUserBtn from './AdminBtns/UnMuteUserBtn';
+import styled from 'styled-components';
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+const Owner = styled.div`
+  font-size: 16px;
+  margin-bottom: 10px;
+`;
+
+const Input = styled.input`
+  font-size: 16px;
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  margin-bottom: 10px;
+`;
+
+const UserListContainer = styled.div`
+  overflow-y: scroll;
+  height: 10em;
+`;
+
+const UserListItem = styled.li`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 16px;
+  margin-bottom: 10px;
+`;
+
+const UserName = styled.span`
+  margin-right: 10px;
+`;
+
+const UserActions = styled.div`
+  display: flex;
+`;
+
+const PassButton = styled.button`
+  background-color: #007bff;
+  color: #fff;
+  font-size: 14px;
+  padding: 5px 10px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  margin-right: 10px;
+  &:hover {
+    background-color: #444;
+  }
+`;
 
 interface UserAdminProps {
     username: string;
@@ -211,48 +266,46 @@ const UserAdmin : any = (props : UserAdminProps) => {
 
 
   return (
-    <div>
-        {showSetRoomType && <SetRoomType setShowSetRoomType={setShowSetRoomType}/>}
-        {showOwner && <button onClick={handleSetPassBtn}>Set Password</button>}
-        Owner: {props.information.room.owner.name}
-        <br></br>
-      <input
-        type="text"
-        placeholder="Search users..."
-        value={searchTerm}
-        onChange={handleSearch}
-      />
-      <div style={{ overflowY: 'scroll', height: '10em' }}>
-        <ul>
-          {filteredUsers2.map((user: any) => (
-            <li key={user.id}>{user.name} 
-            {userPrivilleges.name !== user.name && (            
-            <>
-            {userPrivilleges.isOwner === true && (
-            <>
-            {user.status.isAdmin === false && <SetAdmBtn username={user.name} AdmBtnClick={setAdmButtonClick}/>}
-            {user.status.isAdmin === true && <UndoAdmBtn username={user.name} onUndoAdmClick={undoAdmBtnClick}/>}
-            </>
-            )}
-            {(userPrivilleges.isOwner === true || userPrivilleges.isAdmin === true )  && (
-            <>
-            {user.status.isBlocked === false && <BlockUserBtn username={user.name} onBlockUserClick={BlockUserClick}/>}
-            {user.status.isBlocked === true && <UnblockUserBtn username={user.name} onUnblockUserClick={UnblockUserClick}/>}
-            {user.status.isMuted === false && <MuteUserBtn username={user.name} onMuteUserClick={MuteUserClick}/>}
-            {user.status.isMuted === true && <UnMuteUserBtn username={user.name} onUnmuteUserClick={UnMuteUserClick}/>}
-            </>
-            )}
-           
-            </>)}
-            {
-            
-
-           }
-            </li>
-          ))}
-        </ul>
-      </div>
-    </div>
+    <Container>
+  {showSetRoomType && <SetRoomType setShowSetRoomType={setShowSetRoomType} />}
+  {showOwner && <PassButton onClick={handleSetPassBtn}>Set Password</PassButton> }
+  <br></br>
+  <Owner>Owner: {props.information.room.owner.name}</Owner>
+  <Input
+    type="text"
+    placeholder="Search users..."
+    value={searchTerm}
+    onChange={handleSearch}
+  />
+  <UserListContainer>
+    <ul>
+      {filteredUsers2.map((user: any) => (
+        <UserListItem key={user.id}>
+          <UserName>{user.name}</UserName>
+          {userPrivilleges.name !== user.name && (
+            <UserActions>
+              {userPrivilleges.isOwner === true && (
+                <>
+                 {user.status.isAdmin === false && <SetAdmBtn username={user.name} AdmBtnClick={setAdmButtonClick}/>}
+                  {user.status.isAdmin === true && <UndoAdmBtn username={user.name} onUndoAdmClick={undoAdmBtnClick}/>}
+                </>
+              )}
+              {(userPrivilleges.isOwner === true || userPrivilleges.isAdmin === true) && (
+                <>
+              {user.status.isBlocked === false && <BlockUserBtn username={user.name} onBlockUserClick={BlockUserClick}/>}
+              {user.status.isBlocked === true && <UnblockUserBtn username={user.name} onUnblockUserClick={UnblockUserClick}/>}
+              {user.status.isMuted === false && <MuteUserBtn username={user.name} onMuteUserClick={MuteUserClick}/>}
+              {user.status.isMuted === true && <UnMuteUserBtn username={user.name} onUnmuteUserClick={UnMuteUserClick}/>}
+                  
+                </>
+              )}
+            </UserActions>
+          )}
+        </UserListItem>
+      ))}
+    </ul>
+  </UserListContainer>
+</Container>
   );
 };
 

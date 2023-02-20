@@ -23,9 +23,14 @@ import { MessageModule } from './ChatRoom_database/Message.module';
 import { MessageService } from './ChatRoom_database/Message.service';
 import { UsersInformationController } from './user_database/usersinformation.controller';
 import { ChatRoomControllerNew } from './ChatRoom_database/ChatRoomNew.controller';
+import { ImageController } from './image/image.controller';
+import { ImageService } from './image/image.service';
+import { ImageModule } from './image/image.module';
+import { MulterModule } from '@nestjs/platform-express';
 
 @Module({
   imports: [
+    MulterModule.register({ dest: './uploads' }),
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: 'postgres',
@@ -36,15 +41,15 @@ import { ChatRoomControllerNew } from './ChatRoom_database/ChatRoomNew.controlle
       entities: [Email],
       autoLoadEntities: true,
       synchronize: true,
-    }), EmailModule, UserModule, ChatRoomModule, MessageModule],
-  controllers: [AppController, SimpleGetController, SimplePostController, SingUpController, NameSetController, UserController, LoginController, ChatRoomController, ChatRoomControllerNew, UsersInformationController],
-  providers: [AppService, EmailService, UsersService, ChatRoomService, ChatGateway, MessageService],
+    }), EmailModule, UserModule, ChatRoomModule, MessageModule, ImageModule],
+  controllers: [AppController, SimpleGetController, SimplePostController, SingUpController, NameSetController, UserController, LoginController, ChatRoomController, ChatRoomControllerNew, UsersInformationController, ImageController],
+  providers: [AppService, EmailService, UsersService, ChatRoomService, ChatGateway, MessageService, ImageService],
 })
 export class AppModule implements NestModule{
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(AuthMiddleware)
-      .forRoutes({ path: 'set-name', method: RequestMethod.POST }, UserController, ChatRoomControllerNew);
+      .forRoutes({ path: 'set-name', method: RequestMethod.POST }, UserController, ChatRoomControllerNew, ImageController);
   }
 
 }

@@ -2,7 +2,12 @@ import React from 'react'
 import styled from 'styled-components'
 
 const SetAdmButton = styled.button`
-
+ background-color: #50575e;
+  color: white;
+  padding: 8px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
 `;
 
 interface SetAdmBtnProps {

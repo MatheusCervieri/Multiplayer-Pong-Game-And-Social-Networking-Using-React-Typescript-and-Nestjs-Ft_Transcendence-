@@ -4,6 +4,9 @@ import { ChatRoom } from 'src/ChatRoom_database/ChatRoom.entity';
 import { OneToMany } from 'typeorm';
 import { JoinTable } from 'typeorm';
 import { JoinColumn } from 'typeorm';
+import {OneToOne} from 'typeorm';
+import { Image } from '../image/image.entity';
+
 
 @Entity()
 export class User {
@@ -47,4 +50,9 @@ export class User {
 
   @OneToMany(type => ChatRoom, chatRoom => chatRoom.owner)
   ownedChatRooms: ChatRoom[];
+
+  @OneToOne(() => Image)
+  @JoinColumn()
+  image: Image;
+
 }
