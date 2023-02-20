@@ -13,8 +13,8 @@ import { ChatGateway } from 'src/chat/chat.gateway';
 export class ChatRoomControllerNew {
   constructor(
     private readonly ChatRoomService: ChatRoomService,
-    private readonly UsersService: UsersService
-    //@Inject('ChatGateway') private readonly ChatGateway: ChatGateway
+    private readonly UsersService: UsersService,
+    private readonly ChatGateway: ChatGateway
     ) {}
 
   @Post('create-room')
@@ -180,8 +180,10 @@ export class ChatRoomControllerNew {
       room.adminusers = roomAdmin;
       room.adminusers.push(userToMakeAdmin);
       await this.ChatRoomService.save(room);
-      //const data1 = { message: "updateroom", roomid: room.id};
-      //this.ChatGateway.server.to(room.id).emit('update-room', data1);
+
+      const data1 = { message: "update-room", roomid: room.id};
+      this.ChatGateway.server.to(room.id.toString()).emit('update-room', data1);
+
       return { message: 'User is now admin!', data: room };
     }catch (error)
     {
@@ -225,8 +227,9 @@ export class ChatRoomControllerNew {
       room.adminusers = roomAdmin;
       room.adminusers = room.adminusers.filter(u => u.id !== userToRemoveAdmin.id);
       await this.ChatRoomService.save(room);
-      //const data1 = { message: "updateroom", roomid: room.id};
-     // this.ChatGateway.server.to(room.id).emit('update-room', data1);
+      const data1 = { message: "updateroom", roomid: room.id};
+      console.log(room.id);
+      this.ChatGateway.server.to(room.id.toString()).emit('update-room', data1);
       return { message: 'User is now admin!', data: room };
     }catch (error)
     {
@@ -287,7 +290,9 @@ export class ChatRoomControllerNew {
       //Check if the user is owner
       if (room.owner.id === userToBlock.id)
         throw new Error("You can´t block the owner");
-
+      
+      const data1 = { message: "update-room", roomid: room.id};
+      this.ChatGateway.server.to(room.id.toString()).emit('update-room', data1);
       //If not, block him. 
       room.bannedusers = roomBlocked;
       room.bannedusers.push(userToBlock);
@@ -340,6 +345,8 @@ export class ChatRoomControllerNew {
       if (room.owner.id === userToUnBlock.id)
         throw new Error("You can´t unblock the owner");
 
+      const data1 = { message: "update-room", roomid: room.id};
+      this.ChatGateway.server.to(room.id.toString()).emit('update-room', data1);
       //If yes, unblock him.
       room.bannedusers = roomBlocked;
       room.bannedusers = room.bannedusers.filter(u => u.id !== userToUnBlock.id);
@@ -391,6 +398,9 @@ async MuteUser(@Req() request: any, @Param('id') id: number, @Body() data: any):
       if (room.owner.id === userToMute.id)
         throw new Error("You can´t mute the owner");
 
+
+      const data1 = { message: "update-room", roomid: room.id};
+      this.ChatGateway.server.to(room.id.toString()).emit('update-room', data1);
       //If not, mute him.
       room.mutedusers = roomMuted;
       room.mutedusers.push(userToMute);
@@ -443,6 +453,8 @@ async UnMuteUser(@Req() request: any, @Param('id') id: number, @Body() data: any
       if (room.owner.id === userToUnMute.id)
         throw new Error("You can´t unmute the owner");
 
+      const data1 = { message: "update-room", roomid: room.id};
+      this.ChatGateway.server.to(room.id.toString()).emit('update-room', data1);
       //If yes, mute him.
       room.mutedusers = roomMuted;
       room.mutedusers = room.mutedusers.filter(u => u.id !== userToUnMute.id);

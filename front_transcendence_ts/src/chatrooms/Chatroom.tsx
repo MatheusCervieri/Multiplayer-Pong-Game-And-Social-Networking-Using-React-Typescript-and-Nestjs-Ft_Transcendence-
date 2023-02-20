@@ -340,6 +340,8 @@ useEffect(() => {
     socket.off('update-room');
   };
 },[]);
+
+
 useEffect(() => {
   if (renderPage == true)
   {
@@ -391,12 +393,6 @@ function removeSubstring(str: string | undefined, substring: string) {
     return '';
   }
   return str.replace(substring, '');
-}
-
-function updatetest()
-{
-  const data = { message: "update-room", roomid: id };
-  socket.emit('update-room', data);
 }
 
 const handleKeyDown = (event: any) => {
@@ -459,7 +455,6 @@ if (renderPage == false && promptShown == true)
 else{
   return (
     <>
-    <button onClick={updatetest}>Update Room</button>
     {showInfo && <Useradmin username={username} information={UserInformation} myStatus={myStatus}/>}
   
     <Container>

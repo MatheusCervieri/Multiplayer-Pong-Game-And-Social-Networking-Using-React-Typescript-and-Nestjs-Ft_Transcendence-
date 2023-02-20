@@ -43,6 +43,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   @SubscribeMessage('update-room')
   updateRoom(client: Socket, data: { message:string, roomid: string}) {
+    console.log("EBAAAAAAAAAAAAAAAAAAAA  Received update-room:");
     console.log(data.message, data.roomid);
     this.server.to(data.roomid).emit('update-room', data);
   }
