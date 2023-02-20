@@ -22,6 +22,13 @@ export class ImageController {
   }
 
   @Post('upload')
+  @UseInterceptors(FileInterceptor('image'))
+  async uploadImage(@UploadedFile() file: any, @Req() request: any): Promise<string> {
+    console.log(file);
+    return file.filename;
+  }
+  /*
+  @Post('upload')
   @UseInterceptors(FileInterceptor('image', {
     storage: diskStorage({
       dest: './uploads',
@@ -38,6 +45,7 @@ export class ImageController {
     return file.filename;
   }
 
+  */
   @Get('all')
   getAllFiles(): string[] {
     const filesDir = join(__dirname, 'uploads');

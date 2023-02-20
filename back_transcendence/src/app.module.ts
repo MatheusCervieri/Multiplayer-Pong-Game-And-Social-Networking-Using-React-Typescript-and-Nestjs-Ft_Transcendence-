@@ -50,7 +50,6 @@ export class AppModule implements NestModule{
     consumer
       .apply(AuthMiddleware)
       .forRoutes({ path: 'set-name', method: RequestMethod.POST }, UserController, ChatRoomControllerNew, ImageController);
-  
     }
 
 }
