@@ -9,12 +9,16 @@ import { UsersService } from 'src/user_database/user.service';
 import { GamesServices } from 'src/GamesDatabase/Games.service';
 import {  Game }  from 'src/GamesDatabase/Game.entity';
 import { IoAdapter } from '@nestjs/platform-socket.io';
-
+import {RoomInterface} from './interfaces/roominterface';
 //https://socket.io/pt-br/docs/v3/rooms/ 
+
+
 
 @WebSocketGateway(8002, {cors: '*' })
 export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
   private queue: any[];
+  private connectedRooms = new Map<string, RoomInterface>(); // Map<room_id, RoomInterface> room_id, room_content.
+
   constructor(
     private readonly userService: UsersService,
     private readonly gameService: GamesServices,
@@ -23,6 +27,8 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer() server;
   connectedUsers = [];
 
+  
+
   handleConnection(client: Socket) {
     this.connectedUsers.push(client.id);
     console.log(`Client connected: ${client.id}`);
@@ -30,13 +36,19 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   handleDisconnect(client: Socket) {
     this.connectedUsers = this.connectedUsers.filter(user => user !== client.id);
+    if (this.queue) {
+      this.queue = this.queue.filter(player => player.client.id !== client.id);
+      console.log("Disconected from queue", client.id);
+    }
     console.log(`Client ${client.id} disconnected: ${client.id}`);
   }
 
   @SubscribeMessage('join-room')
-  handleJoinRoom(client: Socket, data : { name: string , room_id: string}) {
-    client.join(data.room_id);
-    console.log(`Client ${client.id} joined room: ${data.room_id}`);
+  handleJoinRoom(client: Socket, data : { token: string, game_id: string}) {
+    const user = this.userService.findOneByToken(data.token);
+    client.join(data.game_id);
+    const roomuser = {client, user};
+    console.log(`Client ${client.id} joined room: ${data.game_id}`);
   }
 
   @SubscribeMessage('join-queue')
