@@ -5,12 +5,20 @@ import { ConnectedSocket } from '@nestjs/websockets';
 import { ChatRoom, Message } from 'src/ChatRoom_database/ChatRoom.entity';
 import { ChatRoomService } from 'src/ChatRoom_database/ChatRoom.service';
 import { MessageService } from 'src/ChatRoom_database/Message.service';
+import { UsersService } from 'src/user_database/user.service';
+import { GamesServices } from 'src/GamesDatabase/Games.service';
+import {  Game }  from 'src/GamesDatabase/Game.entity';
+import { IoAdapter } from '@nestjs/platform-socket.io';
 
 //https://socket.io/pt-br/docs/v3/rooms/ 
 
 @WebSocketGateway(8002, {cors: '*' })
 export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
-  constructor() {}
+  private queue: any[];
+  constructor(
+    private readonly userService: UsersService,
+    private readonly gameService: GamesServices,
+  ) {}
 
   @WebSocketServer() server;
   connectedUsers = [];
@@ -32,14 +40,42 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
   }
 
   @SubscribeMessage('join-queue')
-  handleJoinQueie(client: Socket, data : { name: string }) {
+  async handleJoinQueue(client: Socket, data : { token: string }) {
     console.log("Join queue");
-
-    const gameid = 10;
-    client.emit('game-found', gameid);
+    const user = await this.userService.findOneByToken(data.token);
+    if (user)
+    {
+      console.log("User found");
+      if (this.queue === undefined)
+      {
+        this.queue = [];
+      }
+      //Check if the user is already in the queue
+      if (this.queue.find(x => x.user.id === user.id) === undefined)
+      {
+        this.queue.push({client, user});
+        console.log("User added to queue");
+      }
+      if (this.queue.length >= 2)
+      {
+        console.log("Queue has 2 players");
+        const player1 = this.queue.shift();
+        const player2 = this.queue.shift();
+        
+        const game = new Game();
+        game.name = player1.user.username + " vs " + player2.user.username;
+        game.player1Id = player1.user.id;
+        game.player2Id = player2.user.id;
+        await this.gameService.create(game);
+        //Create a new game and add the players to it
+        player1.client.emit('game-found', { id : game.id });
+        player2.client.emit('game-found', { id: game.id });
+       
+      }
+    }
   }
 
-
+  
   @SubscribeMessage('leave-room')
   handleLeaveRoom(client: Socket, room: string) {
     client.leave(room);

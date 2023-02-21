@@ -16,6 +16,14 @@ export class GamesServices {
     return this.gamesRepository.save(game);
   }
 
+  async findWithPlayers(id: any): Promise<Game> {
+    const game = await this.gamesRepository.findOne({
+      where: { id: id },
+      relations: ['player1', 'player2'],
+    });
+    return game;
+  }
+
   save(game: Game): Promise<Game> {
     return this.gamesRepository.save(game);
   }

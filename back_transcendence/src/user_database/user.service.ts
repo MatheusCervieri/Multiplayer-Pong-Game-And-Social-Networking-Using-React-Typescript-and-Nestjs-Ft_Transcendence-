@@ -40,6 +40,10 @@ export class UsersService {
     return this.usersRepository.findOneBy({ name });
   }
 
+  findOneByToken(token: string): Promise<User> {
+    return this.usersRepository.findOneBy({ token });
+  }
+
   async findAllNames(): Promise<string[]> {
     const users = await this.usersRepository.find();
     return users.map(user => user.name);

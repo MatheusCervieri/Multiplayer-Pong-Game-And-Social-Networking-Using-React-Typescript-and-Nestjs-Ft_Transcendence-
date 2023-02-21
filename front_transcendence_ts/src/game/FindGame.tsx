@@ -22,9 +22,10 @@ export default function FindGame() {
     }, []);
 
     useEffect(() => {
-        socket.emit('join-queue', { name: 'test' });
+        const token = localStorage.getItem('token');
+        socket.emit('join-queue', { token: token });
     }, []);
-    
+
   return (
     <div>FindGame</div>
   )

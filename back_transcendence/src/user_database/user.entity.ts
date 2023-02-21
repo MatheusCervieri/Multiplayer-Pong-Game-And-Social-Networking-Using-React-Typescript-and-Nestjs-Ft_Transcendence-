@@ -6,6 +6,7 @@ import { JoinTable } from 'typeorm';
 import { JoinColumn } from 'typeorm';
 import {OneToOne} from 'typeorm';
 import { Image } from '../image/image.entity';
+import { Game } from 'src/GamesDatabase/Game.entity';
 
 
 @Entity()
@@ -30,6 +31,7 @@ export class User {
 
   @ManyToMany(type => ChatRoom, chatRoom => chatRoom.users)
   chatRooms: ChatRoom[];
+
 
   @ManyToMany(type => ChatRoom, chatRoom => chatRoom.bannedusers)
   bannedrooms: ChatRoom[];
