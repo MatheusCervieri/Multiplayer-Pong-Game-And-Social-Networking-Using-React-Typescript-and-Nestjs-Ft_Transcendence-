@@ -12,6 +12,8 @@ import Createroomaux from "./chatrooms/Createroomaux";
 import UserSearch from "./utils/components/Usersearch";
 import Profile from "./profile/Profile";
 import SetProfileImage from "./login_setup/SetProfileImage/SetProfileImage";
+import Game from "./game/Game";
+import FindGame from "./game/FindGame";
 
 function handleUser()
 {
@@ -28,7 +30,9 @@ export default function Displayroute() {
         <Route path="/setprofileimage" element={<SetProfileImage />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path='/chat' element={<ChatInterface />} />
+        <Route path='/findgame' element={<FindGame />} />
         <Route path='chat/:id' element={<Chatroom/>} />
+        <Route path='game/:id' element={<Game/>} />
         <Route path='profile/:name' element={<Profile/>} />
       </Routes>
     </BrowserRouter>
