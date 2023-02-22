@@ -1,7 +1,33 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import { useParams } from 'react-router-dom';
+import { io } from 'socket.io-client';
 import GameCanvas from './GameCanvas'
 
+const socket = io("http://localhost:8002");
+
 export default function Game() {
+  const [isConnected, setIsConnected] = useState(false);
+  const { id } = useParams<{ id: string | undefined }>();
+
+  useEffect(() => {
+    socket.on("connect", () => {
+        setIsConnected(true);
+    });
+    socket.on("disconnect", () => {
+        setIsConnected(false);
+    });
+    return () => {
+        socket.off('connect');
+        socket.off('disconnect');
+      };
+}, []);
+
+useEffect(() => {
+  const token = localStorage.getItem('token');
+  socket.emit('authenticate', { token: token , game_id: id});
+  
+}, []);
+
     const canvasProps = {
         width: 800,
         height: 600,
@@ -9,6 +35,9 @@ export default function Game() {
         racketHeight: 80,
         racketColor: "#FFFFFF"
       };
+  
+
+
   return (
     <GameCanvas {...canvasProps}/>
   )

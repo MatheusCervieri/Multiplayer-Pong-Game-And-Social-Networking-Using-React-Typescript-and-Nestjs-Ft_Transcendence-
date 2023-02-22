@@ -71,7 +71,7 @@ const GameCanvas: React.FC<GameCanvasProps> = (props) => {
   useEffect(() => {
     const interval = setInterval(() => {
       
-      moveBall();
+      //moveBall();
     }, 16);
   
     return () => clearInterval(interval);
