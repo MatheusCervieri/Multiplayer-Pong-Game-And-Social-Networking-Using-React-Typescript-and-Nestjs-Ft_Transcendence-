@@ -9,15 +9,19 @@ import { UsersService } from 'src/user_database/user.service';
 import { GamesServices } from 'src/GamesDatabase/Games.service';
 import {  Game }  from 'src/GamesDatabase/Game.entity';
 import { IoAdapter } from '@nestjs/platform-socket.io';
-import {RoomInterface} from './interfaces/roominterface';
+import {RTGameRoomInterface} from '../interfaces/roominterface';
 //https://socket.io/pt-br/docs/v3/rooms/ 
 
+export interface CustomSocket extends Socket {
+  user: any,
+}
+//Basicamente eu preciso ter um map the rooms com rooms que contem as informaçoes do jogo. 
 
 
 @WebSocketGateway(8002, {cors: '*' })
 export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
   private queue: any[];
-  private connectedRooms = new Map<string, RoomInterface>(); // Map<room_id, RoomInterface> room_id, room_content.
+  private connectedRooms = new Map<string, RTGameRoomInterface>(); // Map<room_id, RoomInterface> room_id, room_content.
 
   constructor(
     private readonly userService: UsersService,
@@ -26,6 +30,7 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   @WebSocketServer() server;
   connectedUsers = [];
+  authenticatedUsers = [];
 
   
 
@@ -34,21 +39,27 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
     console.log(`Client connected: ${client.id}`);
   }
 
-  handleDisconnect(client: Socket) {
+  handleDisconnect(client: CustomSocket) {
     this.connectedUsers = this.connectedUsers.filter(user => user !== client.id);
     if (this.queue) {
       this.queue = this.queue.filter(player => player.client.id !== client.id);
       console.log("Disconected from queue", client.id);
     }
+    if(client.user)
+      console.log('Client user: ', client.user.name);
     console.log(`Client ${client.id} disconnected: ${client.id}`);
   }
 
-  @SubscribeMessage('join-room')
-  handleJoinRoom(client: Socket, data : { token: string, game_id: string}) {
-    const user = this.userService.findOneByToken(data.token);
+  @SubscribeMessage('authenticate')
+  async authenticate(client: CustomSocket, data : { token: string, game_id: string}) {
+    const user = await this.userService.findOneByToken(data.token);
+    client.user = user;
     client.join(data.game_id);
-    const roomuser = {client, user};
-    console.log(`Client ${client.id} joined room: ${data.game_id}`);
+    this.authenticatedUsers.push(client.user);
+    console.log(`Client ${client.user.name} authenticated: ${data.token}`);
+    //Add the client to the connected players array of the room. 
+    //Verify if the user is the player1 or player2
+    //Send the connect players to the client.
   }
 
   @SubscribeMessage('join-queue')
@@ -74,29 +85,11 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
         const player1 = this.queue.shift();
         const player2 = this.queue.shift();
         
-        const game = new Game();
-        game.name = player1.user.username + " vs " + player2.user.username;
-        game.player1Id = player1.user.id;
-        game.player2Id = player2.user.id;
-        await this.gameService.create(game);
-        //Create a new game and add the players to it
-        player1.client.emit('game-found', { id : game.id });
-        player2.client.emit('game-found', { id: game.id });
-       
+        const game = await this.gameService.createQueueGame(player1, player2);
+        console.log(this.gameService.getRtGame(game.id.toString()));
       }
     }
   }
 
   
-  @SubscribeMessage('leave-room')
-  handleLeaveRoom(client: Socket, room: string) {
-    client.leave(room);
-    console.log(`Client ${client.id} left room: ${room}`);
-  }
-
-
-  @SubscribeMessage('message')
-  async handleMessage(client: Socket, data: { user:string , message:string, roomid: string}) {
-    this.server.to(data.roomid).emit('message', data);
-  }
 }

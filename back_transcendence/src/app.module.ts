@@ -28,7 +28,7 @@ import { ImageService } from './image/image.service';
 import { ImageModule } from './image/image.module';
 import { MulterModule } from '@nestjs/platform-express';
 import { PublicImageController } from './image/publicimage.controller';
-import { GameGateway} from './gamewebsocket/game.gateway';
+import { GameGateway} from './GamesDatabase/gamewebsocket/game.gateway';
 import { GamesServices } from './GamesDatabase/Games.service';
 import { GamesController } from './GamesDatabase/Games.controller';
 import { GameModule } from './GamesDatabase/Games.module';
