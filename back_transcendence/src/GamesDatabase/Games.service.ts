@@ -4,7 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import {User} from '../user_database/user.entity';
 import {Game} from  './Game.entity';
 import { GameGateway } from './gamewebsocket/game.gateway';
-import { RTGameRoomInterface, defaultGameRoom } from './interfaces/roominterface';
+import { RTGameRoomInterface, defaultGameRoom } from './roominterface';
 import {CustomSocket} from './gamewebsocket/game.gateway';
 import { AnyARecord } from 'dns';
 
@@ -76,8 +76,55 @@ export class GamesServices {
     this.updateGame(gameId, rtGame);
   }
 
+ 
+
+  async movePlayer(username: string, game_id: string, direction: string)
+  {
+    const rtGame = this.rtGames.get(game_id);
+    if(rtGame.player1Name === username)
+    {
+      if(direction === 'up')
+      {
+        rtGame.player1RacketPosition -= rtGame.racketVelocity;
+      }
+      if(direction === 'down')
+      {
+        rtGame.player1RacketPosition += rtGame.racketVelocity;
+      }
+    }
+    if(rtGame.player2Name === username)
+    {
+      if(direction === 'up')
+      {
+        rtGame.player2RacketPosition -= rtGame.racketVelocity;
+      }
+      if(direction === 'down')
+      {
+        rtGame.player2RacketPosition += rtGame.racketVelocity;
+      }
+    }
+    this.updateGame(game_id, rtGame);
+  }
+
   updateGame(gameId: string, rtGame: RTGameRoomInterface) {
     rtGame.elepsedTime = new Date().getTime() - rtGame.creationDate;
+    if(rtGame.status === 'lobby')
+    {
+    rtGame.timeToStart = 10000 - rtGame.elepsedTime;
+      if (rtGame.timeToStart <= 0) 
+      {
+        rtGame.timeToStart = 0;
+        if(rtGame.player1IsConnected && rtGame.player2IsConnected)
+        {
+          rtGame.status = 'playing';
+        }
+        else
+        {
+          //Finish the game!
+          rtGame.status = 'finished';
+        }
+      }
+    }
     this.rtGames.set(gameId, rtGame);
     this.gameGateway.server.to(gameId).emit('game-update', rtGame);
   }

@@ -9,7 +9,8 @@ import { UsersService } from 'src/user_database/user.service';
 import { GamesServices } from 'src/GamesDatabase/Games.service';
 import {  Game }  from 'src/GamesDatabase/Game.entity';
 import { IoAdapter } from '@nestjs/platform-socket.io';
-import {RTGameRoomInterface} from '../interfaces/roominterface';
+import { RTGameRoomInterface, defaultGameRoom } from '../roominterface';
+
 //https://socket.io/pt-br/docs/v3/rooms/ 
 
 export interface CustomSocket extends Socket {
@@ -17,7 +18,6 @@ export interface CustomSocket extends Socket {
   gameRoomId: any,
 }
 //Basicamente eu preciso ter um map the rooms com rooms que contem as informaçoes do jogo. 
-
 
 @WebSocketGateway(8002, {cors: '*' })
 export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
@@ -57,7 +57,15 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
     client.join(data.game_id);
     console.log(`Client ${client.user.name} authenticated: ${data.token}`);
     this.gameService.authenticate(user.name, data.game_id);
+  
     //Create a function at gameservice that att the rtgame information about connected users. 
+  }
+
+  @SubscribeMessage('move-player')
+  async movePlayer(client: CustomSocket, data : { token: string, game_id: string, direction: string}) 
+  {
+    const user = await this.userService.findOneByToken(data.token);
+    this.gameService.movePlayer(user.name, data.game_id, data.direction);
   }
 
   @SubscribeMessage('join-queue')

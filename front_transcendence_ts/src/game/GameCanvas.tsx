@@ -45,12 +45,6 @@ const GameCanvas: React.FC<GameCanvasProps> = (props) => {
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       switch (event.key) {
-        case "ArrowUp":
-          setRightRacketPosition(rightRacketPosition - 10);
-          break;
-        case "ArrowDown":
-          setRightRacketPosition(rightRacketPosition + 10);
-          break;
         case "w":
           setLeftRacketPosition(leftRacketPosition - 10);
           break;

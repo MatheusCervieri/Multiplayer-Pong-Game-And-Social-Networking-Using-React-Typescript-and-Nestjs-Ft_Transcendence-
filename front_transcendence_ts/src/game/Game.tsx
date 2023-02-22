@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { io } from 'socket.io-client';
 import GameCanvas from './GameCanvas'
 import Lobby from './Lobby';
-import { defaultGameRoom } from './GameInterface';
+import { RTGameRoomInterface, defaultGameRoom } from './roominterface'
 
 const socket = io("http://localhost:8002");
 
@@ -36,10 +36,10 @@ useEffect(() => {
 }, []);
 
     const canvasProps = {
-        width: 800,
-        height: 600,
+        width: 360,
+        height: 270,
         racketWidth: 10,
-        racketHeight: 80,
+        racketHeight: 60,
         racketColor: "#FFFFFF"
       };
   
@@ -47,8 +47,8 @@ useEffect(() => {
 
   return (
     <>
-    <Lobby gameData={gameData}/>
-    <GameCanvas {...canvasProps}/>
+    {gameData.status === 'lobby' && <Lobby gameData={gameData}/>}
+    {gameData.status === 'playing' && <GameCanvas {...canvasProps}/>}
     </>
   )
 }

@@ -16,8 +16,7 @@ export default function Lobby(props : LobbyProps) {
       </h2>
       <p>Status: {gameData.status}</p>
       <p>
-        Time to start: {gameData.timeToStart}{" "}
-        {gameData.timeToStart === 1 ? "second" : "seconds"}
+        Time to start: {Math.floor(gameData.timeToStart / 1000)} seconds;
       </p>
       <p>Player 1 connected: {gameData.player1IsConnected ? "Yes" : "No"}</p>
       <p>Player 2 connected: {gameData.player2IsConnected ? "Yes" : "No"}</p>
