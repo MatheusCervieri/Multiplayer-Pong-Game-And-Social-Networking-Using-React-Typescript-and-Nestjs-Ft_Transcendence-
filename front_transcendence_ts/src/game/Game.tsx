@@ -16,6 +16,9 @@ export default function Game() {
     socket.on("disconnect", () => {
         setIsConnected(false);
     });
+    socket.on('game-update', (data: any) => {
+      console.log(data);
+    });
     return () => {
         socket.off('connect');
         socket.off('disconnect');

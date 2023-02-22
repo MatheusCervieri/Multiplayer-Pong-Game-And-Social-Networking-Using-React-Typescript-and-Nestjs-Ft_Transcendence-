@@ -14,6 +14,7 @@ import {RTGameRoomInterface} from '../interfaces/roominterface';
 
 export interface CustomSocket extends Socket {
   user: any,
+  gameRoomId: any,
 }
 //Basicamente eu preciso ter um map the rooms com rooms que contem as informaçoes do jogo. 
 
@@ -30,10 +31,8 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   @WebSocketServer() server;
   connectedUsers = [];
-  authenticatedUsers = [];
 
   
-
   handleConnection(client: Socket) {
     this.connectedUsers.push(client.id);
     console.log(`Client connected: ${client.id}`);
@@ -46,7 +45,7 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
       console.log("Disconected from queue", client.id);
     }
     if(client.user)
-      console.log('Client user: ', client.user.name);
+      this.gameService.disconnect(client.user.name, client.gameRoomId);
     console.log(`Client ${client.id} disconnected: ${client.id}`);
   }
 
@@ -54,17 +53,16 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
   async authenticate(client: CustomSocket, data : { token: string, game_id: string}) {
     const user = await this.userService.findOneByToken(data.token);
     client.user = user;
+    client.gameRoomId = data.game_id;
     client.join(data.game_id);
-    this.authenticatedUsers.push(client.user);
     console.log(`Client ${client.user.name} authenticated: ${data.token}`);
-    //Add the client to the connected players array of the room. 
-    //Verify if the user is the player1 or player2
-    //Send the connect players to the client.
+    this.gameService.authenticate(user.name, data.game_id);
+    //Create a function at gameservice that att the rtgame information about connected users. 
   }
 
   @SubscribeMessage('join-queue')
   async handleJoinQueue(client: Socket, data : { token: string }) {
-    console.log("Join queue");
+    console.log("Join queue"); 
     const user = await this.userService.findOneByToken(data.token);
     if (user)
     {

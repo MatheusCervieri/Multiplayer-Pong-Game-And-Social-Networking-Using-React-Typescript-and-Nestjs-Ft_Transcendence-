@@ -20,18 +20,58 @@ export class GamesServices {
   
   async createQueueGame(player1 : any , player2 : any): Promise<Game> {
     const newgame = new Game();
-    newgame.name = player1.user.username + " vs " + player2.user.username;
+    newgame.name = player1.user.name + " vs " + player2.user.username;
     newgame.player1Id = player1.user.id;
     newgame.player2Id = player2.user.id;
     const databaseGame = await this.gamesRepository.save(newgame);
     const rtGame = defaultGameRoom;
     rtGame.id = databaseGame.id;
-    rtGame.player1Name = player1.user.username;
-    rtGame.player2Name = player2.user.username;
+    console.log("Player1 name", player1.user.name);
+    rtGame.player1Name = player1.user.name;
+    rtGame.player2Name = player2.user.name;
     this.rtGames.set(databaseGame.id.toString(), rtGame);
     player1.client.emit('game-found', { id : databaseGame.id });
     player2.client.emit('game-found', { id: databaseGame.id });
     return databaseGame;
+  }
+
+  authenticate(playername: string, gameId: string) {
+    const rtGame = this.rtGames.get(gameId);
+
+    if(playername === rtGame.player1Name) {
+      rtGame.player1IsConnected = true;
+    }
+    else if (playername === rtGame.player2Name)
+    {
+      rtGame.player2IsConnected = true;
+    }
+     // i could create a property for spectors, but i dont think it is necessary. 
+    this.rtGames.set(gameId, rtGame);
+    this.gameGateway.server.to(gameId).emit('game-update', rtGame);
+  }
+
+  disconnect(playername: string, gameId: string) {
+    const rtGame = this.rtGames.get(gameId);
+
+    if(playername === rtGame.player1Name) {
+      rtGame.player1IsConnected = false;
+    }
+    else if (playername === rtGame.player2Name)
+    {
+      rtGame.player2IsConnected = false;
+    }
+    else
+    {
+      
+    }
+
+    if(rtGame.player1IsConnected === false && rtGame.player2IsConnected === false) {
+      console.log("Game is finished"); 
+      //this.rtGames.delete(gameId);
+    }
+
+    this.rtGames.set(gameId, rtGame);
+    this.gameGateway.server.to(gameId).emit('game-update', rtGame);
   }
 
   getRtGame(id: string) {
