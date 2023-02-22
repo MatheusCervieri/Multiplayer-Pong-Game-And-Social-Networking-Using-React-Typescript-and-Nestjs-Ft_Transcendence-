@@ -2,10 +2,12 @@ import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom';
 import { io } from 'socket.io-client';
 import GameCanvas from './GameCanvas'
+import Lobby from './Lobby';
 
 const socket = io("http://localhost:8002");
 
 export default function Game() {
+  const [gameData, setGameData] = useState<any>(null);
   const [isConnected, setIsConnected] = useState(false);
   const { id } = useParams<{ id: string | undefined }>();
 
@@ -18,6 +20,7 @@ export default function Game() {
     });
     socket.on('game-update', (data: any) => {
       console.log(data);
+      setGameData(data);
     });
     return () => {
         socket.off('connect');
@@ -42,6 +45,9 @@ useEffect(() => {
 
 
   return (
+    <>
+    <Lobby gameData={gameData}/>
     <GameCanvas {...canvasProps}/>
+    </>
   )
 }

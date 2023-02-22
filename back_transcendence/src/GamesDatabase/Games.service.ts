@@ -16,7 +16,10 @@ export class GamesServices {
     private gamesRepository: Repository<Game>,
     @Inject(forwardRef(() => GameGateway))
     private gameGateway: GameGateway,
-  ) {}
+  ) {
+
+    setInterval(() => this.gameLoops(), 1000);
+  }
   
   async createQueueGame(player1 : any , player2 : any): Promise<Game> {
     const newgame = new Game();
@@ -29,6 +32,7 @@ export class GamesServices {
     console.log("Player1 name", player1.user.name);
     rtGame.player1Name = player1.user.name;
     rtGame.player2Name = player2.user.name;
+    rtGame.creationDate = new Date().getTime();
     this.rtGames.set(databaseGame.id.toString(), rtGame);
     player1.client.emit('game-found', { id : databaseGame.id });
     player2.client.emit('game-found', { id: databaseGame.id });
@@ -46,8 +50,7 @@ export class GamesServices {
       rtGame.player2IsConnected = true;
     }
      // i could create a property for spectors, but i dont think it is necessary. 
-    this.rtGames.set(gameId, rtGame);
-    this.gameGateway.server.to(gameId).emit('game-update', rtGame);
+     this.updateGame(gameId, rtGame);
   }
 
   disconnect(playername: string, gameId: string) {
@@ -62,7 +65,7 @@ export class GamesServices {
     }
     else
     {
-      
+
     }
 
     if(rtGame.player1IsConnected === false && rtGame.player2IsConnected === false) {
@@ -70,13 +73,25 @@ export class GamesServices {
       //this.rtGames.delete(gameId);
     }
 
+    this.updateGame(gameId, rtGame);
+  }
+
+  updateGame(gameId: string, rtGame: RTGameRoomInterface) {
+    rtGame.elepsedTime = new Date().getTime() - rtGame.creationDate;
     this.rtGames.set(gameId, rtGame);
     this.gameGateway.server.to(gameId).emit('game-update', rtGame);
+  }
+
+  async gameLoops(): Promise<void> {
+    for (const [gameId, rtGame] of this.rtGames.entries()) {
+      this.updateGame(gameId, rtGame);
+    }
   }
 
   getRtGame(id: string) {
     return this.rtGames.get(id);
   }
+
 
 
   create(game: Game): Promise<Game> {
