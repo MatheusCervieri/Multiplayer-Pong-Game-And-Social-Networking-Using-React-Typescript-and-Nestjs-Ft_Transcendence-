@@ -1,5 +1,6 @@
 import React from 'react'
 
+
 interface LobbyProps {
     gameData: any
 }
@@ -11,7 +12,7 @@ export default function Lobby(props : LobbyProps) {
     <div>
       <h1>Lobby</h1>
       <h2>
-        {gameData.player1.name} vs {gameData.player2.name}
+        {gameData.player1Name} vs {gameData.player2Name}
       </h2>
       <p>Status: {gameData.status}</p>
       <p>

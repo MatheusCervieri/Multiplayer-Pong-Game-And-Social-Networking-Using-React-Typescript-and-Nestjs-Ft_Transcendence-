@@ -3,11 +3,12 @@ import { useParams } from 'react-router-dom';
 import { io } from 'socket.io-client';
 import GameCanvas from './GameCanvas'
 import Lobby from './Lobby';
+import { defaultGameRoom } from './GameInterface';
 
 const socket = io("http://localhost:8002");
 
 export default function Game() {
-  const [gameData, setGameData] = useState<any>(null);
+  const [gameData, setGameData] = useState<any>(defaultGameRoom);
   const [isConnected, setIsConnected] = useState(false);
   const { id } = useParams<{ id: string | undefined }>();
 
