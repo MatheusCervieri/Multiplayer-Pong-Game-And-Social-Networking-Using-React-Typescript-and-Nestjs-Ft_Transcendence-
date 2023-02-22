@@ -64,6 +64,7 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @SubscribeMessage('move-player')
   async movePlayer(client: CustomSocket, data : { token: string, game_id: string, direction: string}) 
   {
+    console.log("Move player");
     const user = await this.userService.findOneByToken(data.token);
     this.gameService.movePlayer(user.name, data.game_id, data.direction);
   }

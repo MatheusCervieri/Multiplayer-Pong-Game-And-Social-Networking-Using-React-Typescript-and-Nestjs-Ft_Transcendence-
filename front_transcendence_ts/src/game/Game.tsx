@@ -20,7 +20,7 @@ export default function Game() {
         setIsConnected(false);
     });
     socket.on('game-update', (data: any) => {
-      console.log(data);
+      //console.log(data);
       setGameData(data);
     });
     return () => {
@@ -40,7 +40,9 @@ useEffect(() => {
         height: 270,
         racketWidth: 10,
         racketHeight: 60,
-        racketColor: "#FFFFFF"
+        racketColor: "#FFFFFF",
+        gameData: gameData,
+        socket: socket,
       };
   
 

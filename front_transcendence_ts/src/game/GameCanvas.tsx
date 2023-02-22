@@ -1,4 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import GetToken from '../utils/GetToken';
 
 interface GameCanvasProps {
   width: number;
@@ -6,15 +8,21 @@ interface GameCanvasProps {
   racketWidth: number;
   racketHeight: number;
   racketColor: string;
+  gameData: any;
+  socket: any
 }
 
 const GameCanvas: React.FC<GameCanvasProps> = (props) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const { width, height, racketWidth, racketHeight, racketColor } = props;
-  const [leftRacketPosition, setLeftRacketPosition] = useState(100);
-  const [rightRacketPosition, setRightRacketPosition] = useState(100);
-
+  const navigate = useNavigate();
+  const { id } = useParams<{ id: string | undefined }>();
+  const { width, height, racketWidth, racketHeight, racketColor, gameData, socket } = props;
   const [ball, setBall] = useState({ x: 400, y: 300, vx: 5, vy: 5 });
+  const [myUsername, setMyUsername] = useState('');
+
+  useEffect(() => {
+    GetToken(navigate, setMyUsername);
+  }, []);
 
   useEffect(() => {
     if (canvasRef.current) {
@@ -27,11 +35,11 @@ const GameCanvas: React.FC<GameCanvasProps> = (props) => {
         context.fillRect(0,0,width, height);
 
         context.fillStyle = racketColor;
-        context.fillRect(0, leftRacketPosition, racketWidth, racketHeight);
+        context.fillRect(0, gameData.player1RacketPosition, racketWidth, racketHeight);
         
         // Draw the right racket
         context.fillStyle = racketColor;
-        context.fillRect(width - racketWidth, rightRacketPosition, racketWidth, racketHeight);
+        context.fillRect(width - racketWidth, gameData.player2RacketPosition, racketWidth, racketHeight);
 
         // Draw the ball
         context.beginPath();
@@ -40,16 +48,27 @@ const GameCanvas: React.FC<GameCanvasProps> = (props) => {
         context.fill();
       }
     }
-  }, [canvasRef, width, height, racketWidth, racketHeight, racketColor, leftRacketPosition, rightRacketPosition, ball]);
+  }, [canvasRef, width, height, racketWidth, racketHeight, racketColor, gameData.player1RacketPosition, gameData.player2RacketPosition, ball]);
+
+  function moveRacket(direction: string)
+  {
+    if (myUsername === gameData.player1Name || myUsername === gameData.player2Name)
+    {
+    const token = localStorage.getItem('token');
+    const data = { token: token, game_id: id, direction: direction };
+    socket.emit('move-player', data);
+    }
+  }
+
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       switch (event.key) {
         case "w":
-          setLeftRacketPosition(leftRacketPosition - 10);
+          moveRacket("up");
           break;
         case "s":
-          setLeftRacketPosition(leftRacketPosition + 10);
+          moveRacket("down");
           break;
       }
     };
@@ -59,7 +78,7 @@ const GameCanvas: React.FC<GameCanvasProps> = (props) => {
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [leftRacketPosition, rightRacketPosition]);
+  }, []);
 
 
   useEffect(() => {
