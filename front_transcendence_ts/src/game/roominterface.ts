@@ -22,9 +22,6 @@ export interface RTGameRoomInterface {
     ballY: number,
     ballVx: number,
     ballVy: number,
-    firstBallPosition: number,
-    player1PauseTime: number,
-    player2PauseTime: number,
 }
 
 export const defaultGameRoom : RTGameRoomInterface = {
@@ -37,7 +34,7 @@ export const defaultGameRoom : RTGameRoomInterface = {
     creationDate: 0,
     timeToStart: 10000,
     elepsedTime: 0,
-    racketVelocity: 10,
+    racketVelocity: 5,
     player1Score: 0,
     player2Score: 0,
     racketWidth: 10,
@@ -49,9 +46,6 @@ export const defaultGameRoom : RTGameRoomInterface = {
     ballRadiues: 10,
     ballX: 100,
     ballY: 100,
-    ballVx: 7,
-    ballVy: 7,
-    firstBallPosition: 100,
-    player1PauseTime: 10000,
-    player2PauseTime: 10000,
+    ballVx: 5,
+    ballVy: 5,
 };

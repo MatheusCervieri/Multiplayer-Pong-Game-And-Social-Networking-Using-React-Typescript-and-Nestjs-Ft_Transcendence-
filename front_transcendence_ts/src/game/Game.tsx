@@ -7,7 +7,6 @@ import Lobby from './Lobby';
 import { RTGameRoomInterface, defaultGameRoom } from './roominterface'
 import  instance from '../confs/axios_information';
 import GameFinalScream from './GameFinalScream';
-import GamePauseScream from './GamePauseScream';
 
 const socket = io("http://localhost:8002");
 
@@ -15,7 +14,7 @@ export default function Game() {
   const [myName, setMyName] = useState<string>('');
   const navigate = useNavigate();
   const [gameData, setGameData] = useState<any>(defaultGameRoom);
-  const [gameRequestData, setGameRequestData] = useState<any>();
+  const [gameRequestData, setGameRequestData] = useState<any>(defaultGameRoom);
   const [gameRunning, setGameRunning] = useState<boolean>(false);
   const [isConnected, setIsConnected] = useState(false);
   const { id } = useParams<{ id: string | undefined }>();
@@ -30,7 +29,6 @@ export default function Game() {
   })
     .then(response => {
       console.log(response.data);
-      setGameRequestData(response.data);
       setGameRunning(response.data.isRunning);
     })
     .catch(error => {
@@ -65,8 +63,8 @@ export default function Game() {
         socket.off('disconnect');
       };
     }
-    else {
-      // gameRunning is false, remove all the listeners
+    if(gameRunning === false)
+    {
       socket.off('connect');
       socket.off('disconnect');
       socket.off('game-update');
@@ -75,8 +73,7 @@ export default function Game() {
 
 useEffect(() => {
   const token = localStorage.getItem('token');
-  if(gameRunning === true)
-    socket.emit('authenticate', { token: token , game_id: id});
+  socket.emit('authenticate', { token: token , game_id: id});
   GetToken(navigate, setMyName);
 
 }, []);
@@ -98,8 +95,7 @@ useEffect(() => {
     <>
     {gameRunning === true && gameData.status === 'lobby' && <Lobby gameData={gameData}/>}
     {gameRunning === true && myName !== '' && gameData.status === 'playing' && <GameCanvas {...canvasProps} />}
-    {gameRunning === true && gameData.status === 'paused' && <GamePauseScream gameData={gameData}/>}
-    {gameRunning === false && <GameFinalScream gameData={gameRequestData} myuser={myName} />}
+    {gameRunning === false && <GameFinalScream />}
     </>
   )
 }
