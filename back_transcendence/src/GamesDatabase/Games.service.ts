@@ -42,6 +42,8 @@ export class GamesServices {
   authenticate(playername: string, gameId: string) {
     const rtGame = this.rtGames.get(gameId);
 
+    if (rtGame)
+    {
     if(playername === rtGame.player1Name) {
       rtGame.player1IsConnected = true;
     }
@@ -52,10 +54,12 @@ export class GamesServices {
      // i could create a property for spectors, but i dont think it is necessary. 
      this.updateGame(gameId, rtGame);
   }
+  }
 
   disconnect(playername: string, gameId: string) {
     const rtGame = this.rtGames.get(gameId);
-
+    if (rtGame)
+    {
     if(playername === rtGame.player1Name) {
       rtGame.player1IsConnected = false;
     }
@@ -72,8 +76,9 @@ export class GamesServices {
       console.log("Game is finished"); 
       //this.rtGames.delete(gameId);
     }
-
+    
     this.updateGame(gameId, rtGame);
+    }
   }
 
  
@@ -161,9 +166,32 @@ export class GamesServices {
     this.rtGames.set(gameId, rtGame);
   }
 
-  finishGame(gameId: string , rtGame: RTGameRoomInterface)
+  async finishGame(gameId: string , rtGame: RTGameRoomInterface)
   {
     rtGame.status = 'finished';
+    const gamedatabase = await this.findGame(gameId);
+    gamedatabase.player1FinalScore = rtGame.player1Score;
+    gamedatabase.player2FinalScore = rtGame.player2Score;
+    if(rtGame.player1Score > rtGame.player2Score)
+    {
+      gamedatabase.winnerName = rtGame.player1Name;
+      gamedatabase.winnerId = gamedatabase.player1Id;
+    }
+    else if(rtGame.player1Score < rtGame.player2Score)
+    {
+      gamedatabase.winnerName = rtGame.player2Name;
+      gamedatabase.winnerId = gamedatabase.player2Id;
+    }
+    else
+    {
+      //select draw
+      gamedatabase.winnerName = 'Draw';
+    }
+    gamedatabase.isRunning = false;
+    await this.save(gamedatabase);
+
+    //remove game from rtGames
+    this.rtGames.delete(gameId);
   }
 
   updateGame(gameId: string, rtGame: RTGameRoomInterface) {

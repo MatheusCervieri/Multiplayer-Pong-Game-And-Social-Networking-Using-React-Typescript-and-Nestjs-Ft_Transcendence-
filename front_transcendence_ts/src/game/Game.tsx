@@ -14,7 +14,7 @@ export default function Game() {
   const [myName, setMyName] = useState<string>('');
   const navigate = useNavigate();
   const [gameData, setGameData] = useState<any>(defaultGameRoom);
-  const [gameRequestData, setGameRequestData] = useState<any>(defaultGameRoom);
+  const [gameRequestData, setGameRequestData] = useState<any>();
   const [gameRunning, setGameRunning] = useState<boolean>(false);
   const [isConnected, setIsConnected] = useState(false);
   const { id } = useParams<{ id: string | undefined }>();
@@ -29,6 +29,7 @@ export default function Game() {
   })
     .then(response => {
       console.log(response.data);
+      setGameRequestData(response.data);
       setGameRunning(response.data.isRunning);
     })
     .catch(error => {
@@ -63,8 +64,8 @@ export default function Game() {
         socket.off('disconnect');
       };
     }
-    if(gameRunning === false)
-    {
+    else {
+      // gameRunning is false, remove all the listeners
       socket.off('connect');
       socket.off('disconnect');
       socket.off('game-update');
@@ -73,7 +74,8 @@ export default function Game() {
 
 useEffect(() => {
   const token = localStorage.getItem('token');
-  socket.emit('authenticate', { token: token , game_id: id});
+  if(gameRunning === true)
+    socket.emit('authenticate', { token: token , game_id: id});
   GetToken(navigate, setMyName);
 
 }, []);
@@ -95,7 +97,7 @@ useEffect(() => {
     <>
     {gameRunning === true && gameData.status === 'lobby' && <Lobby gameData={gameData}/>}
     {gameRunning === true && myName !== '' && gameData.status === 'playing' && <GameCanvas {...canvasProps} />}
-    {gameRunning === false && <GameFinalScream />}
+    {gameRunning === false && <GameFinalScream gameData={gameRequestData} myuser={myName} />}
     </>
   )
 }
