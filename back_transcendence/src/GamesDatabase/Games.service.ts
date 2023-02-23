@@ -18,7 +18,7 @@ export class GamesServices {
     private gameGateway: GameGateway,
   ) {
 
-    setInterval(() => this.gameLoops(), 270);
+    setInterval(() => this.gameLoops(), 100);
   }
   
   async createQueueGame(player1 : any , player2 : any): Promise<Game> {
@@ -108,11 +108,49 @@ export class GamesServices {
 
   moveBall(game_id: string)
   {
-    console.log("Inside move ball!!!");
     const rtGame = this.rtGames.get(game_id);
     rtGame.ballX += rtGame.ballVx;
     rtGame.ballY += rtGame.ballVy;
     this.rtGames.set(game_id, rtGame);
+  }
+
+
+  handleBallWallCollision(gameId: string , rtGame: any) {
+    const { width, height, ballRadiues, ballX, ballY, ballVx, ballVy } = rtGame;
+  
+    if (ballX + ballRadiues > width) {
+      rtGame.ballVx = -Math.abs(ballVx);
+    } else if (ballX - ballRadiues < 0) {
+      rtGame.ballVx = Math.abs(ballVx);
+    }
+  
+    if (ballY + ballRadiues > height) {
+      rtGame.ballVy = -Math.abs(ballVy);
+    } else if (ballY - ballRadiues < 0) {
+      rtGame.ballVy = Math.abs(ballVy);
+    }
+    this.rtGames.set(gameId, rtGame);
+  }
+
+  handleBallRacketCollision(gameId: string, rtGame: any) {
+    const { ballX, ballY, ballRadiues, ballVx, ballVy,
+            racketHeight, racketWidth,
+            player1RacketPosition, player2RacketPosition, width } = rtGame;
+  
+    const isCollidingWithRacket = (racketPosition: number, height: number, width: number) => {
+      const isBallInRangeOfRacketY = ballY > racketPosition - ballRadiues && ballY < racketPosition + height + ballRadiues;
+      const isBallInRangeOfRacketX = (ballX + ballRadiues > width && ballVx > 0 && ballX < width + ballRadiues) ||
+                                     (ballX - ballRadiues < width && ballVx < 0 && ballX > width - racketWidth - ballRadiues);
+      return isBallInRangeOfRacketY && isBallInRangeOfRacketX;
+    }
+  
+    if (isCollidingWithRacket(player1RacketPosition, racketHeight, racketWidth)) {
+      rtGame.ballVx = Math.abs(ballVx);
+    } else if (isCollidingWithRacket(player2RacketPosition, racketHeight, racketWidth)) {
+      rtGame.ballVx = -Math.abs(ballVx);
+    }
+  
+    this.rtGames.set(gameId, rtGame);
   }
 
   updateGame(gameId: string, rtGame: RTGameRoomInterface) {
@@ -141,8 +179,9 @@ export class GamesServices {
   async gameLoops(): Promise<void> {
     for (const [gameId, rtGame] of this.rtGames.entries()) {
       if (rtGame.status === 'playing') {
-        console.log("Move ball!!!");
         this.moveBall(gameId);
+        this.handleBallWallCollision(gameId, rtGame);
+        //this.handleBallRacketCollision(gameId, rtGame);
       }
       this.updateGame(gameId, rtGame);
     }

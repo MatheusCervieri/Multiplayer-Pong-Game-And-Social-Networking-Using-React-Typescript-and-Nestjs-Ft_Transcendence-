@@ -16,12 +16,16 @@ const GameCanvas: React.FC<GameCanvasProps> = (props) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const navigate = useNavigate();
   const { id } = useParams<{ id: string | undefined }>();
-  const { width, height, racketWidth, racketHeight, racketColor, gameData, socket } = props;
+  const { racketWidth, racketHeight, racketColor, gameData, socket } = props;
+  const [height , setHeight] = useState<number>(0);
+  const [width , setWidth] = useState<number>(0);
   const [ball, setBall] = useState({ x: 200, y: 150, vx: 5, vy: 5 });
   const [myUsername, setMyUsername] = useState('');
 
   useEffect(() => {
     GetToken(navigate, setMyUsername);
+    setHeight(gameData.height);
+    setWidth(gameData.width);
   }, []);
 
   useEffect(() => {
@@ -35,20 +39,20 @@ const GameCanvas: React.FC<GameCanvasProps> = (props) => {
         context.fillRect(0,0,width, height);
 
         context.fillStyle = racketColor;
-        context.fillRect(0, gameData.player1RacketPosition, racketWidth, racketHeight);
+        context.fillRect(0, gameData.player1RacketPosition,  gameData.racketWidth,  gameData.racketHeight);
         
         // Draw the right racket
         context.fillStyle = racketColor;
-        context.fillRect(width - racketWidth, gameData.player2RacketPosition, racketWidth, racketHeight);
+        context.fillRect(width - racketWidth, gameData.player2RacketPosition,  gameData.racketWidth,  gameData.racketHeight);
 
         // Draw the ball
         context.beginPath();
-        context.arc(gameData.ballX, gameData.ballY, 10, 0, 2 * Math.PI);
+        context.arc(gameData.ballX, gameData.ballY, gameData.ballRadiues , 0, 2 * Math.PI);
         context.fillStyle = "#FFFFFF";
         context.fill();
       }
     }
-  }, [canvasRef, width, height, racketWidth, racketHeight, racketColor, gameData.player1RacketPosition, gameData.player2RacketPosition, gameData.ballX, gameData.ballY]);
+  }, [height, width, canvasRef, width, height, racketWidth, racketHeight, racketColor, gameData.player1RacketPosition, gameData.player2RacketPosition, gameData.ballX, gameData.ballY]);
 
   function moveRacket(direction: string)
   {
@@ -64,6 +68,7 @@ const GameCanvas: React.FC<GameCanvasProps> = (props) => {
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
+      console.log();
       switch (event.key) {
         case "w":
           moveRacket("up");
@@ -83,7 +88,9 @@ const GameCanvas: React.FC<GameCanvasProps> = (props) => {
 
  
   return (
-    <canvas ref={canvasRef} width={width} height={height} />
+    <>
+    {height !== 0 && width !== 0 && <canvas ref={canvasRef} width={width} height={height} />}
+    </>
   );
 };
 
