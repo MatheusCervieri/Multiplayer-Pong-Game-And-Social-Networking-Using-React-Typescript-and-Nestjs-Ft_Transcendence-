@@ -9,21 +9,20 @@ interface GameCanvasProps {
   racketHeight: number;
   racketColor: string;
   gameData: any;
-  socket: any
+  socket: any;
+  myName: string;
 }
 
 const GameCanvas: React.FC<GameCanvasProps> = (props) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const navigate = useNavigate();
   const { id } = useParams<{ id: string | undefined }>();
-  const { racketWidth, racketHeight, racketColor, gameData, socket } = props;
+  const { racketWidth, racketHeight, racketColor, gameData, socket, myName } = props;
   const [height , setHeight] = useState<number>(0);
   const [width , setWidth] = useState<number>(0);
   const [ball, setBall] = useState({ x: 200, y: 150, vx: 5, vy: 5 });
-  const [myUsername, setMyUsername] = useState('');
 
   useEffect(() => {
-    GetToken(navigate, setMyUsername);
     setHeight(gameData.height);
     setWidth(gameData.width);
   }, []);
@@ -56,8 +55,8 @@ const GameCanvas: React.FC<GameCanvasProps> = (props) => {
 
   function moveRacket(direction: string)
   {
-    console.log(myUsername);
-    if (myUsername === gameData.player1Name || myUsername === gameData.player2Name)
+    console.log(myName);
+    if (myName === gameData.player1Name || myName === gameData.player2Name)
     {
     const token = localStorage.getItem('token');
     const data = { token: token, game_id: id, direction: direction };
@@ -68,7 +67,6 @@ const GameCanvas: React.FC<GameCanvasProps> = (props) => {
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      console.log();
       switch (event.key) {
         case "w":
           moveRacket("up");
@@ -89,6 +87,7 @@ const GameCanvas: React.FC<GameCanvasProps> = (props) => {
  
   return (
     <>
+    {gameData.player1Score !== undefined && <div>Player 1: {gameData.player1Score} - Player 2: {gameData.player2Score}</div>}
     {height !== 0 && width !== 0 && <canvas ref={canvasRef} width={width} height={height} />}
     </>
   );

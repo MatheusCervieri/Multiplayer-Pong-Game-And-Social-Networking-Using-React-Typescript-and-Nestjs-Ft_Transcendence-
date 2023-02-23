@@ -118,20 +118,28 @@ export class GamesServices {
   handleBallWallCollision(gameId: string , rtGame: any) {
     const { width, height, ballRadiues, ballX, ballY, ballVx, ballVy } = rtGame;
   
+    // Check for collision with the right or left walls
     if (ballX + ballRadiues > width) {
-      rtGame.ballVx = -Math.abs(ballVx);
-    } else if (ballX - ballRadiues < 0) {
-      rtGame.ballVx = Math.abs(ballVx);
+      rtGame.ballX = rtGame.firstBallPosition;
+      rtGame.ballY = rtGame.firstBallPosition; 
+      rtGame.player1Score += 1; // Ball collided with right wall
+      rtGame.ballVx = -Math.abs(ballVx); // Reverse ball velocity in x direction
+    } else if (ballX - ballRadiues < 0) { // Ball collided with left wall
+      rtGame.ballX = rtGame.firstBallPosition;
+      rtGame.ballY = rtGame.firstBallPosition;
+      rtGame.player2Score += 1;  
+      rtGame.ballVx = Math.abs(ballVx); // Reverse ball velocity in x direction
     }
   
-    if (ballY + ballRadiues > height) {
-      rtGame.ballVy = -Math.abs(ballVy);
-    } else if (ballY - ballRadiues < 0) {
-      rtGame.ballVy = Math.abs(ballVy);
+    // Check for collision with the top or bottom walls
+    if (ballY + ballRadiues > height) { // Ball collided with bottom wall
+      rtGame.ballVy = -Math.abs(ballVy); // Reverse ball velocity in y direction
+    } else if (ballY - ballRadiues < 0) { // Ball collided with top wall
+      rtGame.ballVy = Math.abs(ballVy); // Reverse ball velocity in y direction
     }
+  
     this.rtGames.set(gameId, rtGame);
   }
-
   handleBallRacketCollision(gameId: string, rtGame: any) {
     const { ballX, ballY, ballRadiues, ballVx, ballVy,
             racketHeight, racketWidth,
@@ -153,6 +161,11 @@ export class GamesServices {
     this.rtGames.set(gameId, rtGame);
   }
 
+  finishGame(gameId: string , rtGame: RTGameRoomInterface)
+  {
+    rtGame.status = 'finished';
+  }
+
   updateGame(gameId: string, rtGame: RTGameRoomInterface) {
     rtGame.elepsedTime = new Date().getTime() - rtGame.creationDate;
     if(rtGame.status === 'lobby')
@@ -167,7 +180,7 @@ export class GamesServices {
         }
         else
         {
-          //Finish the game!
+          //finishgame
           rtGame.status = 'finished';
         }
       }
@@ -181,7 +194,9 @@ export class GamesServices {
       if (rtGame.status === 'playing') {
         this.moveBall(gameId);
         this.handleBallWallCollision(gameId, rtGame);
-        //this.handleBallRacketCollision(gameId, rtGame);
+        this.handleBallRacketCollision(gameId, rtGame);
+        if(rtGame.player1Score === 10 || rtGame.player2Score === 10)
+          this.finishGame(gameId, rtGame);
       }
       this.updateGame(gameId, rtGame);
     }
@@ -203,9 +218,17 @@ export class GamesServices {
     return game;
   }
 
+  async findGame(id: any): Promise<Game> {
+    const game = await this.gamesRepository.findOne({
+      where: { id: id },
+    });
+    return game;
+  }
+
   save(game: Game): Promise<Game> {
     return this.gamesRepository.save(game);
   }
+
 
   async update(id: number, game: Game): Promise<void> {
     await this.gamesRepository.update(id, game);
