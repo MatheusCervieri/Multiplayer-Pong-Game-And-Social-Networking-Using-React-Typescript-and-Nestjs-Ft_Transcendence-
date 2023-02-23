@@ -7,6 +7,7 @@ import Lobby from './Lobby';
 import { RTGameRoomInterface, defaultGameRoom } from './roominterface'
 import  instance from '../confs/axios_information';
 import GameFinalScream from './GameFinalScream';
+import GamePauseScream from './GamePauseScream';
 
 const socket = io("http://localhost:8002");
 
@@ -97,6 +98,7 @@ useEffect(() => {
     <>
     {gameRunning === true && gameData.status === 'lobby' && <Lobby gameData={gameData}/>}
     {gameRunning === true && myName !== '' && gameData.status === 'playing' && <GameCanvas {...canvasProps} />}
+    {gameRunning === true && gameData.status === 'paused' && <GamePauseScream gameData={gameData}/>}
     {gameRunning === false && <GameFinalScream gameData={gameRequestData} myuser={myName} />}
     </>
   )
