@@ -18,7 +18,7 @@ export class GamesServices {
     private gameGateway: GameGateway,
   ) {
 
-    setInterval(() => this.gameLoops(), 1000);
+    setInterval(() => this.gameLoops(), 270);
   }
   
   async createQueueGame(player1 : any , player2 : any): Promise<Game> {
@@ -106,6 +106,15 @@ export class GamesServices {
     this.updateGame(game_id, rtGame);
   }
 
+  moveBall(game_id: string)
+  {
+    console.log("Inside move ball!!!");
+    const rtGame = this.rtGames.get(game_id);
+    rtGame.ballX += rtGame.ballVx;
+    rtGame.ballY += rtGame.ballVy;
+    this.rtGames.set(game_id, rtGame);
+  }
+
   updateGame(gameId: string, rtGame: RTGameRoomInterface) {
     rtGame.elepsedTime = new Date().getTime() - rtGame.creationDate;
     if(rtGame.status === 'lobby')
@@ -131,6 +140,10 @@ export class GamesServices {
 
   async gameLoops(): Promise<void> {
     for (const [gameId, rtGame] of this.rtGames.entries()) {
+      if (rtGame.status === 'playing') {
+        console.log("Move ball!!!");
+        this.moveBall(gameId);
+      }
       this.updateGame(gameId, rtGame);
     }
   }
@@ -138,8 +151,6 @@ export class GamesServices {
   getRtGame(id: string) {
     return this.rtGames.get(id);
   }
-
-
 
   create(game: Game): Promise<Game> {
     return this.gamesRepository.save(game);

@@ -17,7 +17,7 @@ const GameCanvas: React.FC<GameCanvasProps> = (props) => {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string | undefined }>();
   const { width, height, racketWidth, racketHeight, racketColor, gameData, socket } = props;
-  const [ball, setBall] = useState({ x: 400, y: 300, vx: 5, vy: 5 });
+  const [ball, setBall] = useState({ x: 200, y: 150, vx: 5, vy: 5 });
   const [myUsername, setMyUsername] = useState('');
 
   useEffect(() => {
@@ -43,15 +43,16 @@ const GameCanvas: React.FC<GameCanvasProps> = (props) => {
 
         // Draw the ball
         context.beginPath();
-        context.arc(ball.x, ball.y, 10, 0, 2 * Math.PI);
+        context.arc(gameData.ballX, gameData.ballY, 10, 0, 2 * Math.PI);
         context.fillStyle = "#FFFFFF";
         context.fill();
       }
     }
-  }, [canvasRef, width, height, racketWidth, racketHeight, racketColor, gameData.player1RacketPosition, gameData.player2RacketPosition, ball]);
+  }, [canvasRef, width, height, racketWidth, racketHeight, racketColor, gameData.player1RacketPosition, gameData.player2RacketPosition, gameData.ballX, gameData.ballY]);
 
   function moveRacket(direction: string)
   {
+    console.log(myUsername);
     if (myUsername === gameData.player1Name || myUsername === gameData.player2Name)
     {
     const token = localStorage.getItem('token');
@@ -78,30 +79,9 @@ const GameCanvas: React.FC<GameCanvasProps> = (props) => {
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, []);
+  }, [gameData.player1RacketPosition, gameData.player2RacketPosition]);
 
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      
-      //moveBall();
-    }, 16);
-  
-    return () => clearInterval(interval);
-  }, [ball]);
-
-  function moveBall() {
-    console.log(ball);
-
-    setBall({
-      x: ball.x + ball.vx,
-      y: ball.y + ball.vy,
-      vx: ball.vx,
-      vy: ball.vy
-    });
-  }
-  
-  
+ 
   return (
     <canvas ref={canvasRef} width={width} height={height} />
   );
