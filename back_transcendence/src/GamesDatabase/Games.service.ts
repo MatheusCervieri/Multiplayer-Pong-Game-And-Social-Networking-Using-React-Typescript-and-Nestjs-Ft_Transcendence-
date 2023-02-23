@@ -71,18 +71,23 @@ export class GamesServices {
     {
 
     }
-
-    if(rtGame.player1IsConnected === false && rtGame.player2IsConnected === false) {
-      console.log("Game is finished"); 
-      //this.rtGames.delete(gameId);
-    }
-    
     this.updateGame(gameId, rtGame);
     }
   }
 
- 
-
+  decreasePauseTime(gameId : number, rtGame: RTGameRoomInterface)
+  {
+    if(rtGame.status === 'playing')
+    {
+      if(rtGame.player1IsConnected === false) {
+        rtGame.player1PauseTime -= 100;
+      }
+      if(rtGame.player1IsConnected === false) {
+        rtGame.player2PauseTime -= 100;
+      }
+    }
+    
+  }
   async movePlayer(username: string, game_id: string, direction: string)
   {
     const rtGame = this.rtGames.get(game_id);
@@ -189,7 +194,7 @@ export class GamesServices {
     }
     gamedatabase.isRunning = false;
     await this.save(gamedatabase);
-
+    this.updateGame(gameId, rtGame);
     //remove game from rtGames
     this.rtGames.delete(gameId);
   }
@@ -209,8 +214,37 @@ export class GamesServices {
         else
         {
           //finishgame
-          rtGame.status = 'finished';
+          this.finishGame(gameId, rtGame);
         }
+      }
+    }
+    if(rtGame.status === 'paused')
+    {
+      if(rtGame.player1IsConnected === false)
+      {
+        rtGame.player1PauseTime = rtGame.player1PauseTime - rtGame.elepsedTime;
+      }
+      if(rtGame.player2IsConnected === false)
+      {
+        rtGame.player2PauseTime = rtGame.player2PauseTime - rtGame.elepsedTime;
+      }
+      if(rtGame.player1PauseTime <= 0 && rtGame.player2PauseTime <= 0)
+      {
+        rtGame.status = 'finished';
+        this.finishGame(gameId, rtGame);
+      }
+    }
+    if(rtGame.status === 'playing')
+    {
+      if(rtGame.player1IsConnected === false)
+      {
+        rtGame.status = 'paused';
+        rtGame.player1PauseTime = rtGame.player1PauseTime + rtGame.elepsedTime;
+      }
+      if(rtGame.player2IsConnected === false)
+      {
+        rtGame.status = 'paused';
+        rtGame.player2PauseTime = rtGame.player2PauseTime + rtGame.elepsedTime;
       }
     }
     this.rtGames.set(gameId, rtGame);

@@ -1,6 +1,6 @@
 export interface RTGameRoomInterface {
     id: number,
-    status: 'lobby' | 'playing' | 'finished';
+    status: 'lobby' | 'playing' | 'paused' | 'finished';
     player1IsConnected: boolean,
     player2IsConnected: boolean,
     player1Name: string,

@@ -48,8 +48,8 @@ export default function Game() {
   }, []);
 
   useEffect(() => {
-    if (gameRunning === true)
-    {
+   
+
     socket.on("connect", () => {
         setIsConnected(true);
     });
@@ -57,20 +57,14 @@ export default function Game() {
         setIsConnected(false);
     });
     socket.on('game-update', (data: any) => {
-      //console.log(data);
+      console.log(data);
       setGameData(data);
     });
     return () => {
         socket.off('connect');
         socket.off('disconnect');
       };
-    }
-    else {
-      // gameRunning is false, remove all the listeners
-      socket.off('connect');
-      socket.off('disconnect');
-      socket.off('game-update');
-    }
+    
 }, [gameRunning]);
 
 useEffect(() => {
