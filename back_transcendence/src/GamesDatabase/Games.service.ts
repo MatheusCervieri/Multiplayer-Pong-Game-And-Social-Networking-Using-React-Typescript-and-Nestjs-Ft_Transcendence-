@@ -240,6 +240,51 @@ export class GamesServices {
         }
       }
     }
+    if(rtGame.status === 'playing')
+    {
+      if(rtGame.player1IsConnected === false)
+      {
+        rtGame.status = 'paused';
+        rtGame.pausedtime = new Date().getTime();
+       
+      }
+      if(rtGame.player2IsConnected === false)
+      {
+        rtGame.status = 'paused';
+        rtGame.pausedtime = new Date().getTime();
+       
+      }
+    }
+    if(rtGame.status === 'paused')
+    {
+      if(rtGame.player1IsConnected && rtGame.player2IsConnected)
+      {
+        rtGame.status = 'playing';
+      }
+      if(rtGame.player1IsConnected === false)
+      {
+        rtGame.player1PauseTime = rtGame.player1PauseTime - (new Date().getTime() - rtGame.pausedtime);
+      }
+      if(rtGame.player2IsConnected === false)
+      {
+        rtGame.player2PauseTime = rtGame.player2PauseTime - (new Date().getTime() - rtGame.pausedtime);
+      }
+      if (rtGame.player1PauseTime <= 0 || rtGame.player2PauseTime <= 0) 
+      {
+        if(rtGame.player1IsConnected && rtGame.player2IsConnected)
+        {
+          rtGame.status = 'playing';
+        }
+        else
+        {
+          //FINISH GAME BECAUSE OF PAUSED TIME. 
+        }
+      }
+      if(rtGame.player1IsConnected && rtGame.player2IsConnected)
+      {
+        rtGame.status = 'playing';
+      }
+    }
     this.rtGames.set(gameId, rtGame);
     this.gameGateway.server.to(gameId).emit('game-update', rtGame);
   }

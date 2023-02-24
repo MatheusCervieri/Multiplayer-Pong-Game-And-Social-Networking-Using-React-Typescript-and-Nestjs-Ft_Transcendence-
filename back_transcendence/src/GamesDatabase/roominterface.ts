@@ -1,6 +1,6 @@
 export interface RTGameRoomInterface {
     id: number,
-    status: 'lobby' | 'playing' | 'finished';
+    status: 'lobby' | 'playing' | 'paused' | 'finished';
     player1IsConnected: boolean,
     player2IsConnected: boolean,
     player1Name: string,
@@ -25,6 +25,7 @@ export interface RTGameRoomInterface {
     firstBallPosition: number,
     player1PauseTime: number,
     player2PauseTime: number,
+    pausedtime: number,
 }
 
 export const defaultGameRoom : RTGameRoomInterface = {
@@ -52,6 +53,7 @@ export const defaultGameRoom : RTGameRoomInterface = {
     ballVx: 7,
     ballVy: 7,
     firstBallPosition: 100,
+    pausedtime: 0,
     player1PauseTime: 10000,
     player2PauseTime: 10000,
 };
