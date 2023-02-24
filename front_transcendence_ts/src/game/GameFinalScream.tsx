@@ -51,8 +51,9 @@ export default function GameFinalScream(props: GameFinalScreamProps) {
        hello
        {gameData && <div>
         <h1>{playersName[0] + ' ' + '(' + gameData.player1FinalScore + ')' + ' vs ' + playersName[1] + ' (' + gameData.player2FinalScore + ')'}</h1>
+        {gameData.winnerName === "ERROR1" && <h2>Game Finished Before Start!</h2>}
         {gameData.winnerName === myuser && <h2>You won!</h2>}
-        {gameData.winnerName !== myuser && <h2>{gameData.winnerName} won!</h2>}
+        {gameData.winnerName !== myuser && gameData.winnerName !== "ERROR1" && <h2>{gameData.winnerName} won!</h2>}
         <p>Player 1 Score: {gameData.player1FinalScore}</p>
         <p>Player 2 Score: {gameData.player2FinalScore}</p>
     </div>}</>

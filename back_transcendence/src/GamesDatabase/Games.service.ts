@@ -208,6 +208,20 @@ export class GamesServices {
     this.rtGames.delete(gameId);
   }
 
+  async finishgameBeforeStart(gameId: string, rtGame: RTGameRoomInterface)
+  {
+    rtGame.status = 'finished';
+    const gamedatabase = await this.findGame(gameId);
+    gamedatabase.player1FinalScore = 0;
+    gamedatabase.player2FinalScore = 0;
+    gamedatabase.winnerName = "ERROR1";
+    gamedatabase.winnerId = 0;
+    gamedatabase.isRunning = false;
+    await this.save(gamedatabase);
+    //remove game from rtGames
+    this.rtGames.delete(gameId);
+  }
+
   updateGame(gameId: string, rtGame: RTGameRoomInterface) {
     rtGame.elepsedTime = new Date().getTime() - rtGame.creationDate;
     if(rtGame.status === 'lobby')
@@ -222,12 +236,10 @@ export class GamesServices {
         }
         else
         {
-          //finishgame
-          rtGame.status = 'finished';
+          this.finishgameBeforeStart(gameId, rtGame);
         }
       }
     }
-
     this.rtGames.set(gameId, rtGame);
     this.gameGateway.server.to(gameId).emit('game-update', rtGame);
   }
@@ -238,7 +250,7 @@ export class GamesServices {
         this.moveBall(gameId);
         this.handleBallWallCollision(gameId, rtGame);
         this.handleBallRacketCollision(gameId, rtGame);
-        if(rtGame.player1Score === 1 || rtGame.player2Score === 1)
+        if(rtGame.player1Score === 5 || rtGame.player2Score === 5)
           this.finishGame(gameId, rtGame);
       }
       this.updateGame(gameId, rtGame);
