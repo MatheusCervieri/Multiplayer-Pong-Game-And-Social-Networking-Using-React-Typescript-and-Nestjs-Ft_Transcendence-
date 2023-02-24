@@ -55,12 +55,15 @@ export class GamesServices {
     if(playername === rtGame.player1Name) {
       rtGame.player1IsConnected = true;
       //Remove possible player1 clients from the queue
-      
+      this.queue = this.queue.filter(x => x.user.name !== rtGame.player1Name);
+
     }
     else if (playername === rtGame.player2Name)
     {
       rtGame.player2IsConnected = true;
-      //Remove possible player2 clients from the queue
+       //Remove possible player2 clients from the queue
+      this.queue = this.queue.filter(x => x.user.name !== rtGame.player2Name);
+     
     }
      // i could create a property for spectors, but i dont think it is necessary. 
      this.updateGame(gameId, rtGame);
