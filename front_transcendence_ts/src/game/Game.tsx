@@ -75,6 +75,7 @@ useEffect(() => {
   const token = localStorage.getItem('token');
   socket.emit('authenticate', { token: token , game_id: id});
   GetToken(navigate, setMyName);
+  console.log("running", gameRunning);
 
 }, []);
 
