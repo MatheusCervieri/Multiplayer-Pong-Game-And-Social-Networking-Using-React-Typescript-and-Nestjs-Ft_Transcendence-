@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Delete, HttpCode, HttpStatus, Post, Req, HttpException, ForbiddenException, Inject } from '@nestjs/common';
+import { Body, Controller, Get, Delete, HttpCode, HttpStatus, Post, Req, HttpException, ForbiddenException, Inject, Param } from '@nestjs/common';
 import { UseInterceptors } from '@nestjs/common';
 import { AuthMiddleware } from '../user_database/auth.middleware'
 import { UsersService } from '../user_database/user.service';
@@ -33,4 +33,33 @@ export class GamesController {
       return e;
     }
   }
+
+  @Get('running')
+  async getRunningGames(@Req() request: any, @Body() data : any): Promise<any> {
+    try
+    {
+    const games = await this.GameService.getRunningGames();
+    return games;
+    }
+    catch (e) {
+      return e;
+    }
+  }
+
+  @Get('history/:name')
+  async getMatchHistory(@Req() request: any,@Param('name') name: string, @Body() data : any): Promise<any> {
+    const decodedname = decodeURIComponent(name);
+    
+    try
+    {
+      const user = await this.UsersService.findOneByName(decodedname);
+      console.log(user.id, user.name);
+      const history = await this.GameService.getGamesByPlayerId(user.id);
+    return history;
+    }
+    catch (e) {
+      return e;
+    }
+  }
+ 
 }

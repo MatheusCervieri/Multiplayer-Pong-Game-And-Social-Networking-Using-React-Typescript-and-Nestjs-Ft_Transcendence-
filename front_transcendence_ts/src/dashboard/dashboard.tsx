@@ -51,11 +51,15 @@ const Dashboard = () => {
   function findGame() {
     navigate('../findgame');
   }
+  function watchGame() {
+    navigate('../watchgame');
+  }
 
     return (
       <div>
         <p>Welcome, {username}!</p>
         <button onClick={findGame}>Find Game</button>
+        <button onClick={watchGame}>Watch a Game!</button>
         <button onClick={handleLogout}>Log Out</button>
       </div>
     );

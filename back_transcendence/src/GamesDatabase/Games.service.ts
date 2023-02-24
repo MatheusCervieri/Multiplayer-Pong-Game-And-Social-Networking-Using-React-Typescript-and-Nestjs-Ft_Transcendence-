@@ -410,4 +410,14 @@ export class GamesServices {
   async deleteAll(): Promise<void> {
     await this.gamesRepository.clear();
   }
+
+  async getRunningGames(): Promise<Game[]> {
+    return this.gamesRepository.find({ where: { isRunning: true } });
+  }
+
+  async getGamesByPlayerId(playerId: number): Promise<Game[]> {
+    const games = await this.gamesRepository.find();
+    return games.filter(game => game.player1Id === playerId || game.player2Id === playerId);
+  }
+
 }
