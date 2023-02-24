@@ -223,7 +223,7 @@ export class GamesServices {
         this.moveBall(gameId);
         this.handleBallWallCollision(gameId, rtGame);
         this.handleBallRacketCollision(gameId, rtGame);
-        if(rtGame.player1Score === 10 || rtGame.player2Score === 10)
+        if(rtGame.player1Score === 3 || rtGame.player2Score === 3)
           this.finishGame(gameId, rtGame);
       }
       this.updateGame(gameId, rtGame);

@@ -8,6 +8,7 @@ import { RTGameRoomInterface, defaultGameRoom } from './roominterface'
 import  instance from '../confs/axios_information';
 import GameFinalScream from './GameFinalScream';
 import GamePauseScream from './GamePauseScream';
+import game from '../confs/game_information';
 
 const socket = io("http://localhost:8002");
 
@@ -48,6 +49,13 @@ export default function Game() {
   }, []);
 
   useEffect(() => {
+    if(gameData.status === 'finished')
+    {
+      setGameRunning(false);
+    }
+  }, []);
+
+  useEffect(() => {
     if (gameRunning === true)
     {
     socket.on("connect", () => {
@@ -59,6 +67,11 @@ export default function Game() {
     socket.on('game-update', (data: any) => {
       //console.log(data);
       setGameData(data);
+      if(data.status === 'finished')
+      {
+        setGameRunning(false);
+        //getGameInformation();
+      }
     });
     return () => {
         socket.off('connect');
@@ -93,8 +106,6 @@ useEffect(() => {
         myName: myName,
       };
   
-
-
   return (
     <>
     {gameRunning === true && gameData.status === 'lobby' && <Lobby gameData={gameData}/>}
