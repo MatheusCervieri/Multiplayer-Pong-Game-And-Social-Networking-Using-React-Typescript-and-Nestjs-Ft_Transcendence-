@@ -54,6 +54,6 @@ export const defaultGameRoom : RTGameRoomInterface = {
     ballVy: 7,
     firstBallPosition: 100,
     pausedtime: 0,
-    player1PauseTime: 10000,
-    player2PauseTime: 10000,
+    player1PauseTime: 100000,
+    player2PauseTime: 100000,
 };

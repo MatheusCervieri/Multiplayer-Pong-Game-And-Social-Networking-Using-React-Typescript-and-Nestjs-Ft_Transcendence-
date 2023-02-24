@@ -222,6 +222,30 @@ export class GamesServices {
     this.rtGames.delete(gameId);
   }
 
+  async finishgamePaused(gameId: string, rtGame: RTGameRoomInterface)
+  {
+    rtGame.status = 'finished';
+    const gamedatabase = await this.findGame(gameId);
+    gamedatabase.player1FinalScore = rtGame.player1Score;
+    gamedatabase.player2FinalScore = rtGame.player2Score;
+   
+    if(rtGame.player1PauseTime > 0)
+    {
+      gamedatabase.winnerName = rtGame.player1Name;
+      gamedatabase.winnerId = gamedatabase.player1Id;
+    }
+    if(rtGame.player2PauseTime > 0)
+    {
+      gamedatabase.winnerName = rtGame.player2Name;
+      gamedatabase.winnerId = gamedatabase.player2Id;
+    }
+    
+    gamedatabase.isRunning = false;
+    await this.save(gamedatabase);
+    //remove game from rtGames
+    this.rtGames.delete(gameId);
+  }
+
   updateGame(gameId: string, rtGame: RTGameRoomInterface) {
     rtGame.elepsedTime = new Date().getTime() - rtGame.creationDate;
     if(rtGame.status === 'lobby')
@@ -277,6 +301,7 @@ export class GamesServices {
         }
         else
         {
+          this.finishgamePaused(gameId, rtGame);
           //FINISH GAME BECAUSE OF PAUSED TIME. 
         }
       }
