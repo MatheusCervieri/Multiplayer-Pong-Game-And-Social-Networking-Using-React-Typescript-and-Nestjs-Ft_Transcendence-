@@ -51,6 +51,7 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   @SubscribeMessage('authenticate')
   async authenticate(client: CustomSocket, data : { token: string, game_id: string}) {
+    console.log("SUPER TEST");
     const user = await this.userService.findOneByToken(data.token);
     client.user = user;
     client.gameRoomId = data.game_id;
