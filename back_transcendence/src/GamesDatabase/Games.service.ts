@@ -7,6 +7,7 @@ import { GameGateway } from './gamewebsocket/game.gateway';
 import { RTGameRoomInterface, defaultGameRoom } from './roominterface';
 import {CustomSocket} from './gamewebsocket/game.gateway';
 import { AnyARecord } from 'dns';
+import { defaultThrottleConfig } from 'rxjs/internal/operators/throttle';
 
 @Injectable()
 export class GamesServices {
@@ -23,17 +24,19 @@ export class GamesServices {
   
   async createQueueGame(player1 : any , player2 : any): Promise<Game> {
     const newgame = new Game();
-    newgame.name = player1.user.name + " vs " + player2.user.username;
+    newgame.name = player1.user.name + " vs " + player2.user.name;
     newgame.player1Id = player1.user.id;
     newgame.player2Id = player2.user.id;
-    const databaseGame = await this.gamesRepository.save(newgame);
-    const rtGame = defaultGameRoom;
+    const databaseGame = await this.gamesRepository.save(newgame); 
+    const rtGame = Object.assign({}, defaultGameRoom); //One of the problens is here. 
+    console.log("RT GAME", defaultGameRoom);
     rtGame.id = databaseGame.id;
-    console.log("Player1 name", player1.user.name);
     rtGame.player1Name = player1.user.name;
     rtGame.player2Name = player2.user.name;
     rtGame.creationDate = new Date().getTime();
+    rtGame.status = "lobby";
     this.rtGames.set(databaseGame.id.toString(), rtGame);
+    console.log(this.rtGames);
     player1.client.emit('game-found', { id : databaseGame.id });
     player2.client.emit('game-found', { id: databaseGame.id });
     return databaseGame;
@@ -213,6 +216,7 @@ export class GamesServices {
         }
       }
     }
+
     this.rtGames.set(gameId, rtGame);
     this.gameGateway.server.to(gameId).emit('game-update', rtGame);
   }
@@ -223,7 +227,7 @@ export class GamesServices {
         this.moveBall(gameId);
         this.handleBallWallCollision(gameId, rtGame);
         this.handleBallRacketCollision(gameId, rtGame);
-        if(rtGame.player1Score === 3 || rtGame.player2Score === 3)
+        if(rtGame.player1Score === 1 || rtGame.player2Score === 1)
           this.finishGame(gameId, rtGame);
       }
       this.updateGame(gameId, rtGame);

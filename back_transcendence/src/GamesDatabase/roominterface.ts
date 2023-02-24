@@ -35,7 +35,7 @@ export const defaultGameRoom : RTGameRoomInterface = {
     player1Name: "",
     player2Name: "",
     creationDate: 0,
-    timeToStart: 10000,
+    timeToStart: 3000,
     elepsedTime: 0,
     racketVelocity: 10,
     player1Score: 0,

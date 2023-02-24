@@ -20,6 +20,7 @@ export default function GameFinalScream(props: GameFinalScreamProps) {
             console.log(gameData.name);
             const splitstr = gameData.name.split(" vs ");
             setPlayersName(splitstr);
+            console.log(splitstr[0], splitstr[1]);
         }
     }, [gameData]);
 

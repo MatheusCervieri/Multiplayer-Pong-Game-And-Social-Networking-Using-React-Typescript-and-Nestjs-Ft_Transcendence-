@@ -22,7 +22,6 @@ export interface CustomSocket extends Socket {
 @WebSocketGateway(8002, {cors: '*' })
 export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
   private queue: any[];
-  private connectedRooms = new Map<string, RTGameRoomInterface>(); // Map<room_id, RoomInterface> room_id, room_content.
 
   constructor(
     private readonly userService: UsersService,
@@ -56,7 +55,7 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
     client.user = user;
     client.gameRoomId = data.game_id;
     client.join(data.game_id);
-    console.log(`Client ${client.user.name} authenticated: ${data.token}`);
+    console.log(`Client ${client.user.name} authenticated: ${user.name} ${data.game_id}`);
     this.gameService.authenticate(user.name, data.game_id);
   
     //Create a function at gameservice that att the rtgame information about connected users. 
@@ -87,12 +86,13 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
         this.queue.push({client, user});
         console.log("User added to queue");
       }
+
       if (this.queue.length >= 2)
       {
-        console.log("Queue has 2 players");
         const player1 = this.queue.shift();
         const player2 = this.queue.shift();
-        
+        console.log("Queue", this.queue);
+
         const game = await this.gameService.createQueueGame(player1, player2);
         console.log(this.gameService.getRtGame(game.id.toString()));
       }

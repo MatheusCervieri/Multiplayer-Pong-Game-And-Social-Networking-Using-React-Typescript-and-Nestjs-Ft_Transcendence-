@@ -20,7 +20,6 @@ const GameCanvas: React.FC<GameCanvasProps> = (props) => {
   const { racketWidth, racketHeight, racketColor, gameData, socket, myName } = props;
   const [height , setHeight] = useState<number>(0);
   const [width , setWidth] = useState<number>(0);
-  const [ball, setBall] = useState({ x: 200, y: 150, vx: 5, vy: 5 });
 
   useEffect(() => {
     setHeight(gameData.height);
