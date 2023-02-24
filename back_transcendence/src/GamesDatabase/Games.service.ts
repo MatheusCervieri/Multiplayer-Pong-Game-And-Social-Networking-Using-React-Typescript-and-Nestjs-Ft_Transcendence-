@@ -6,17 +6,22 @@ import {Game} from  './Game.entity';
 import { GameGateway } from './gamewebsocket/game.gateway';
 import { RTGameRoomInterface, defaultGameRoom } from './roominterface';
 import {CustomSocket} from './gamewebsocket/game.gateway';
+import { Socket } from 'socket.io';
 import { AnyARecord } from 'dns';
 import { defaultThrottleConfig } from 'rxjs/internal/operators/throttle';
+import { UsersService } from 'src/user_database/user.service';
+
 
 @Injectable()
 export class GamesServices {
+  private queue: any[];
   private rtGames = new Map<string, RTGameRoomInterface>();
   constructor(
     @InjectRepository(Game)
     private gamesRepository: Repository<Game>,
     @Inject(forwardRef(() => GameGateway))
     private gameGateway: GameGateway,
+    private readonly userService: UsersService,
   ) {
 
     setInterval(() => this.gameLoops(), 100);
@@ -49,10 +54,13 @@ export class GamesServices {
     {
     if(playername === rtGame.player1Name) {
       rtGame.player1IsConnected = true;
+      //Remove possible player1 clients from the queue
+      
     }
     else if (playername === rtGame.player2Name)
     {
       rtGame.player2IsConnected = true;
+      //Remove possible player2 clients from the queue
     }
      // i could create a property for spectors, but i dont think it is necessary. 
      this.updateGame(gameId, rtGame);
@@ -236,6 +244,50 @@ export class GamesServices {
 
   getRtGame(id: string) {
     return this.rtGames.get(id);
+  }
+
+  async handleQueue(data : any, client: Socket) {
+    const user = await this.userService.findOneByToken(data.token);
+    if (user)
+    {
+      console.log("User found");
+      if (this.queue === undefined)
+      {
+        this.queue = [];
+      }
+      //Check if the user is already in the queue
+      if (this.queue.find(x => x.user.id === user.id) === undefined)
+      {
+        this.queue.push({client, user});
+        console.log("User added to queue");
+      }
+
+      //Check if the user is already in a running game! 
+      for (const [gameId, rtGame] of this.rtGames.entries()) {
+        if (rtGame.player1Name === user.name || rtGame.player2Name === user.name)
+        {
+          console.log("User is already in a running game!");
+          return;
+        }
+      }
+
+      if (this.queue.length >= 2)
+      {
+        const player1 = this.queue.shift();
+        const player2 = this.queue.shift();
+        console.log("Queue", this.queue);
+        const game = await this.createQueueGame(player1, player2);
+        console.log(this.getRtGame(game.id.toString()));
+      }
+    }
+  }
+
+  async handleQueueDisconnect(client: CustomSocket) {
+
+    if (this.queue) {
+      this.queue = this.queue.filter(player => player.client.id !== client.id);
+      console.log("Disconected from queue", client.id);
+    }
   }
 
   create(game: Game): Promise<Game> {

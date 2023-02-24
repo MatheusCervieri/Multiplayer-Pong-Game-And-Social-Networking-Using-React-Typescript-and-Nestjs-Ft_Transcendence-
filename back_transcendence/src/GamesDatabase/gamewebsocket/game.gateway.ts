@@ -21,7 +21,7 @@ export interface CustomSocket extends Socket {
 
 @WebSocketGateway(8002, {cors: '*' })
 export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
-  private queue: any[];
+  
 
   constructor(
     private readonly userService: UsersService,
@@ -39,10 +39,8 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   handleDisconnect(client: CustomSocket) {
     this.connectedUsers = this.connectedUsers.filter(user => user !== client.id);
-    if (this.queue) {
-      this.queue = this.queue.filter(player => player.client.id !== client.id);
-      console.log("Disconected from queue", client.id);
-    }
+    //Create a function to handle disconection from queue.
+    this.gameService.handleQueueDisconnect(client);
     if(client.user)
       this.gameService.disconnect(client.user.name, client.gameRoomId);
     console.log(`Client ${client.id} disconnected: ${client.id}`);
@@ -72,31 +70,7 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @SubscribeMessage('join-queue')
   async handleJoinQueue(client: Socket, data : { token: string }) {
     console.log("Join queue"); 
-    const user = await this.userService.findOneByToken(data.token);
-    if (user)
-    {
-      console.log("User found");
-      if (this.queue === undefined)
-      {
-        this.queue = [];
-      }
-      //Check if the user is already in the queue
-      if (this.queue.find(x => x.user.id === user.id) === undefined)
-      {
-        this.queue.push({client, user});
-        console.log("User added to queue");
-      }
-
-      if (this.queue.length >= 2)
-      {
-        const player1 = this.queue.shift();
-        const player2 = this.queue.shift();
-        console.log("Queue", this.queue);
-
-        const game = await this.gameService.createQueueGame(player1, player2);
-        console.log(this.gameService.getRtGame(game.id.toString()));
-      }
-    }
+    this.gameService.handleQueue(data, client);
   }
 
   
