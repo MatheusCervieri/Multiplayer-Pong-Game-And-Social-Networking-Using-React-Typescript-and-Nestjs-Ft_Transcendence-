@@ -12,7 +12,6 @@ export class NotificationService {
   constructor(
     @Inject(forwardRef(() => NotificationGateway))
     private notificationGateway: NotificationGateway,
-    
   ) {
     
   }
@@ -27,7 +26,19 @@ export class NotificationService {
       this.connectedUsers = this.connectedUsers.filter(c => c.id !== client.id);
       console.log(this.connectedUsers);
   }
-  
 
+  async checkUsersStatus(userId : any)
+  {
+    const user = this.connectedUsers.find(c => c.user.id === userId);
+    console.log("Oi mundo kaka");
+    if(user)
+    {
+      //check if the user is playing a game. 
+    }
+    else
+    {
+      //The user is offline. 
+    }
+  }
 
 }

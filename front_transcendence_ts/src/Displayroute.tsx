@@ -15,6 +15,7 @@ import SetProfileImage from "./login_setup/SetProfileImage/SetProfileImage";
 import Game from "./game/Game";
 import FindGame from "./game/FindGame";
 import RunningGames from "./dashboard/RunningGames";
+import Users from "./dashboard/Users";
 
 function handleUser()
 {
@@ -33,6 +34,7 @@ export default function Displayroute() {
         <Route path='/chat' element={<ChatInterface />} />
         <Route path='/findgame' element={<FindGame />} />
         <Route path='/watchgame' element={<RunningGames/>} />
+        <Route path='/users' element={<Users/>} />
         <Route path='chat/:id' element={<Chatroom/>} />
         <Route path='game/:id' element={<Game/>} />
         <Route path='profile/:name' element={<Profile/>} />
