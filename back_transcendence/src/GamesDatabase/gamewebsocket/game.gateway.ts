@@ -10,6 +10,7 @@ import { GamesServices } from 'src/GamesDatabase/Games.service';
 import {  Game }  from 'src/GamesDatabase/Game.entity';
 import { IoAdapter } from '@nestjs/platform-socket.io';
 import { RTGameRoomInterface, defaultGameRoom } from '../roominterface';
+import { forwardRef, Inject } from '@nestjs/common';
 
 //https://socket.io/pt-br/docs/v3/rooms/ 
 
@@ -24,7 +25,9 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
   
 
   constructor(
+    @Inject(forwardRef(() => UsersService))
     private readonly userService: UsersService,
+    @Inject(forwardRef(() => GamesServices))
     private readonly gameService: GamesServices,
   ) {}
 

@@ -1,19 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import  instance from '../confs/axios_information';
 
-interface User {
-  id: number;
-  name: string;
-}
 
-const initialUsers: User[] = [
-  { id: 1, name: 'Alice' },
-  { id: 2, name: 'Bob' },
-  { id: 3, name: 'Charlie' },
-];
+
 
 const Users: React.FC = () => {
-  const [users, setUsers] = useState<User[]>(initialUsers);
+  const [users, setUsers] = useState<any[]>([]);
 
 
   function getUserInformation()
@@ -26,7 +18,7 @@ const Users: React.FC = () => {
   })
     .then(response => {
       console.log(response.data);
-      //setUsers(response.data);
+      setUsers(response.data);
     })
     .catch(error => {
       console.error(error);
@@ -41,7 +33,7 @@ const Users: React.FC = () => {
       <h2>Users</h2>
       <ul>
         {users.map((user) => (
-          <li key={user.id}>{user.name}</li>
+          <li key={user.id}>{user.name} {user.status}</li>
         ))}
       </ul>
     </div>

@@ -35,9 +35,8 @@ export class UserController {
 
   @Get('userstatus')
   async getUserWhithTheirStatus(@Req() request: any): Promise<any> {
-    //Return a array of the users with their stauts - online, offline, playing a game. 
-    this.userService.GetUsersAndStatus();
-    return "Invalid user";
+    //Return a array of the users with their stauts - online, offline, playing a game.
+    return await this.userService.GetUsersAndStatus();
   }
 
 

@@ -1,5 +1,6 @@
 import { forwardRef, Inject, Injectable } from "@nestjs/common";
 import { Socket } from 'socket.io';
+import { GamesServices } from "src/GamesDatabase/Games.service";
 import { CustomSocket, NotificationGateway } from "./notification.gateway";
 
 
@@ -12,19 +13,19 @@ export class NotificationService {
   constructor(
     @Inject(forwardRef(() => NotificationGateway))
     private notificationGateway: NotificationGateway,
+    @Inject(forwardRef(() => GamesServices))
+    private gameService: GamesServices,
   ) {
     
   }
 
   async connectUser(client: CustomSocket) {
     this.connectedUsers.push(client);
-    console.log(this.connectedUsers);
   }
 
   async disconnectClient(client : Socket) {
       //Disconect the client from the connectUsers array.
       this.connectedUsers = this.connectedUsers.filter(c => c.id !== client.id);
-      console.log(this.connectedUsers);
   }
 
   async checkUsersStatus(userId : any)
@@ -32,11 +33,14 @@ export class NotificationService {
     const user = this.connectedUsers.find(c => c.user.id === userId);
     if(user)
     {
-      //check if the user is playing a game. 
+      if(this.gameService.checkIfUserIsPlaying(user.user.name))
+        return "Playing";
+      else
+        return "Online";
     }
     else
     {
-      //The user is offline. 
+      return "Offline";
     }
   }
 

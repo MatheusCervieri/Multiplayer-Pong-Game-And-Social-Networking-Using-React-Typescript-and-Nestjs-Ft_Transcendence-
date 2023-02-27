@@ -5,6 +5,10 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { NotificationService } from 'src/notification/notification.service';
 import { NotificationGateway } from 'src/notification/notification.gateway';
 
+interface UserWithStatus extends User {
+  status: string;
+}
+
 @Injectable()
 export class UsersService {
   constructor(
@@ -18,18 +22,17 @@ export class UsersService {
     return this.usersRepository.save(user);
   }
 
-  async GetUsersAndStatus()
-  {
+  async GetUsersAndStatus() {
     const users = await this.usersRepository.find();
-    const me = this;
-    if (users)
-    {
-      users.forEach(function (e) {
-        me.notificationService.checkUsersStatus(e.id);
-    });
+    if (users) {
+      const usersWithStatus: UserWithStatus[] = [];
+      for (let i = 0; i < users.length; i++) {
+        const user = users[i];
+        const userWithStatus: UserWithStatus = { ...user, status: await this.notificationService.checkUsersStatus(user.id) };
+        usersWithStatus.push(userWithStatus);
+      }
+      return usersWithStatus;
     }
-    //Use checkUsersStatus to check the status of each user. Than atribute to each user object the status properties
-    //and return the array of users.
   }
 
   async update(id: number, user: User): Promise<void> {

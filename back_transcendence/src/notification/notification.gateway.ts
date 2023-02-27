@@ -36,7 +36,7 @@ export class NotificationGateway implements OnGatewayConnection, OnGatewayDiscon
   }
   @SubscribeMessage('authenticate')
   async authenticate(client: CustomSocket, data : { token: string}) {
-    const user = this.userService.findOneByToken(data.token);
+    const user = await this.userService.findOneByToken(data.token);
     if(user)
     {
       client.user = user;

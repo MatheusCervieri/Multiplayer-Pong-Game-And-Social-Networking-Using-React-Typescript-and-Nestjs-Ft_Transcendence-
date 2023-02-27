@@ -21,6 +21,7 @@ export class GamesServices {
     private gamesRepository: Repository<Game>,
     @Inject(forwardRef(() => GameGateway))
     private gameGateway: GameGateway,
+    @Inject(forwardRef(() => UsersService))
     private readonly userService: UsersService,
   ) {
 
@@ -378,6 +379,17 @@ export class GamesServices {
       this.queue = this.queue.filter(player => player.client.id !== client.id);
       console.log("Disconected from queue", client.id);
     }
+  }
+
+  checkIfUserIsPlaying(playerName: string)
+  {
+    for (const [gameId, rtGame] of this.rtGames.entries()) {
+      if (rtGame.player1Name === playerName || rtGame.player2Name === playerName)
+      {
+        return true;
+      }
+    }
+    return false; 
   }
 
   create(game: Game): Promise<Game> {
