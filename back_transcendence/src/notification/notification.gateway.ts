@@ -34,6 +34,7 @@ export class NotificationGateway implements OnGatewayConnection, OnGatewayDiscon
     this.notificationService.disconnectClient(client);
     console.log(`Client ${client.id} disconnected: ${client.id}`);
   }
+
   @SubscribeMessage('authenticate')
   async authenticate(client: CustomSocket, data : { token: string}) {
     const user = await this.userService.findOneByToken(data.token);
@@ -41,6 +42,27 @@ export class NotificationGateway implements OnGatewayConnection, OnGatewayDiscon
     {
       client.user = user;
       this.notificationService.connectUser(client);
+    }
+  }
+
+  @SubscribeMessage('invite-game')
+  async inviteToPlay(client: CustomSocket, data : { token: string, playerToPlayName : string}) {
+    //validate the token.
+    const user = await this.userService.findOneByToken(data.token);
+    if(user)
+    {
+      //validate if the playerToPlayName is a valid player.
+      const playerToPlay = await this.userService.findOneByName(data.playerToPlayName);
+      if(playerToPlay)
+      {
+        //validate if the playerToPlay is not the same as the user.
+        if(playerToPlay.name != user.name)
+        {
+          //validate if the playerToPlay status is online and not in a game and offline. 
+          this.notificationService.InviteGame(user, playerToPlay);
+            //send the invitation to the playerToPlay.
+        }
+      }
     }
   }
 }
