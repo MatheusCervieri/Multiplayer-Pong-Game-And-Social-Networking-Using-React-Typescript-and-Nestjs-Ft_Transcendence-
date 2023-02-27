@@ -12,20 +12,16 @@ export class NotificationGateway implements OnGatewayConnection, OnGatewayDiscon
   constructor() {}
 
   @WebSocketServer() server;
-  connectedUsers = [];
 
   handleConnection(client: Socket) {
-    this.connectedUsers.push(client.id);
     console.log(`Client connected: ${client.id}`);
   }
 
   handleDisconnect(client: Socket) {
-    this.connectedUsers = this.connectedUsers.filter(user => user !== client.id);
     console.log(`Client ${client.id} disconnected: ${client.id}`);
   }
   @SubscribeMessage('authenticate')
-  async authenticate(client: Socket, data : { token: string, game_id: string}) {
-    console.log("SUPER TEST");
-  
+  async authenticate(client: Socket, data : { token: string}) {
+   
   }
 }
