@@ -30,7 +30,6 @@ export class NotificationService {
   async checkUsersStatus(userId : any)
   {
     const user = this.connectedUsers.find(c => c.user.id === userId);
-    console.log("Oi mundo kaka");
     if(user)
     {
       //check if the user is playing a game. 

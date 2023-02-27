@@ -19,6 +19,7 @@ export class NotificationGateway implements OnGatewayConnection, OnGatewayDiscon
   constructor(
     @Inject(forwardRef(() => NotificationService))
     private notificationService: NotificationService,
+    @Inject(forwardRef(() => UsersService))
     private readonly userService: UsersService) {
     
   }

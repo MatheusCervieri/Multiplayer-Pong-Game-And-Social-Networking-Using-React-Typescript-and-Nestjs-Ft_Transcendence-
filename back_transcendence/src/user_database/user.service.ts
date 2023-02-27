@@ -21,10 +21,11 @@ export class UsersService {
   async GetUsersAndStatus()
   {
     const users = await this.usersRepository.find();
+    const me = this;
     if (users)
     {
       users.forEach(function (e) {
-        this.notificationService.checkUsersStatus(e.id);
+        me.notificationService.checkUsersStatus(e.id);
     });
     }
     //Use checkUsersStatus to check the status of each user. Than atribute to each user object the status properties
