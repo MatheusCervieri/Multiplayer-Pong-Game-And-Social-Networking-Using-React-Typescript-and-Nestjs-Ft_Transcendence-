@@ -32,6 +32,8 @@ import { GameGateway} from './GamesDatabase/gamewebsocket/game.gateway';
 import { GamesServices } from './GamesDatabase/Games.service';
 import { GamesController } from './GamesDatabase/Games.controller';
 import { GameModule } from './GamesDatabase/Games.module';
+import { NotificationGateway } from './notification/notification.gateway';
+
 
 @Module({
   imports: [
@@ -48,7 +50,7 @@ import { GameModule } from './GamesDatabase/Games.module';
       synchronize: true,
     }), EmailModule, UserModule, ChatRoomModule, MessageModule, ImageModule, GameModule],
   controllers: [AppController, SimpleGetController, SimplePostController, SingUpController, NameSetController, UserController, LoginController, ChatRoomController, ChatRoomControllerNew, UsersInformationController, ImageController, PublicImageController, GamesController],
-  providers: [AppService, EmailService, UsersService, ChatRoomService, ChatGateway, MessageService, ImageService, GameGateway, GamesServices],
+  providers: [AppService, EmailService, UsersService, ChatRoomService, ChatGateway, MessageService, ImageService, GameGateway, GamesServices, NotificationGateway],
 })
 export class AppModule implements NestModule{
   configure(consumer: MiddlewareConsumer) {

@@ -138,12 +138,13 @@ export class GamesServices {
     const { width, height, ballRadiues, ballX, ballY, ballVx, ballVy } = rtGame;
   
     // Check for collision with the right or left walls
-    if (ballX + ballRadiues > width) {
+    if (ballX + ballRadiues > (width + ballRadiues * 2 + 2)) {
       rtGame.ballX = rtGame.firstBallPosition;
       rtGame.ballY = rtGame.firstBallPosition; 
       rtGame.player1Score += 1; // Ball collided with right wall
       rtGame.ballVx = -Math.abs(ballVx); // Reverse ball velocity in x direction
-    } else if (ballX - ballRadiues < 0) { // Ball collided with left wall
+    } 
+    else if (ballX - ballRadiues < (0 - ballRadiues * 2 - 2)) { // Ball collided with left wall
       rtGame.ballX = rtGame.firstBallPosition;
       rtGame.ballY = rtGame.firstBallPosition;
       rtGame.player2Score += 1;  
@@ -153,12 +154,14 @@ export class GamesServices {
     // Check for collision with the top or bottom walls
     if (ballY + ballRadiues > height) { // Ball collided with bottom wall
       rtGame.ballVy = -Math.abs(ballVy); // Reverse ball velocity in y direction
-    } else if (ballY - ballRadiues < 0) { // Ball collided with top wall
+    } 
+    else if (ballY - ballRadiues < 0) { // Ball collided with top wall
       rtGame.ballVy = Math.abs(ballVy); // Reverse ball velocity in y direction
     }
   
     this.rtGames.set(gameId, rtGame);
   }
+
   handleBallRacketCollision(gameId: string, rtGame: any) {
     const { ballX, ballY, ballRadiues, ballVx, ballVy,
             racketHeight, racketWidth,
