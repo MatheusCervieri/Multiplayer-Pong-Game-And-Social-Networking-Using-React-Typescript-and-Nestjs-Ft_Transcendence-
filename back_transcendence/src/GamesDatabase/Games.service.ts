@@ -104,10 +104,14 @@ export class GamesServices {
     {
       if(direction === 'up')
       {
-        rtGame.player1RacketPosition -= rtGame.racketVelocity;
+        //Check colision with the top wall using this properties  rtGame.player1RacketPosition - rtGame.racketHeight < rtGame.height
+    
+          rtGame.player1RacketPosition -= rtGame.racketVelocity;
       }
+      
       if(direction === 'down')
       {
+        //Check colision with the botton wall
         rtGame.player1RacketPosition += rtGame.racketVelocity;
       }
     }
@@ -115,7 +119,8 @@ export class GamesServices {
     {
       if(direction === 'up')
       {
-        rtGame.player2RacketPosition -= rtGame.racketVelocity;
+        if (rtGame.player1RacketPosition + rtGame.racketHeight > rtGame.height)
+          rtGame.player2RacketPosition -= rtGame.racketVelocity;
       }
       if(direction === 'down')
       {
@@ -163,25 +168,19 @@ export class GamesServices {
   }
 
   handleBallRacketCollision(gameId: string, rtGame: any) {
-    const { ballX, ballY, ballRadiues, ballVx, ballVy,
-            racketHeight, racketWidth,
-            player1RacketPosition, player2RacketPosition, width } = rtGame;
-  
-    const isCollidingWithRacket = (racketPosition: number, height: number, width: number) => {
-      const isBallInRangeOfRacketY = ballY > racketPosition - ballRadiues && ballY < racketPosition + height + ballRadiues;
-      const isBallInRangeOfRacketX = (ballX + ballRadiues > width && ballVx > 0 && ballX < width + ballRadiues) ||
-                                     (ballX - ballRadiues < width && ballVx < 0 && ballX > width - racketWidth - ballRadiues);
-      return isBallInRangeOfRacketY && isBallInRangeOfRacketX;
+    const { ballX, ballY, ballRadiues, ballVx, ballVy, racketHeight, racketWidth, player1RacketPosition, player2RacketPosition, player1RacketXPosition, player2RacketXPosition, width } = rtGame;
+   
+    // Check for collision with player 1 racket
+    if (ballX - ballRadiues < player1RacketXPosition + racketWidth && ballX + ballRadiues > player1RacketXPosition && ballY - ballRadiues < player1RacketPosition + racketHeight && ballY + ballRadiues > player1RacketPosition) {
+      rtGame.ballVx = Math.abs(ballVx); // Reverse ball velocity in x direction
     }
   
-    if (isCollidingWithRacket(player1RacketPosition, racketHeight, racketWidth)) {
-      rtGame.ballVx = Math.abs(ballVx);
-    } else if (isCollidingWithRacket(player2RacketPosition, racketHeight, racketWidth)) {
-      rtGame.ballVx = -Math.abs(ballVx);
+    // Check for collision with player 2 racket
+    if (ballX - ballRadiues < player2RacketXPosition + racketWidth && ballX + ballRadiues > player2RacketXPosition && ballY - ballRadiues < player2RacketPosition + racketHeight && ballY + ballRadiues > player2RacketPosition) {
+      rtGame.ballVx = -Math.abs(ballVx); // Reverse ball velocity in x direction
     }
-  
     this.rtGames.set(gameId, rtGame);
-  }
+    }
 
   async finishGame(gameId: string , rtGame: RTGameRoomInterface)
   {

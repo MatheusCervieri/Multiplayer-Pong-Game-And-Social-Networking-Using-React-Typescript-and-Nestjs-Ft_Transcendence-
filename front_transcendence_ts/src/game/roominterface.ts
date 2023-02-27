@@ -1,6 +1,6 @@
 export interface RTGameRoomInterface {
     id: number,
-    status: 'lobby' | 'playing' | 'finished';
+    status: 'lobby' | 'playing' | 'paused' | 'finished';
     player1IsConnected: boolean,
     player2IsConnected: boolean,
     player1Name: string,
@@ -13,6 +13,8 @@ export interface RTGameRoomInterface {
     player2Score: number,
     racketWidth: number,
     racketHeight: number,
+    player1RacketXPosition: number,
+    player2RacketXPosition: number,
     player1RacketPosition: number,
     player2RacketPosition: number,
     width: number,
@@ -25,6 +27,7 @@ export interface RTGameRoomInterface {
     firstBallPosition: number,
     player1PauseTime: number,
     player2PauseTime: number,
+    pausedtime: number,
 }
 
 export const defaultGameRoom : RTGameRoomInterface = {
@@ -35,13 +38,15 @@ export const defaultGameRoom : RTGameRoomInterface = {
     player1Name: "",
     player2Name: "",
     creationDate: 0,
-    timeToStart: 10000,
+    timeToStart: 3000,
     elepsedTime: 0,
     racketVelocity: 10,
     player1Score: 0,
     player2Score: 0,
     racketWidth: 10,
     racketHeight: 60,
+    player1RacketXPosition: 0,
+    player2RacketXPosition: 360,
     player1RacketPosition: 100,
     player2RacketPosition: 100,
     width: 360,
@@ -52,6 +57,7 @@ export const defaultGameRoom : RTGameRoomInterface = {
     ballVx: 7,
     ballVy: 7,
     firstBallPosition: 100,
-    player1PauseTime: 10000,
-    player2PauseTime: 10000,
+    pausedtime: 0,
+    player1PauseTime: 100000,
+    player2PauseTime: 100000,
 };

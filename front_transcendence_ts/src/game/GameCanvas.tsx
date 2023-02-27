@@ -37,11 +37,11 @@ const GameCanvas: React.FC<GameCanvasProps> = (props) => {
         context.fillRect(0,0,width, height);
 
         context.fillStyle = racketColor;
-        context.fillRect(0, gameData.player1RacketPosition,  gameData.racketWidth,  gameData.racketHeight);
+        context.fillRect(gameData.player1RacketXPosition, gameData.player1RacketPosition,  gameData.racketWidth,  gameData.racketHeight);
         
         // Draw the right racket
         context.fillStyle = racketColor;
-        context.fillRect(width - racketWidth, gameData.player2RacketPosition,  gameData.racketWidth,  gameData.racketHeight);
+        context.fillRect(gameData.player2RacketXPosition - gameData.racketWidth, gameData.player2RacketPosition,  gameData.racketWidth,  gameData.racketHeight);
 
         // Draw the ball
         context.beginPath();
