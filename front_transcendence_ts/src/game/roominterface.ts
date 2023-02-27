@@ -46,7 +46,7 @@ export const defaultGameRoom : RTGameRoomInterface = {
     racketWidth: 10,
     racketHeight: 60,
     player1RacketXPosition: 0,
-    player2RacketXPosition: 360,
+    player2RacketXPosition: 360 - 10, //10 is the racketwidth.
     player1RacketPosition: 100,
     player2RacketPosition: 100,
     width: 360,

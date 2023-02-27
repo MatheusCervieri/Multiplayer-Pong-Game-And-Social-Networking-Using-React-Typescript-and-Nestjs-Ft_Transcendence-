@@ -105,26 +105,29 @@ export class GamesServices {
       if(direction === 'up')
       {
         //Check colision with the top wall using this properties  rtGame.player1RacketPosition - rtGame.racketHeight < rtGame.height
-    
+        if(rtGame.player1RacketPosition > 0)
           rtGame.player1RacketPosition -= rtGame.racketVelocity;
       }
-      
+
       if(direction === 'down')
       {
         //Check colision with the botton wall
-        rtGame.player1RacketPosition += rtGame.racketVelocity;
+        if(rtGame.player1RacketPosition + rtGame.racketHeight < rtGame.height)
+          rtGame.player1RacketPosition += rtGame.racketVelocity;
       }
     }
+
     if(rtGame.player2Name === username)
     {
       if(direction === 'up')
       {
-        if (rtGame.player1RacketPosition + rtGame.racketHeight > rtGame.height)
+        if(rtGame.player2RacketPosition > 0)
           rtGame.player2RacketPosition -= rtGame.racketVelocity;
       }
       if(direction === 'down')
       {
-        rtGame.player2RacketPosition += rtGame.racketVelocity;
+        if(rtGame.player2RacketPosition + rtGame.racketHeight < rtGame.height)
+         rtGame.player2RacketPosition += rtGame.racketVelocity;
       }
     }
     this.updateGame(game_id, rtGame);
@@ -176,7 +179,7 @@ export class GamesServices {
     }
   
     // Check for collision with player 2 racket
-    if (ballX - ballRadiues < player2RacketXPosition + racketWidth && ballX + ballRadiues > player2RacketXPosition && ballY - ballRadiues < player2RacketPosition + racketHeight && ballY + ballRadiues > player2RacketPosition) {
+    if (ballX - ballRadiues < player2RacketXPosition - racketWidth && ballX + ballRadiues > player2RacketXPosition && ballY - ballRadiues < player2RacketPosition + racketHeight && ballY + ballRadiues > player2RacketPosition) {
       rtGame.ballVx = -Math.abs(ballVx); // Reverse ball velocity in x direction
     }
     this.rtGames.set(gameId, rtGame);
