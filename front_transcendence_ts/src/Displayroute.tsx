@@ -18,11 +18,8 @@ import RunningGames from "./dashboard/RunningGames";
 import Users from "./dashboard/Users";
 import { io } from "socket.io-client";
 import Notification from "./dashboard/Notification";
+import { useState } from "react";
 
-function handleUser()
-{
-  alert("Hello World");
-}
 
 
 const socket = io("http://localhost:8003");

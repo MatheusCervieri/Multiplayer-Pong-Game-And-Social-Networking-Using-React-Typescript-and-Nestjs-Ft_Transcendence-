@@ -38,6 +38,7 @@ export class GamesServices {
     const rtGame = Object.assign({}, defaultGameRoom); 
     console.log("RT GAME", defaultGameRoom);
     rtGame.id = databaseGame.id;
+    rtGame.type = 'invite';
     rtGame.player1Name = player1.user.name;
     rtGame.player2Name = player2.user.name;
     rtGame.creationDate = new Date().getTime();
@@ -73,6 +74,8 @@ export class GamesServices {
 
     if (rtGame)
     {
+    if(rtGame.type === 'findgame')
+    {
     if(playername === rtGame.player1Name) {
       rtGame.player1IsConnected = true;
       //Remove possible player1 clients from the queue
@@ -85,6 +88,17 @@ export class GamesServices {
        //Remove possible player2 clients from the queue
       this.queue = this.queue.filter(x => x.user.name !== rtGame.player2Name);
      
+    }
+    }
+    else
+    {
+      if(playername === rtGame.player1Name) {
+        rtGame.player1IsConnected = true;
+      }
+      else if (playername === rtGame.player2Name)
+      {
+        rtGame.player2IsConnected = true;
+      }
     }
      // i could create a property for spectors, but i dont think it is necessary. 
      this.updateGame(gameId, rtGame);
@@ -151,6 +165,7 @@ export class GamesServices {
          rtGame.player2RacketPosition += rtGame.racketVelocity;
       }
     }
+    
     this.updateGame(game_id, rtGame);
   }
 

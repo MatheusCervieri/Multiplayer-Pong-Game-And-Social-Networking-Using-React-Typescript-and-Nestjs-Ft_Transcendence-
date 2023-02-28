@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { io } from 'socket.io-client';
@@ -16,6 +16,8 @@ interface NotificationProps {
 
 export default function Notification(props: NotificationProps) {
     const navigate = useNavigate();
+    const [inviteDiv, setInviteDiv] = useState<boolean>(false);
+    const [invitationData , setInvitationData] = useState<invitation>();
     const {socket} = props;
 
     useEffect(() => {
@@ -28,6 +30,8 @@ export default function Notification(props: NotificationProps) {
       });
   
       socket.on("receive-invitation", (data: invitation) => {
+        setInvitationData(data);
+        setInviteDiv(true);
         toast.error("You have been invite to someone");
       });
   
@@ -54,6 +58,15 @@ export default function Notification(props: NotificationProps) {
     }, []);
   
   return (
-    <></>
+    <>
+    {
+        inviteDiv && invitationData &&
+    <div>
+       {invitationData.playerThatInvited.name} invite you to play a game!!!
+       <button>Accept Invitation!</button>
+       <button>Decline Invitation!</button> 
+    </div>
+    }
+    </>
   )
 }

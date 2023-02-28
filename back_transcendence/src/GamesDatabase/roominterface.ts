@@ -1,5 +1,6 @@
 export interface RTGameRoomInterface {
     id: number,
+    type: 'findgame' | 'invite',
     status: 'lobby' | 'playing' | 'paused' | 'finished';
     player1IsConnected: boolean,
     player2IsConnected: boolean,
@@ -33,6 +34,7 @@ export interface RTGameRoomInterface {
 
 export const defaultGameRoom : RTGameRoomInterface = {
     id: 0,
+    type: 'findgame',
     status: 'lobby',
     player1IsConnected: false,
     player2IsConnected: false,
