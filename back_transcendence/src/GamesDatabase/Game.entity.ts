@@ -13,6 +13,9 @@ export class Game {
   name: string;
 
   @Column({nullable: true})
+  type: string;
+
+  @Column({nullable: true})
   winnerName: string;
 
   @Column({nullable: true})

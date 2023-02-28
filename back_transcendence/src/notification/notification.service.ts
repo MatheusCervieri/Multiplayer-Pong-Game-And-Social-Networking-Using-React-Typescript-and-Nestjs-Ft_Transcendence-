@@ -50,7 +50,9 @@ export class NotificationService {
 
   async InviteGame(PlayerThatInvited: any, InvitedUser : any)	{
     //validate if the playerToPlay status is online and not in a game and offline. 
+    console.log("Chegou na função invite game");
     const InvitedPlayerStatus = await this.checkUsersStatus(InvitedUser.id);
+    
     if(InvitedPlayerStatus == "Online")
     {
       //create a invitation. 
@@ -59,9 +61,12 @@ export class NotificationService {
         invitedPlayer: InvitedUser,
       }
       //check if the player already invited someone.
+      
       const invitationExists = this.invitations.find(i => i.playerThatInvited.id === PlayerThatInvited.id);
       if(invitationExists)
       {
+        const playerThatInvited = this.connectedUsers.find(c => c.user.id === PlayerThatInvited.id);
+        playerThatInvited.emit("message", "You already invited someone.");
         //return a error message: You already invited someone. 
       }
       else
@@ -69,8 +74,13 @@ export class NotificationService {
         this.invitations.push(invitation);
         //send the invitation to the playerToPlay.
         const invitedPlayer = this.connectedUsers.find(c => c.user.id === InvitedUser.id);
-        //invitedPlayer.emit('receive-invitation', {playerThatInvited: PlayerThatInvited.name});
-      }
+        //this.notificationGateway.server.emit('receive-invitation', invitation);
+        invitedPlayer.emit("receive-invitation", invitation);
+
+        const playerThatInvited = this.connectedUsers.find(c => c.user.id === PlayerThatInvited.id);
+        playerThatInvited.emit("invitation-work", invitation);
+        console.log("Chegou no final");
+     }
       //invite to play.
     }
   }

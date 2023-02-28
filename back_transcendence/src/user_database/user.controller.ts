@@ -40,8 +40,6 @@ export class UserController {
   }
 
 
-
-
   @Post('block')
   async blockUser(@Req() request: any, @Body() body: { userToBlockName: string }): Promise<void> {
     const blockingUser = await this.userService.findByIdWithBlocks(request.user_id);

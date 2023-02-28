@@ -12,6 +12,11 @@ console.log(game);
 
 const socket = io("http://localhost:8003");
 
+interface invitation {
+  playerThatInvited: any,
+  invitedPlayer: any,
+}
+
 const GlobalStyle = createGlobalStyle`
   body {
     font-family: Arial, sans-serif;
@@ -30,6 +35,20 @@ function App() {
     socket.on("disconnect", () => {
      
     });
+
+    socket.on("receive-invitation", (data: invitation) => {
+      toast.error("You have been invite to someone");
+    });
+
+    socket.on("invitation-work", (data: invitation) => {
+      toast.error("You invite someone to play with you");
+    });
+
+
+    socket.on("message", (data: any) => {
+      toast.error(data);
+    });
+
     return () => {
         socket.off('connect');
         socket.off('disconnect');

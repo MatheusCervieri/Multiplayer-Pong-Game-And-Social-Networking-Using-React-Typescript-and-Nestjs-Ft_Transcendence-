@@ -27,10 +27,32 @@ export class GamesServices {
 
     setInterval(() => this.gameLoops(), 100);
   }
+
+  async createInviteGame(player1 : any , player2 : any): Promise<Game> {
+    const newgame = new Game();
+    newgame.name = player1.user.name + " vs " + player2.user.name;
+    newgame.type = "invite";
+    newgame.player1Id = player1.user.id;
+    newgame.player2Id = player2.user.id;
+    const databaseGame = await this.gamesRepository.save(newgame); 
+    const rtGame = Object.assign({}, defaultGameRoom); 
+    console.log("RT GAME", defaultGameRoom);
+    rtGame.id = databaseGame.id;
+    rtGame.player1Name = player1.user.name;
+    rtGame.player2Name = player2.user.name;
+    rtGame.creationDate = new Date().getTime();
+    rtGame.status = "lobby";
+    this.rtGames.set(databaseGame.id.toString(), rtGame);
+    console.log(this.rtGames);
+    player1.client.emit('game-found', { id : databaseGame.id });
+    player2.client.emit('game-found', { id: databaseGame.id });
+    return databaseGame;
+  }
   
   async createQueueGame(player1 : any , player2 : any): Promise<Game> {
     const newgame = new Game();
     newgame.name = player1.user.name + " vs " + player2.user.name;
+    newgame.type = "findgame";
     newgame.player1Id = player1.user.id;
     newgame.player2Id = player2.user.id;
     const databaseGame = await this.gamesRepository.save(newgame); 
