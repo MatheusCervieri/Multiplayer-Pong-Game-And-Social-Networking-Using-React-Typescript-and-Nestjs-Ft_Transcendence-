@@ -42,10 +42,8 @@ export class GamesServices {
     rtGame.player2Name = player2.user.name;
     rtGame.creationDate = new Date().getTime();
     rtGame.status = "lobby";
+    rtGame.lobbyTime = 25000;
     this.rtGames.set(databaseGame.id.toString(), rtGame);
-    console.log(this.rtGames);
-    player1.client.emit('game-found', { id : databaseGame.id });
-    player2.client.emit('game-found', { id: databaseGame.id });
     return databaseGame;
   }
   
@@ -278,7 +276,7 @@ export class GamesServices {
     rtGame.elepsedTime = new Date().getTime() - rtGame.creationDate;
     if(rtGame.status === 'lobby')
     {
-    rtGame.timeToStart = 10000 - rtGame.elepsedTime;
+    rtGame.timeToStart = rtGame.lobbyTime - rtGame.elepsedTime;
       if (rtGame.timeToStart <= 0) 
       {
         rtGame.timeToStart = 0;

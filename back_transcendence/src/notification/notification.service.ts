@@ -6,6 +6,7 @@ import { CustomSocket, NotificationGateway } from "./notification.gateway";
 interface invitation {
   playerThatInvited: any,
   invitedPlayer: any,
+  id: any,
 }
 
 @Injectable()
@@ -59,6 +60,7 @@ export class NotificationService {
       const invitation : invitation = {
         playerThatInvited: PlayerThatInvited,
         invitedPlayer: InvitedUser,
+        id: 0;
       }
       //check if the player already invited someone.
       
@@ -71,6 +73,9 @@ export class NotificationService {
       }
       else
       {
+        
+        const gamedatabase = await this.gameService.createInviteGame(PlayerThatInvited.name, InvitedUser.name);
+        invitation.id = gamedatabase.id;
         this.invitations.push(invitation);
         //send the invitation to the playerToPlay.
         const invitedPlayer = this.connectedUsers.find(c => c.user.id === InvitedUser.id);
@@ -79,6 +84,7 @@ export class NotificationService {
 
         const playerThatInvited = this.connectedUsers.find(c => c.user.id === PlayerThatInvited.id);
         playerThatInvited.emit("invitation-work", invitation);
+        
         console.log("Chegou no final");
      }
       //invite to play.

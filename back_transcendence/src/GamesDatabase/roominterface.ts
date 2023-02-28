@@ -28,6 +28,7 @@ export interface RTGameRoomInterface {
     player1PauseTime: number,
     player2PauseTime: number,
     pausedtime: number,
+    lobbyTime: number,
 }
 
 export const defaultGameRoom : RTGameRoomInterface = {
@@ -60,4 +61,5 @@ export const defaultGameRoom : RTGameRoomInterface = {
     pausedtime: 0,
     player1PauseTime: 100000,
     player2PauseTime: 100000,
+    lobbyTime: 10000,
 };

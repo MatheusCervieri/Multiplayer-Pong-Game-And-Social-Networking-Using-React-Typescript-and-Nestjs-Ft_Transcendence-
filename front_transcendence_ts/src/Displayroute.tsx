@@ -16,19 +16,21 @@ import Game from "./game/Game";
 import FindGame from "./game/FindGame";
 import RunningGames from "./dashboard/RunningGames";
 import Users from "./dashboard/Users";
+import { io } from "socket.io-client";
+import Notification from "./dashboard/Notification";
 
 function handleUser()
 {
   alert("Hello World");
 }
 
-interface DisplayrouteProps {
-  socket : any;
-}
 
-export default function Displayroute(props : DisplayrouteProps) {
+const socket = io("http://localhost:8003");
+
+export default function Displayroute() {
   return (
     <BrowserRouter>
+    <Notification socket={socket}/>
       <Routes>
         <Route path="/" element={<Singup />} />
         <Route path="/login" element={<Login  />} />
@@ -38,7 +40,7 @@ export default function Displayroute(props : DisplayrouteProps) {
         <Route path='/chat' element={<ChatInterface />} />
         <Route path='/findgame' element={<FindGame />} />
         <Route path='/watchgame' element={<RunningGames/>} />
-        <Route path='/users' element={<Users socket={props.socket}/>} />
+        <Route path='/users' element={<Users socket={socket}/>} />
         <Route path='chat/:id' element={<Chatroom/>} />
         <Route path='game/:id' element={<Game/>} />
         <Route path='profile/:name' element={<Profile/>} />
