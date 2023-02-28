@@ -55,6 +55,7 @@ const GameCanvas: React.FC<GameCanvasProps> = (props) => {
   function moveRacket(direction: string)
   {
     console.log(myName);
+    console.log("wtf");
     if (myName === gameData.player1Name || myName === gameData.player2Name)
     {
     const token = localStorage.getItem('token');

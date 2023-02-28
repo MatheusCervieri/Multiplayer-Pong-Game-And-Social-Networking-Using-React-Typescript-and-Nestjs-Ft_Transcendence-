@@ -8,6 +8,7 @@ import { MessageService } from 'src/ChatRoom_database/Message.service';
 import { NotificationService } from './notification.service';
 import { UsersService } from 'src/user_database/user.service';
 import { forwardRef, Inject } from '@nestjs/common';
+import {invitation} from './notification.service'
 
 export interface CustomSocket extends Socket {
   user: any,
@@ -64,6 +65,15 @@ export class NotificationGateway implements OnGatewayConnection, OnGatewayDiscon
             //send the invitation to the playerToPlay.
         }
       }
+    }
+  }
+
+  @SubscribeMessage('decline-invite')
+  async declineInvitation(client: CustomSocket, data : { token: string, invitation: invitation}) {
+    const user = await this.userService.findOneByToken(data.token);
+    if (user)
+    {
+      this.notificationService.declineInvite(data.invitation);
     }
   }
 }

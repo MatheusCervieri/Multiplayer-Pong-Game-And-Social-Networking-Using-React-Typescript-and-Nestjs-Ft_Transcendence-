@@ -3,7 +3,7 @@ import { Socket } from 'socket.io';
 import { GamesServices } from "src/GamesDatabase/Games.service";
 import { CustomSocket, NotificationGateway } from "./notification.gateway";
 
-interface invitation {
+export interface invitation {
   playerThatInvited: any,
   invitedPlayer: any,
   id: any,
@@ -49,7 +49,7 @@ export class NotificationService {
     }
   }
 
-  
+
 
   async InviteGame(PlayerThatInvited: any, InvitedUser : any)	{
     //validate if the playerToPlay status is online and not in a game and offline. 
@@ -93,5 +93,14 @@ export class NotificationService {
      }
       //invite to play.
     }
+  }
+  async declineInvite(invitation : invitation)
+  {
+    //remove the invitation from the invitations array. 
+    this.invitations = this.invitations.filter(i => i.id !== invitation.id);
+    //finish the game in the database.
+    console.log("invitation id", invitation.id);
+    await this.gameService.finishgameDecline(invitation.id);
+
   }
 }

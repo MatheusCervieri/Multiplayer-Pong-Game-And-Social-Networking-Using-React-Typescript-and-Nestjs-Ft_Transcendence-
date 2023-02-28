@@ -165,7 +165,7 @@ export class GamesServices {
          rtGame.player2RacketPosition += rtGame.racketVelocity;
       }
     }
-    
+
     this.updateGame(game_id, rtGame);
   }
 
@@ -261,6 +261,22 @@ export class GamesServices {
     await this.save(gamedatabase);
     //remove game from rtGames
     this.rtGames.delete(gameId);
+  }
+
+  async finishgameDecline(gameId: string)
+  {
+    const rtGame = this.rtGames.get(gameId.toString());
+    console.log("Rt Game", rtGame);
+    rtGame.status = 'finished';
+    const gamedatabase = await this.findGame(gameId);
+    gamedatabase.player1FinalScore = 0;
+    gamedatabase.player2FinalScore = 0;
+    gamedatabase.winnerName = "ERROR2";
+    gamedatabase.winnerId = 0;
+    gamedatabase.isRunning = false;
+    await this.save(gamedatabase);
+    //remove game from rtGames
+    this.rtGames.delete(gameId.toString());
   }
 
   async finishgamePaused(gameId: string, rtGame: RTGameRoomInterface)

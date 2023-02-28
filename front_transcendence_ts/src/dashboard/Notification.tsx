@@ -56,6 +56,23 @@ export default function Notification(props: NotificationProps) {
       if (token)
         socket.emit('authenticate', { token: token});
     }, []);
+
+    function AcceptInvitation()
+    {
+        setInviteDiv(false);
+        if(invitationData)
+            navigate('game/' + invitationData.id);
+    }
+
+    
+    function DeclineInvitation()
+    {
+    const token = localStorage.getItem('token');
+      if (token)
+        socket.emit('decline-invite', { token: token, invitation: invitationData});
+    setInviteDiv(false);
+
+    }
   
   return (
     <>
@@ -63,8 +80,8 @@ export default function Notification(props: NotificationProps) {
         inviteDiv && invitationData &&
     <div>
        {invitationData.playerThatInvited.name} invite you to play a game!!!
-       <button>Accept Invitation!</button>
-       <button>Decline Invitation!</button> 
+       <button onClick={AcceptInvitation}>Accept Invitation!</button>
+       <button onClick={DeclineInvitation}>Decline Invitation!</button> 
     </div>
     }
     </>
