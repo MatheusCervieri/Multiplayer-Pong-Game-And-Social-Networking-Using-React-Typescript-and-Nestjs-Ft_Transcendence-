@@ -48,6 +48,7 @@ export class NotificationGateway implements OnGatewayConnection, OnGatewayDiscon
   @SubscribeMessage('invite-game')
   async inviteToPlay(client: CustomSocket, data : { token: string, playerToPlayName : string}) {
     //validate the token.
+    console.log("invite-game");
     const user = await this.userService.findOneByToken(data.token);
     if(user)
     {

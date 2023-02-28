@@ -48,7 +48,7 @@ function App() {
     <Header game={game} />
     <ToastContainer />
     <br></br>
-    <Displayroute />
+    <Displayroute socket={socket}/>
     </>
   );
 }

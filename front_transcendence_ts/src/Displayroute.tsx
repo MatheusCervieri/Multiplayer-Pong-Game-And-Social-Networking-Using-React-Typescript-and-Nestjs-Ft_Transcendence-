@@ -22,7 +22,11 @@ function handleUser()
   alert("Hello World");
 }
 
-export default function Displayroute() {
+interface DisplayrouteProps {
+  socket : any;
+}
+
+export default function Displayroute(props : DisplayrouteProps) {
   return (
     <BrowserRouter>
       <Routes>
@@ -34,7 +38,7 @@ export default function Displayroute() {
         <Route path='/chat' element={<ChatInterface />} />
         <Route path='/findgame' element={<FindGame />} />
         <Route path='/watchgame' element={<RunningGames/>} />
-        <Route path='/users' element={<Users/>} />
+        <Route path='/users' element={<Users socket={props.socket}/>} />
         <Route path='chat/:id' element={<Chatroom/>} />
         <Route path='game/:id' element={<Game/>} />
         <Route path='profile/:name' element={<Profile/>} />
