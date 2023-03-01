@@ -4,10 +4,20 @@ import { User } from './user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { NotificationService } from 'src/notification/notification.service';
 import { NotificationGateway } from 'src/notification/notification.gateway';
+import { Game } from 'src/GamesDatabase/Game.entity';
+import { GamesServices } from 'src/GamesDatabase/Games.service';
 
 interface UserWithStatus extends User {
   status: string;
 }
+
+interface UserWithRanking extends UserWithStatus {
+  score: any,
+  wins: any,
+  losts: any,
+  rankingP: any,
+}
+
 
 @Injectable()
 export class UsersService {
@@ -16,6 +26,8 @@ export class UsersService {
     private usersRepository: Repository<User>,
     @Inject(forwardRef(() => NotificationService))
     private notificationService: NotificationService,
+    @Inject(forwardRef(() => GamesServices))
+    private gameService: GamesServices,
   ) {}
 
   create(user: User): Promise<User> {
@@ -32,6 +44,32 @@ export class UsersService {
         usersWithStatus.push(userWithStatus);
       }
       return usersWithStatus;
+    }
+  }
+
+  async GetUsersRanking() {
+    const users = await this.GetUsersAndStatus();
+    if (users) {
+      const usersWithRanking: UserWithRanking[] = [];
+      for (let i = 0; i < users.length; i++) {
+        const user = users[i];
+        const wins = await this.gameService.getUserWins(user.id);
+        const losts = await this.gameService.getUserLosts(user.id);
+        const userWithRanking = { ...user, 
+          wins: wins,
+          losts: losts, 
+          score: wins - losts,
+          rankingP: 0,
+        };
+        usersWithRanking.push(userWithRanking);
+      }
+      // Sort by score in descending order
+      usersWithRanking.sort((a, b) => b.score - a.score);
+      //atribute a ranking position (rankingP) based on the order of the array
+      for (let i = 0; i < usersWithRanking.length; i++) {
+        usersWithRanking[i].rankingP = i + 1;
+      }
+      return usersWithRanking;
     }
   }
 

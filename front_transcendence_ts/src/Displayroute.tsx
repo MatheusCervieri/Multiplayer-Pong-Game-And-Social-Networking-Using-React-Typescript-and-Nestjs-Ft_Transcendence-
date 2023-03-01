@@ -19,6 +19,8 @@ import Users from "./dashboard/Users";
 import { io } from "socket.io-client";
 import Notification from "./dashboard/Notification";
 import { useState } from "react";
+import Ranking from "./dashboard/Ranking";
+import Authapi from "./42api/Authapi";
 
 
 
@@ -30,6 +32,7 @@ export default function Displayroute() {
     <Notification socket={socket}/>
       <Routes>
         <Route path="/" element={<Singup />} />
+        <Route path="/42" element={< Authapi />}/>
         <Route path="/login" element={<Login  />} />
         <Route path="/setname" element={<Setname />} />
         <Route path="/setprofileimage" element={<SetProfileImage />} />
@@ -37,6 +40,7 @@ export default function Displayroute() {
         <Route path='/chat' element={<ChatInterface />} />
         <Route path='/findgame' element={<FindGame />} />
         <Route path='/watchgame' element={<RunningGames/>} />
+        <Route path='/ranking' element={<Ranking/>} />
         <Route path='/users' element={<Users socket={socket}/>} />
         <Route path='chat/:id' element={<Chatroom/>} />
         <Route path='game/:id' element={<Game/>} />

@@ -3,6 +3,8 @@ sudo chmod -R 777 pgdata
 sudo chmod -R 777 pgdata
 sudo chmod -R 777 pgdata
 
+//https://api.intra.42.fr/apidoc/guides/getting_started 
+
 //"start": "nest start",
 
 HOW TO CONNECT DATABASE - MUITO IMPORTANTE: 

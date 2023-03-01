@@ -11,7 +11,6 @@ import { AnyARecord } from 'dns';
 import { defaultThrottleConfig } from 'rxjs/internal/operators/throttle';
 import { UsersService } from 'src/user_database/user.service';
 
-
 @Injectable()
 export class GamesServices {
   private queue: any[];
@@ -231,11 +230,13 @@ export class GamesServices {
     {
       gamedatabase.winnerName = rtGame.player1Name;
       gamedatabase.winnerId = gamedatabase.player1Id;
+      gamedatabase.looserId = gamedatabase.player2Id;
     }
     else if(rtGame.player1Score < rtGame.player2Score)
     {
       gamedatabase.winnerName = rtGame.player2Name;
       gamedatabase.winnerId = gamedatabase.player2Id;
+      gamedatabase.looserId = gamedatabase.player1Id;
     }
     else
     {
@@ -290,11 +291,13 @@ export class GamesServices {
     {
       gamedatabase.winnerName = rtGame.player1Name;
       gamedatabase.winnerId = gamedatabase.player1Id;
+      gamedatabase.looserId = gamedatabase.player2Id;
     }
     if(rtGame.player2PauseTime > 0)
     {
       gamedatabase.winnerName = rtGame.player2Name;
       gamedatabase.winnerId = gamedatabase.player2Id;
+      gamedatabase.looserId = gamedatabase.player1Id;
     }
     
     gamedatabase.isRunning = false;
@@ -422,6 +425,28 @@ export class GamesServices {
         console.log(this.getRtGame(game.id.toString()));
       }
     }
+  }
+
+  async getUserWins(userId : number) : Promise<number> 
+  {
+    const games = await this.gamesRepository.find();
+    let wins = 0;
+    for (const game of games) {
+      if(game.winnerId === userId)
+        wins++;
+    }
+    return wins;
+  }
+
+  async getUserLosts(userId : number) : Promise<number> 
+  {
+    const games = await this.gamesRepository.find();
+    let looses = 0;
+    for (const game of games) {
+      if(game.looserId === userId)
+        looses++;
+    }
+    return looses;
   }
 
   async handleQueueDisconnect(client: CustomSocket) {

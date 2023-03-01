@@ -40,6 +40,12 @@ export class UserController {
   }
 
 
+  @Get('usersranking')
+  async getUsersRanking(@Req() request: any): Promise<any> {
+    //Return a array of the users with their stauts - online, offline, playing a game.
+    return await this.userService.GetUsersRanking();
+  }
+
   @Post('block')
   async blockUser(@Req() request: any, @Body() body: { userToBlockName: string }): Promise<void> {
     const blockingUser = await this.userService.findByIdWithBlocks(request.user_id);

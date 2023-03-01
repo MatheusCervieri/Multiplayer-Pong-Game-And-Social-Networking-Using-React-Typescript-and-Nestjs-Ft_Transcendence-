@@ -22,6 +22,9 @@ export class Game {
   winnerId: number;
 
   @Column({nullable: true})
+  looserId: number;
+
+  @Column({nullable: true})
   player1FinalScore: number;
 
   @Column({nullable: true})
