@@ -44,7 +44,6 @@ export class User {
   @ManyToMany(type => ChatRoom, chatRoom => chatRoom.users)
   chatRooms: ChatRoom[];
 
-
   @ManyToMany(type => ChatRoom, chatRoom => chatRoom.bannedusers)
   bannedrooms: ChatRoom[];
 
@@ -64,6 +63,12 @@ export class User {
 
   @OneToMany(type => ChatRoom, chatRoom => chatRoom.owner)
   ownedChatRooms: ChatRoom[];
+
+  @ManyToMany(() => User)
+  @JoinTable()
+  friends: User[];
+
+  
 
   @OneToOne(() => Image)
   @JoinColumn()

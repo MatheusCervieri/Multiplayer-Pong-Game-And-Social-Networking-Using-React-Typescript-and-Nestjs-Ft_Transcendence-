@@ -119,6 +119,13 @@ export class UsersService {
     });
   }
 
+  async findByIdWithFriends(id: number): Promise<User> {
+    return await this.usersRepository.findOne({
+      where: { id },
+      relations: ['friends'],
+    });
+  }
+
   async findWithImage(id: number): Promise<User> {
     return await this.usersRepository.findOne({
       where: { id },
@@ -141,4 +148,10 @@ export class UsersService {
     blockingUser.blocks.push(userToBlock);
     await this.usersRepository.save(blockingUser);
   }
+
+  async AddFriend(AddFriendUser: User, userToAdd: User): Promise<void> {
+    AddFriendUser.friends.push(userToAdd);
+    await this.usersRepository.save(AddFriendUser);
+  }
 }
+

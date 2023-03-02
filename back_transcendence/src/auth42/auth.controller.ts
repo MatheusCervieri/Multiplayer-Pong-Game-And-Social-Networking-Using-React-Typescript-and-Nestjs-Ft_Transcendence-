@@ -5,12 +5,13 @@ import { UsersService } from '../user_database/user.service';
 import { User } from '../user_database/user.entity';
 import * as jwt from 'jsonwebtoken';
 import { create } from 'domain';
+import nodemailer from 'nodemailer';
 
 @Controller('auth')
 export class AuthController {
   constructor(
     private readonly fortyTwoStrategy: FortyTwoStrategy,
-    private readonly userService: UsersService
+    private readonly userService: UsersService,
     ) {}
 
   @Get('42')
@@ -109,6 +110,9 @@ export class AuthController {
   
       return (token);
   }
+
+  
+
 
 
   

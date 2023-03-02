@@ -53,10 +53,24 @@ export class UserController {
     await this.userService.blockUser(blockingUser, userToBlock);
   }
 
+  @Post('addfriend')
+  async AddFriend(@Req() request: any, @Body() body: { userToAddName: string }): Promise<void> {
+    const addingFriend = await this.userService.findByIdWithFriends(request.user_id);
+    const userToAdd = await this.userService.findOneByName(body.userToAddName);
+    await this.userService.AddFriend(addingFriend, userToAdd);
+  }
+
   @Get('blocked-users')
   async getBlockedUsers(@Req() request: any): Promise<User[]> {
   const blockingUser = await this.userService.findByIdWithBlocks(request.user_id);
   return blockingUser.blocks;
+  }
+
+  @Get('friends')
+  async getFriends(@Req() request: any): Promise<User[]> {
+  const userWithFriends = await this.userService.findByIdWithFriends(request.user_id);
+  return userWithFriends.friends;
+
   }
 
 

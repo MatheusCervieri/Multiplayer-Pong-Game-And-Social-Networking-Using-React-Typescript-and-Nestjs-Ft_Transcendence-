@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import  instance from '../confs/axios_information';
+import { toast } from "react-toastify";
 
 interface UserProps {
   socket : any;
@@ -32,9 +33,22 @@ const Users = (props : UserProps) => {
 
   //socket.emit('authenticate', { token: token , game_id: id});
 
-  function teste(data : any)
+  function addAsFriend(name : any)
   {
-
+    const token = localStorage.getItem('token');
+    const data = { userToAddName : name}
+    instance.post('userdata/addfriend' , data,  {
+    headers: {
+      'Authorization': `Bearer ${token}`
+    }
+  })
+    .then(response => {
+      console.log(response.data);
+      toast.success("Friend added!");
+    })
+    .catch(error => {
+      console.error(error);
+    });
   }
   /*
 
@@ -45,12 +59,17 @@ const Users = (props : UserProps) => {
       <h2>Users</h2>
       <ul>
         {users.map((user) => (
-          <li key={user.id}>{user.name} {user.status} <button onClick={  () => {
+          <li key={user.id}>{user.name} {user.status} 
+          <button onClick={  () => {
             console.log(user.name);
             const token = localStorage.getItem('token');
               const data = { token: token, playerToPlayName : user.name}
               props.socket.emit('invite-game', data);
-            }}>Invite to Play</button></li>
+            }}>Invite to Play</button>
+            <button onClick={  () => {
+              addAsFriend(user.name);
+            }}>Add as Friend!</button>
+            </li>
         ))}
       </ul>
     </div>

@@ -2,7 +2,6 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import * as cors from 'cors';
 import * as dotenv from 'dotenv'
-import { createProxyMiddleware } from 'http-proxy-middleware';
 
 async function bootstrap() {
   dotenv.config();
