@@ -16,7 +16,7 @@ function make_user(data: SingUpDTO)
 
 function create_JWT(user: User) : any
 {
-    const secretKey = 'mysecretkey';
+    const secretKey = process.env.SECRET_KEY;
 
     const payload = { id: user.id, email: user.email };
 

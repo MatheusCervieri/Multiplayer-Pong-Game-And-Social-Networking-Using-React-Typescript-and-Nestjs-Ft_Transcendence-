@@ -15,6 +15,9 @@ export class User {
   id: number;
 
   @Column({nullable: true})
+  FortytwoId: number;
+
+  @Column({nullable: true})
   token: string;
 
   @Column()
@@ -23,7 +26,7 @@ export class User {
   @Column()
   name: string;
 
-  @Column()
+  @Column({nullable: true})
   password: string;
 
   @Column({ default: true })

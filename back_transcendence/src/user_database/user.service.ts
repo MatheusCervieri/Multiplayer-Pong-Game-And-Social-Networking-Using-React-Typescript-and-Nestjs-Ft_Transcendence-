@@ -103,6 +103,10 @@ export class UsersService {
     return this.usersRepository.findOneBy({ token });
   }
 
+  findOneBy42Id(FortytwoId: number): Promise<User> {
+    return this.usersRepository.findOneBy({ FortytwoId });
+  }
+
   async findAllNames(): Promise<string[]> {
     const users = await this.usersRepository.find();
     return users.map(user => user.name);
