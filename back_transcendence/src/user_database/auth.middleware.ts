@@ -22,11 +22,11 @@ export class AuthMiddleware implements NestMiddleware {
     if (!token) {
       return res.status(401).send('Access denied. No token provided.');
     }
-
+    console.log("baleia");
     try {
       const decoded = jwt.verify(token, 'mysecretkey');
-      req.banana = 20;
       req.user_id = decoded.id;
+      //Check if user has two factor authentication enabled
       next();
     } catch (error) {
       return res.status(400).send('Invalid token.');

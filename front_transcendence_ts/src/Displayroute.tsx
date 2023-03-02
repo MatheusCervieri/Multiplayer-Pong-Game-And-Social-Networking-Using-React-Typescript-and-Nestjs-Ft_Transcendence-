@@ -22,6 +22,8 @@ import { useState } from "react";
 import Ranking from "./dashboard/Ranking";
 import Authapi from "./42api/Authapi";
 import {AuthCallback} from "./42api/AuthCallback";
+import SendTwoFaCode from "./login_setup/2fa/SendTwofaCode";
+import TwoFaEnable from "./login_setup/2fa/TwoFaEnable";
 
 
 
@@ -36,6 +38,8 @@ export default function Displayroute() {
         <Route path="/42" element={< Authapi />}/>
         <Route path="/login" element={<Login  />} />
         <Route path="/auth" element={<AuthCallback  />} />
+        <Route path="/twofa" element={<SendTwoFaCode  />} />
+        <Route path="/enabletwofa" element={<TwoFaEnable  />} />
         <Route path="/setname" element={<Setname />} />
         <Route path="/setprofileimage" element={<SetProfileImage />} />
         <Route path="/dashboard" element={<Dashboard />} />

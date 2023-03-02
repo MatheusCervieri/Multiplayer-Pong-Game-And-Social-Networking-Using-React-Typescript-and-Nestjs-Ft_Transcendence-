@@ -23,8 +23,11 @@ export class User {
   @Column({ default: false })
   TwofaAactive: boolean;
 
+  @Column({ default: false })
+  TwofaCodeGenerated: boolean;
+
   @Column({nullable: true})
-  TwofaSecret: string;
+  TwofaSecret: number;
 
   @Column()
   email: string;

@@ -62,6 +62,7 @@ export class UserController {
 
   @Post('enable-2fa')
   async Enable2fa(@Req() request: any): Promise<any> {
+    console.log("wtf");
     try 
     {
       const user = await this.userService.findOne(request.user_id);
@@ -78,6 +79,25 @@ export class UserController {
     {
       return error;
     }
+  }
 
+  @Post('disable-2fa')
+  async Disable2fa(@Req() request: any): Promise<any> {
+    try 
+    {
+      const user = await this.userService.findOne(request.user_id);
+      if (user)
+      {
+      user.TwofaAactive = false;
+      await this.userService.update(request.user_id, user);
+      return "2FA disable";
+      }
+      else
+        throw "User not found";
+    }
+    catch (error)
+    {
+      return error;
+    }
   }
 }
