@@ -58,4 +58,26 @@ export class UserController {
   const blockingUser = await this.userService.findByIdWithBlocks(request.user_id);
   return blockingUser.blocks;
   }
+
+
+  @Post('enable-2fa')
+  async Enable2fa(@Req() request: any): Promise<any> {
+    try 
+    {
+      const user = await this.userService.findOne(request.user_id);
+      if (user)
+      {
+      user.TwofaAactive = true;
+      await this.userService.update(request.user_id, user);
+      return "2FA enabled";
+      }
+      else
+        throw "User not found";
+    }
+    catch (error)
+    {
+      return error;
+    }
+
+  }
 }

@@ -20,6 +20,12 @@ export class User {
   @Column({nullable: true})
   token: string;
 
+  @Column({ default: false })
+  TwofaAactive: boolean;
+
+  @Column({nullable: true})
+  TwofaSecret: string;
+
   @Column()
   email: string;
 
