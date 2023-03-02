@@ -21,6 +21,7 @@ import Notification from "./dashboard/Notification";
 import { useState } from "react";
 import Ranking from "./dashboard/Ranking";
 import Authapi from "./42api/Authapi";
+import {AuthCallback} from "./42api/AuthCallback";
 
 
 
@@ -34,6 +35,7 @@ export default function Displayroute() {
         <Route path="/" element={<Singup />} />
         <Route path="/42" element={< Authapi />}/>
         <Route path="/login" element={<Login  />} />
+        <Route path="/auth" element={<AuthCallback  />} />
         <Route path="/setname" element={<Setname />} />
         <Route path="/setprofileimage" element={<SetProfileImage />} />
         <Route path="/dashboard" element={<Dashboard />} />
