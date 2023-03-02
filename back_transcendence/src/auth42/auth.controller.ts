@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Header, Post, Req, Res, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Header, Post, Req, Res, UseGuards , HttpException, HttpStatus} from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { FortyTwoStrategy } from './fortytwo.strategy';
 import { UsersService } from '../user_database/user.service';
@@ -18,36 +18,35 @@ export class AuthController {
   async fortyTwoLogin() {}
 
   @Post('2fa')
-  async TwoFa(@Req() req, @Res() res, @Body() data : any) 
-  {
-    try
-    {
-    const user = await this.userService.findOneByName(data.name);
-    if (user)
-    {
-      if (user.TwofaCodeGenerated === true)
-      {
-        if (user.TwofaSecret === data.code)
-        {
-          //return a response with the token of the user. 
-          const token = user.token;
-          return token;
-        }
-        else
-        {
-          throw new Error("Invalid code");
+  async TwoFa(@Req() req, @Res() res, @Body() data: any) {
+    try {
+      console.log(data.name);
+      const user = await this.userService.findOneByName(data.name);
+      console.log(user);
+      console.log("Code generated", user.TwofaCodeGenerated);
+      console.log(user.TwofaSecret, data.code);
+      if (user) {
+        if (user.TwofaCodeGenerated === true) {
+          console.log(user.TwofaSecret, data.code);
+          if (user.TwofaSecret === data.code) {
+            // Return a response with the token of the user.
+            const token = user.token;
+            const data = { 
+              token : token,
+            }
+            //return the response with the token
+            res.status(HttpStatus.OK).json(data);
+          } else {
+            throw new HttpException('Invalid code', HttpStatus.BAD_REQUEST);
+          }
+        } else {
+          throw new HttpException('Code not generated', HttpStatus.BAD_REQUEST);
         }
       }
-      else
-      {
-        throw new Error("Code not generated");
-      }
+    } catch (e) {
+      console.log(e);
+      throw new HttpException(e.message, HttpStatus.BAD_REQUEST);
     }
-  }
-  catch (e)
-  {
-    return e;
-  }
   }
 
   @Get('42/callback')
@@ -66,9 +65,9 @@ export class AuthController {
           //Redirect to two factor authentication.
           const frontendUrl = `http://localhost:3000/twofa?${new URLSearchParams({name: user42.name})}`;
           const twofacode = Math.floor(100000 + Math.random() * 900000);
-          console.log(twofacode);
           user42.TwofaCodeGenerated = true;
-          user42.TwofaSecret = twofacode;
+          user42.TwofaSecret = twofacode.toString();
+          //send the code to email.
           await this.userService.update(user42.id, user42);
           res.redirect(frontendUrl);
         }

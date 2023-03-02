@@ -11,9 +11,9 @@ export default function TwoFa() {
   async function enable2FA()
   {
     const token = localStorage.getItem('token');
-    const data = "empty";
+
     try {
-      const response = await instance.post('userdata/enable-2fa', data, {
+      const response = await instance.get('/userdata/enable-2fa',   {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -28,7 +28,7 @@ export default function TwoFa() {
     const token = localStorage.getItem('token');
     const data = "empty";
     try {
-      const response = await instance.post('userdata/disable-2fa', data, {
+      const response = await instance.get('userdata/disable-2fa', {
         headers: {
           'Authorization': `Bearer ${token}`
         }

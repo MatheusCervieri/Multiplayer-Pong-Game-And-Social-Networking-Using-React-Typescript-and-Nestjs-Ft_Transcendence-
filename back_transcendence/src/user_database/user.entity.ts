@@ -27,7 +27,7 @@ export class User {
   TwofaCodeGenerated: boolean;
 
   @Column({nullable: true})
-  TwofaSecret: number;
+  TwofaSecret: string;
 
   @Column()
   email: string;

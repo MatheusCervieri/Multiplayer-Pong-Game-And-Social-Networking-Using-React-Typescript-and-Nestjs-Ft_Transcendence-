@@ -60,9 +60,9 @@ export class UserController {
   }
 
 
-  @Post('enable-2fa')
+  @Get('enable-2fa')
   async Enable2fa(@Req() request: any): Promise<any> {
-    console.log("wtf");
+   
     try 
     {
       const user = await this.userService.findOne(request.user_id);
@@ -81,7 +81,7 @@ export class UserController {
     }
   }
 
-  @Post('disable-2fa')
+  @Get('disable-2fa')
   async Disable2fa(@Req() request: any): Promise<any> {
     try 
     {

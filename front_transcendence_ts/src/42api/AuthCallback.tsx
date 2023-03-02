@@ -4,7 +4,6 @@ import Cookies from 'js-cookie';
 
 export const AuthCallback: React.FC = () => {
   const location = useLocation();
-  const searchParams = new URLSearchParams(location.search);
   const navigate = useNavigate();
 
 
