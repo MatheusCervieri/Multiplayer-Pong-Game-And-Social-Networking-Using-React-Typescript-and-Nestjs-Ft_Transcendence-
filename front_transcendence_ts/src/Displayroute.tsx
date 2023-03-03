@@ -24,6 +24,7 @@ import Authapi from "./42api/Authapi";
 import {AuthCallback} from "./42api/AuthCallback";
 import SendTwoFaCode from "./login_setup/2fa/SendTwofaCode";
 import TwoFaEnable from "./login_setup/2fa/TwoFaEnable";
+import { AuthCallbackRegister } from "./42api/AuthCallbackRegister";
 
 
 
@@ -38,6 +39,7 @@ export default function Displayroute() {
         <Route path="/42" element={< Authapi />}/>
         <Route path="/login" element={<Login  />} />
         <Route path="/auth" element={<AuthCallback  />} />
+        <Route path="/authregister" element={<AuthCallbackRegister  />} />
         <Route path="/twofa" element={<SendTwoFaCode  />} />
         <Route path="/enabletwofa" element={<TwoFaEnable  />} />
         <Route path="/setname" element={<Setname />} />

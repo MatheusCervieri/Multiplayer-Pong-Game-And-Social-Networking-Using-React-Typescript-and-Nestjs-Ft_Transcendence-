@@ -12,6 +12,12 @@ export class NameSetController {
   async update(@Req() req: any, @Body() data: { name: string }) {
 
       const userId = req.user_id;
+      //check in the database if the name is unique. If it not unique, return a error to the frontend.
+      const user = await this.userService.findOneByName(data.name);
+      if (user) {
+          return { message: 'Name already taken', status: HttpStatus.BAD_REQUEST };
+      }
+
       await this.userService.updateName(userId, data.name);
       return { message: 'Name updated successfully', status: HttpStatus.OK };
   }

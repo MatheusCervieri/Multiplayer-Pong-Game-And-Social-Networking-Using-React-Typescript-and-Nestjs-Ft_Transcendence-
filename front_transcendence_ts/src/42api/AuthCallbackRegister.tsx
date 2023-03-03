@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 
-export const AuthCallback: React.FC = () => {
+export const AuthCallbackRegister: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -13,7 +13,7 @@ export const AuthCallback: React.FC = () => {
     if (token) {
       localStorage.setItem('token', token);
       //redirect to the dashboard
-      navigate('/dashboard');
+      navigate('/setname');
     }
   }, []);
 

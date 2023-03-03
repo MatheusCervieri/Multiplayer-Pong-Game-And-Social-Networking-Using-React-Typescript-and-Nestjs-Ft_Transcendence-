@@ -6,11 +6,14 @@ import { User } from '../user_database/user.entity';
 import * as jwt from 'jsonwebtoken';
 import { create } from 'domain';
 import nodemailer from 'nodemailer';
+import {Image} from '../image/image.entity';
+import { ImageService } from 'src/image/image.service';
 
 @Controller('auth')
 export class AuthController {
   constructor(
     private readonly fortyTwoStrategy: FortyTwoStrategy,
+    private readonly imageService: ImageService,
     private readonly userService: UsersService,
     ) {}
 
@@ -54,6 +57,10 @@ export class AuthController {
   @UseGuards(AuthGuard('42'))
   async fortyTwoLoginCallback(@Req() req, @Res() res) {
       //Verificar se o usuário existe no banco de dados, eu posso fazer isso usando o id da 42. 
+      //Remove user for make tests
+      
+      const user = await this.userService.findOneBy42Id(req.user.id);
+      await this.userService.remove(user.id);
       const user42 = await this.userService.findOneBy42Id(req.user.id);
       if (user42)
       {
@@ -84,17 +91,32 @@ export class AuthController {
         //Criar usuário
         const user = new User();
         user.email = req.user.email;
-        user.name = req.user.name;
+        //user.name = req.user.name;
         user.FortytwoId = req.user.id; 
         const databaseuser = await this.userService.create(user);
         const token = this.create_JWT(databaseuser);
         databaseuser.token = token;
-        await this.userService.update(databaseuser.id, databaseuser);
+        const updatedUser = await this.userService.update(databaseuser.id, databaseuser);
+
+        //set a default image to the new user:
+
+        const fs = require('fs');
+        const mime = require('mime');
+        const defaultImagePath = '/uploads/default.jpg';
+        const image = new Image();
+        image.filename = 'default.jpg';
+        image.mimetype = mime.getType(defaultImagePath);
+        image.path = defaultImagePath;
+        image.size = fs.statSync(defaultImagePath).size;
+        const imagedatabase = await this.imageService.create(image);
+        const userWithImage = await this.userService.findWithImage(databaseuser.id);
+        userWithImage.image = imagedatabase;
+        await this.userService.update(databaseuser.id, userWithImage);
+        console.log("USER ID TO GET IMAGE ", databaseuser.id);
+
         //encoding the token
-        const base64Url = token.split('.').map(str => {
-          return Buffer.from(str, 'base64').toString('base64url');
-        }).join('.');
-        const frontendUrl = `http://localhost:3000/auth?${new URLSearchParams({token: base64Url, newUser: 'true'})}`;
+        res.cookie('loginToken',token);
+        const frontendUrl = `http://localhost:3000/authregister`;
         res.redirect(frontendUrl);
       }
     

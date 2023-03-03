@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import styles from '../singup/singup.module.css'
 import instance from '../../confs/axios_information';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 
 const Setname = () => {
@@ -20,7 +21,12 @@ const Setname = () => {
     })
       .then(response => {
         console.log(response.data);
-        navigate('/dashboard');
+        if (response.data.status === 400)
+        {
+          toast.error("Name already taken, choose another one");
+        }
+        else
+          navigate('/setprofileimage');
       })
       .catch(error => {
         console.error(error);

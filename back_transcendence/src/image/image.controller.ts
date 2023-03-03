@@ -61,11 +61,12 @@ export class ImageController {
     if (user.image) {
       const oldImage = user.image;
       const oldImagePath = oldImage.path;
-      //NEED TO DO: Delete the old image fron the server and from the database.
+      //NEED TO DO: Delete the old image fron the server and from the database if it is different from the default image
 
     }
     newImage.user = user;
-    await this.ImageService.create(newImage);
+    const image = await this.ImageService.create(newImage);
+    console.log(image);
     console.log(file);
     return file.filename;
   }
