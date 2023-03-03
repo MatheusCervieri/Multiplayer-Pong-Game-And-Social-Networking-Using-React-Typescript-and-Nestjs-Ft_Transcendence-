@@ -1,8 +1,11 @@
 import React, { useState, ChangeEvent, FormEvent } from 'react';
+import { Navigate, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import instance from '../../confs/axios_information';
 
 const SetProfileImage: React.FC = () => {
   const [image, setImage] = useState<File | null>(null);
+  const navigate = useNavigate();
 
   const handleImageChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
@@ -25,6 +28,7 @@ const SetProfileImage: React.FC = () => {
     const token = localStorage.getItem('token');
 
     try {
+
       const response = await instance.post('/image/upload', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
@@ -33,8 +37,17 @@ const SetProfileImage: React.FC = () => {
       });
 
       console.log(response.data);
+      if(response.data.statusCode === 200)
+      {
+        toast.success(response.data.message);
+        navigate('/dashboard');
+      }
+      if(response.data.error.status === 400)
+      {
+        toast.error(response.data.message);
+      }
     } catch (error) {
-      console.error(error);
+     
     }
   };
   
@@ -47,12 +60,21 @@ const SetProfileImage: React.FC = () => {
             'Content-Type': 'multipart/form-data',
             'Authorization': `Bearer ${token}`
           }
+          ,
+          responseType: 'blob' // set the responseType to 'blob' to get the image data as a blob object
         });
-        console.log(response.data);
-      } catch (error) {
-        console.error(error);
+        console.log("Response", response);
+       
+      }  catch (error : any) {
+        console.log("Error");
       }
     };
+
+    
+    
+    
+    
+    
 
   
   return (
