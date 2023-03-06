@@ -140,7 +140,11 @@ const AddUserBtn = styled.button`
 
 const socket = io('http://localhost:8001');
 
-const Chatroom: React.FC = () => {
+interface ChatRoomProps {
+  socket: any;
+}
+
+const Chatroom = (props: ChatRoomProps) => {
 const [ messages, setMessages ] = useState<{id: number , user: string, message:string}[]>([]);
 const { id } = useParams<{ id: string | undefined }>();
 const [ message, setMessage ] = useState<string>('Test Message');
@@ -498,7 +502,7 @@ else{
     else {
     console.log(blockedUsers);
     console.log(m.user);
-    return <Message username={username} index={index} user={m.user} message={m.message} setBlockedUsers={setBlockedUsers} loadBlocked={loadBlockedUsers} />
+    return <Message username={username} socket={props.socket} index={index} user={m.user} message={m.message} setBlockedUsers={setBlockedUsers} loadBlocked={loadBlockedUsers} />
     }
     
     }) }

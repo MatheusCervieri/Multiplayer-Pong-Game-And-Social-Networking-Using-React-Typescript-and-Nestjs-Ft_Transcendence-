@@ -2,11 +2,16 @@ import React from 'react'
 import { Button } from 'react-native/types';
 import Blockuser from './Blockuser';
 import styled from 'styled-components';
+import ProfileBtn from './UserOptionsBtns/ProfileBtn';
+import DmBtn from './UserOptionsBtns/DmBtn';
+import InviteToPlayBtn from './UserOptionsBtns/InvitePlayBtn';
 
 interface UserOptionsProps {
     user: string;
     setBlockedUsers : (blockedUsers : string[]) => void;
     loadBlocks: any;
+    me: string;
+    socket : any;
 }
 
 const UserOptionsContainer = styled.div`
@@ -33,9 +38,9 @@ export default function UserOptions(props: UserOptionsProps) {
   return (
     <UserOptionsContainer>
         <Blockuser setBlockedUsers={props.setBlockedUsers} blockeduser={props.user} loadBlocked={props.loadBlocks}/>
-        <OptionButton>Profile</OptionButton>
-        <OptionButton>DM</OptionButton>
-        <OptionButton>Invite to Play</OptionButton>
+        <ProfileBtn name={props.user}></ProfileBtn>
+        <DmBtn name={props.user} me={props.me}></DmBtn>
+        <InviteToPlayBtn name={props.user} me={props.me} socket={props.socket}></InviteToPlayBtn>
     </UserOptionsContainer>
   )
 }
