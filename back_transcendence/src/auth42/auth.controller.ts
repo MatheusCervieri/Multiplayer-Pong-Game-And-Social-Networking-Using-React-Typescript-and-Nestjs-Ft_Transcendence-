@@ -8,6 +8,7 @@ import { create } from 'domain';
 import nodemailer from 'nodemailer';
 import {Image} from '../image/image.entity';
 import { ImageService } from 'src/image/image.service';
+import fs from 'fs';
 
 @Controller('auth')
 export class AuthController {
@@ -101,14 +102,13 @@ export class AuthController {
 
         //set a default image to the new user:
 
-        const fs = require('fs');
-        const mime = require('mime');
+        
         const defaultImagePath = '/uploads/default.jpg';
         const image = new Image();
         image.filename = 'default.jpg';
-        image.mimetype = mime.getType(defaultImagePath);
+        image.mimetype = "image/" + defaultImagePath.split('.').pop();
         image.path = defaultImagePath;
-        image.size = fs.statSync(defaultImagePath).size;
+        image.size = 5242880; //5mb
         const imagedatabase = await this.imageService.create(image);
         const userWithImage = await this.userService.findWithImage(databaseuser.id);
         userWithImage.image = imagedatabase;
@@ -134,7 +134,13 @@ export class AuthController {
       return (token);
   }
 
+  getMimeType(file: File): string {
+    if (!file.type) {
+      throw new Error('File type not supported');
+    }
   
+    return file.type;
+  }
 
 
 
