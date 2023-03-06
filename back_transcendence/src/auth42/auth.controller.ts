@@ -62,9 +62,9 @@ export class AuthController {
   async fortyTwoLoginCallback(@Req() req, @Res() res) {
       //Verificar se o usuário existe no banco de dados, eu posso fazer isso usando o id da 42. 
       //Remove user for make tests
-      
-      const user = await this.userService.findOneBy42Id(req.user.id);
-      await this.userService.remove(user.id);
+      //The next two coments will remove the user from the database to do create users tests. 
+      //const user = await this.userService.findOneBy42Id(req.user.id);
+      //await this.userService.remove(user.id);
       const user42 = await this.userService.findOneBy42Id(req.user.id);
       if (user42)
       {
@@ -84,7 +84,7 @@ export class AuthController {
           const subject = 'Your Two-Factor Authentication Code';
           const text = `Your two-factor authentication code is: ${twofacode}`;
           //I need to change the user email. 
-          await this.mailService.sendEmail("mathcervieri@gmail.com", subject, text);
+          await this.mailService.sendEmail(user42.email, subject, text);
 
           res.redirect(frontendUrl);
         }

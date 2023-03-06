@@ -1,4 +1,5 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Post, Req } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Get, HttpCode, HttpStatus, Post, Req } from '@nestjs/common';
+import { IsEmail } from 'class-validator';
 import { Request } from 'express';
 import { UsersService } from './user.service';
 import { UseInterceptors } from '@nestjs/common';
@@ -91,15 +92,23 @@ export class UserController {
   }
 
 
-  @Get('enable-2fa')
-  async Enable2fa(@Req() request: any): Promise<any> {
-   
+  @Post('enable-2fa')
+  async Enable2fa(@Req() request: any, @Body() data : any): Promise<any> {
+    
     try 
     {
+      const email = data.email;
+      if (!IsEmail(email)) {
+        throw new BadRequestException('Invalid email format');
+      }
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        throw new BadRequestException('Invalid email format');
+      }
       const user = await this.userService.findOne(request.user_id);
       if (user)
       {
       user.TwofaAactive = true;
+      user.email = email;
       await this.userService.update(request.user_id, user);
       return "2FA enabled";
       }
@@ -122,6 +131,24 @@ export class UserController {
       user.TwofaAactive = false;
       await this.userService.update(request.user_id, user);
       return "2FA disable";
+      }
+      else
+        throw "User not found";
+    }
+    catch (error)
+    {
+      return error;
+    }
+  }
+
+  @Get('2fastatus')
+  async Get2fa(@Req() request: any): Promise<any> {
+    try 
+    {
+      const user = await this.userService.findOne(request.user_id);
+      if (user)
+      {
+        return user.TwofaAactive;
       }
       else
         throw "User not found";
