@@ -46,6 +46,24 @@ export class UserController {
     return await this.userService.GetUsersRanking();
   }
 
+  @Get('myprofile')
+  async getMyProfile(@Req() request: any): Promise<any> {
+    //Return a array of the users with their stauts - online, offline, playing a game.
+    const user = await this.userService.findOne(request.user_id);
+    console.log(user);
+    if (user)
+    {
+      const users = await this.userService.GetUsersRanking();
+      const userprofile = users.find((user) => user.id == request.user_id); 
+      //return sucessufull message with userprofile 
+      return userprofile;
+    }
+    else 
+    {
+      return "Invalid user";
+    }
+  }
+
   @Post('block')
   async blockUser(@Req() request: any, @Body() body: { userToBlockName: string }): Promise<void> {
     const blockingUser = await this.userService.findByIdWithBlocks(request.user_id);
@@ -67,9 +85,8 @@ export class UserController {
   }
 
   @Get('friends')
-  async getFriends(@Req() request: any): Promise<User[]> {
-  const userWithFriends = await this.userService.findByIdWithFriends(request.user_id);
-  return userWithFriends.friends;
+  async getFriends(@Req() request: any): Promise<any[]> {
+    return this.userService.GetFriendWithStatus(request.user_id);
 
   }
 

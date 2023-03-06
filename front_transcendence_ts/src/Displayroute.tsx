@@ -25,6 +25,8 @@ import {AuthCallback} from "./42api/AuthCallback";
 import SendTwoFaCode from "./login_setup/2fa/SendTwofaCode";
 import TwoFaEnable from "./login_setup/2fa/TwoFaEnable";
 import { AuthCallbackRegister } from "./42api/AuthCallbackRegister";
+import Friends from "./dashboard/Friends";
+import MyPerfil from "./dashboard/myperfil/MyPerfil";
 
 
 
@@ -45,6 +47,8 @@ export default function Displayroute() {
         <Route path="/setname" element={<Setname />} />
         <Route path="/setprofileimage" element={<SetProfileImage />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/myperfil" element={<MyPerfil />} />
+        <Route path="/friends" element={<Friends socket={socket} />} />
         <Route path='/chat' element={<ChatInterface />} />
         <Route path='/findgame' element={<FindGame />} />
         <Route path='/watchgame' element={<RunningGames/>} />

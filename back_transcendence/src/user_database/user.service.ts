@@ -47,6 +47,24 @@ export class UsersService {
     }
   }
 
+  async GetFriendWithStatus(requestUserId : any) {
+    const userWithFriends = await this.findByIdWithFriends(requestUserId);
+    const friends = userWithFriends.friends;
+    if (friends) {
+      const friendswithstatus: any[] = [];
+      for (let i = 0; i < friends.length; i++) {
+        const friend = friends[i];
+        const friendWithStatus: any = { ...friend, status: await this.notificationService.checkUsersStatus(friend.id) };
+        friendswithstatus.push(friendWithStatus);
+      }
+      return friendswithstatus;
+    }
+    
+  
+  }
+
+ 
+
   async GetUsersRanking() {
     const users = await this.GetUsersAndStatus();
     if (users) {
@@ -90,6 +108,7 @@ export class UsersService {
   findOne(id: number): Promise<User> {
     return this.usersRepository.findOneBy({ id });
   }
+
 
   findOneEmail(email: string): Promise<User> {
     return this.usersRepository.findOneBy({ email });

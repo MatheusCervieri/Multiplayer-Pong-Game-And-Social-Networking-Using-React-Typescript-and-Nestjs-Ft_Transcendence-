@@ -22,7 +22,6 @@ export class AuthMiddleware implements NestMiddleware {
     if (!token) {
       return res.status(401).send('Access denied. No token provided.');
     }
-    console.log("baleia");
     try {
       const decoded = jwt.verify(token, 'mysecretkey');
       req.user_id = decoded.id;

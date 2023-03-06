@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import  instance from '../confs/axios_information';
+import  instance, { serverurl } from '../confs/axios_information';
 import { toast } from "react-toastify";
 
 interface UserProps {
@@ -50,6 +50,24 @@ const Users = (props : UserProps) => {
       console.error(error);
     });
   }
+
+  function Block(name : any)
+  {
+    const token = localStorage.getItem('token');
+    const data = { userToBlockName : name}
+    instance.post('userdata/block' , data,  {
+    headers: {
+      'Authorization': `Bearer ${token}`
+    }
+  })
+    .then(response => {
+      console.log(response.data);
+      toast.success("User blocked");
+    })
+    .catch(error => {
+      console.error(error);
+    });
+  }
   /*
 
   */
@@ -60,6 +78,7 @@ const Users = (props : UserProps) => {
       <ul>
         {users.map((user) => (
           <li key={user.id}>{user.name} {user.status} 
+          <img src={serverurl + "/publicimage/profileimage/" + user.id } alt="Profile" width="50" height="50" />
           <button onClick={  () => {
             console.log(user.name);
             const token = localStorage.getItem('token');
@@ -69,6 +88,9 @@ const Users = (props : UserProps) => {
             <button onClick={  () => {
               addAsFriend(user.name);
             }}>Add as Friend!</button>
+            <button onClick={  () => {
+              Block(user.name);
+            }}>Block</button>
             </li>
         ))}
       </ul>

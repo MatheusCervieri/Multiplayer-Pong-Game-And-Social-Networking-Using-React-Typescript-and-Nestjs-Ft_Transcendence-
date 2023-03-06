@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import  instance from '../confs/axios_information';
+import  instance, { serverurl } from '../confs/axios_information';
 import { toast } from "react-toastify";
 
 interface UserProps {
@@ -14,7 +14,7 @@ const Friends = (props : UserProps) => {
   function getUserInformation()
   {
     const token = localStorage.getItem('token');
-    instance.get('userdata/userstatus' , {
+    instance.get('userdata/friends' , {
     headers: {
       'Authorization': `Bearer ${token}`
     }
@@ -38,10 +38,11 @@ const Friends = (props : UserProps) => {
 
   return (
     <div>
-      <h2>Users</h2>
+      <h2>Friends</h2>
       <ul>
         {users.map((user) => (
           <li key={user.id}>{user.name} {user.status} 
+          <img src={serverurl + "/publicimage/profileimage/" + user.id } alt="Profile" width="50" height="50" />
           <button onClick={  () => {
             console.log(user.name);
             const token = localStorage.getItem('token');

@@ -92,6 +92,7 @@ export class AuthController {
         const user = new User();
         user.email = req.user.email;
         //user.name = req.user.name;
+        user.name = "";
         user.FortytwoId = req.user.id; 
         const databaseuser = await this.userService.create(user);
         const token = this.create_JWT(databaseuser);
