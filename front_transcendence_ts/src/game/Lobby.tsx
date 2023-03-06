@@ -1,6 +1,7 @@
 import React from 'react'
 import {useState} from 'react';
 import { useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 
 interface LobbyProps {
@@ -21,27 +22,23 @@ export default function Lobby(props : LobbyProps) {
   function handleSmallRacketChange(event: any) {
     const checkboxstate = event.target.checked;
     setSmallRacket(checkboxstate);
-    console.log("Event target ", event.target.checked,"Small Racket", smallRacket);
-    if (props.myName === gameData.player1Name || props.myName === gameData.player2Name)
-    {
-    const token = localStorage.getItem('token');
-    console.log("Small Racket", smallRacket, "Longer game", longerGame);
-    const data = { token: token, game_id: id,  smallRacket: smallRacket, longerGame: longerGame };
-    props.socket.emit('vote-game-type', data);
-    }
   }
 
   function handleLongerGameChange(event: any) {
     setLongerGame(event.target.checked);
-    console.log("Event target ", event.target.checked);
+   
+  }
+
+  function vote()
+  {
     if (props.myName === gameData.player1Name || props.myName === gameData.player2Name)
     {
     const token = localStorage.getItem('token');
     console.log("Small Racket", smallRacket, "Longer game", longerGame);
     const data = { token: token, game_id: id,  smallRacket: smallRacket, longerGame: longerGame };
     props.socket.emit('vote-game-type', data);
+    toast.success("Vote sent");
     }
-   
   }
 
   return (
@@ -67,6 +64,7 @@ export default function Lobby(props : LobbyProps) {
         <input type="checkbox" onChange={handleLongerGameChange} />
         Longer Game
       </label>
+      <button onClick={vote}>Vote</button>
     </div>
     </div>
   );
