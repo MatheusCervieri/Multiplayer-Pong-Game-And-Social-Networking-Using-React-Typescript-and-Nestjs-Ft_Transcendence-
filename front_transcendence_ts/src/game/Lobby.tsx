@@ -12,18 +12,20 @@ interface LobbyProps {
 export default function Lobby(props : LobbyProps) {
     const { gameData } = props;
     const { id } = useParams<{ id: string | undefined }>();
-    const [smallRacket, setSmallRacket] = useState(false);
-    const [longerGame, setLongerGame] = useState(false);
+    const [smallRacket, setSmallRacket] = useState<boolean>(false);
+    const [longerGame, setLongerGame] = useState<boolean>(false);
   //Vote for small racket.
   //Vote for a longer game. 
   //Check if player is playing.
 
   function handleSmallRacketChange(event: any) {
-    setSmallRacket(event.target.checked);
-    console.log(props.myName, gameData.player1Name, gameData.player2Name);
+    const checkboxstate = event.target.checked;
+    setSmallRacket(checkboxstate);
+    console.log("Event target ", event.target.checked,"Small Racket", smallRacket);
     if (props.myName === gameData.player1Name || props.myName === gameData.player2Name)
     {
     const token = localStorage.getItem('token');
+    console.log("Small Racket", smallRacket, "Longer game", longerGame);
     const data = { token: token, game_id: id,  smallRacket: smallRacket, longerGame: longerGame };
     props.socket.emit('vote-game-type', data);
     }
@@ -31,6 +33,14 @@ export default function Lobby(props : LobbyProps) {
 
   function handleLongerGameChange(event: any) {
     setLongerGame(event.target.checked);
+    console.log("Event target ", event.target.checked);
+    if (props.myName === gameData.player1Name || props.myName === gameData.player2Name)
+    {
+    const token = localStorage.getItem('token');
+    console.log("Small Racket", smallRacket, "Longer game", longerGame);
+    const data = { token: token, game_id: id,  smallRacket: smallRacket, longerGame: longerGame };
+    props.socket.emit('vote-game-type', data);
+    }
    
   }
 
@@ -49,12 +59,12 @@ export default function Lobby(props : LobbyProps) {
       <div>
       <h2>Vote for game options:</h2>
       <label>
-        <input type="checkbox" checked={smallRacket} onChange={handleSmallRacketChange} />
+        <input type="checkbox" onChange={handleSmallRacketChange} />
         Small Racket
       </label>
       <br />
       <label>
-        <input type="checkbox" checked={longerGame} onChange={handleLongerGameChange} />
+        <input type="checkbox" onChange={handleLongerGameChange} />
         Longer Game
       </label>
     </div>

@@ -133,6 +133,7 @@ export class GamesServices {
   async voteGame(username: string, game_id: string, smallRacket: boolean, longerGame: boolean)
   {
     const rtGame = this.rtGames.get(game_id);
+    console.log(smallRacket, longerGame);
     if(rtGame.player1Name === username)
     {
         rtGame.player1SmallRacketVote = smallRacket;
@@ -334,6 +335,12 @@ export class GamesServices {
         rtGame.timeToStart = 0;
         if(rtGame.player1IsConnected && rtGame.player2IsConnected)
         {
+          //Select the gametime - make the necessary changes in the game based in the players votes. 
+          console.log(rtGame.player1LongerGameVote, rtGame.player2LongerGameVote, rtGame.player1SmallRacketVote, rtGame.player2SmallRacketVote);
+          if(rtGame.player1LongerGameVote && rtGame.player2LongerGameVote)
+            rtGame.gameFinishScore = 20;
+          if(rtGame.player1SmallRacketVote && rtGame.player2SmallRacketVote)
+            rtGame.racketHeight = rtGame.racketHeight / 2;
           rtGame.status = 'playing';
         }
         else
@@ -398,7 +405,7 @@ export class GamesServices {
         this.moveBall(gameId);
         this.handleBallWallCollision(gameId, rtGame);
         this.handleBallRacketCollision(gameId, rtGame);
-        if(rtGame.player1Score === 5 || rtGame.player2Score === 5)
+        if(rtGame.player1Score === rtGame.gameFinishScore || rtGame.player2Score === rtGame.gameFinishScore)
           this.finishGame(gameId, rtGame);
       }
       this.updateGame(gameId, rtGame);
