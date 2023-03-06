@@ -49,7 +49,7 @@ export const defaultGameRoom : RTGameRoomInterface = {
     player2SmallRacketVote : false,
     player1LongerGameVote : false,
     player2LongerGameVote : false,
-    gameFinishScore: 1,
+    gameFinishScore: 10,
     creationDate: 0,
     timeToStart: 3000,
     elepsedTime: 0,
@@ -73,5 +73,5 @@ export const defaultGameRoom : RTGameRoomInterface = {
     pausedtime: 0,
     player1PauseTime: 100000,
     player2PauseTime: 100000,
-    lobbyTime: 100000,
+    lobbyTime: 10000,
 };
