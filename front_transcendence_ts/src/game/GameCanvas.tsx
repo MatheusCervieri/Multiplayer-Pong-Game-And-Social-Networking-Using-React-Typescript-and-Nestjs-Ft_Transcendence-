@@ -34,7 +34,6 @@ const GameCanvas: React.FC<GameCanvasProps> = (props) => {
     if (container) {
       const { width: containerWidth, height: containerHeight } = container.getBoundingClientRect();
       //We're using the getBoundingClientRect() method to get the container size, which takes into account any CSS transforms that may affect the element's size
-      console.log(containerWidth, containerHeight);
       if (containerWidth < width) {
         setScaleX(containerWidth / width);
       }
@@ -42,8 +41,8 @@ const GameCanvas: React.FC<GameCanvasProps> = (props) => {
         setScaleY(containerHeight / height);
       }
     }
-  }, [containerRef]);
-  
+  }, [containerRef, width, height]);
+
   useEffect(() => {
     if (canvasRef.current && scaleX && scaleY && racketColor && gameData) {
       const canvas = canvasRef.current;
@@ -106,7 +105,7 @@ const GameCanvas: React.FC<GameCanvasProps> = (props) => {
   return (
     <>
     {gameData.player1Score !== undefined && <div>Player 1: {gameData.player1Score} - Player 2: {gameData.player2Score}</div>}
-    <div ref={containerRef}>
+    <div ref={containerRef} style={{ maxWidth: "360px", maxHeight: "270px" }}>
     {height !== 0 && width !== 0 && <canvas ref={canvasRef} width={width * scaleX} height={height * scaleY}  style={{ width: '100%', height: '100%' }}/>}
     </div>
     </>
