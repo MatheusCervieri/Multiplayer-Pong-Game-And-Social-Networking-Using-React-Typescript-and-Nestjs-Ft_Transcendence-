@@ -129,6 +129,24 @@ export class GamesServices {
     }
   }
 
+
+  async voteGame(username: string, game_id: string, smallRacket: boolean, longerGame: boolean)
+  {
+    const rtGame = this.rtGames.get(game_id);
+    if(rtGame.player1Name === username)
+    {
+        rtGame.player1SmallRacketVote = smallRacket;
+        rtGame.player1LongerGameVote = longerGame;
+    }
+
+    if(rtGame.player2Name === username)
+    {
+        rtGame.player2SmallRacketVote = smallRacket;
+        rtGame.player2LongerGameVote = longerGame;
+    }
+
+    this.updateGame(game_id, rtGame);
+  }
  
 
   async movePlayer(username: string, game_id: string, direction: string)

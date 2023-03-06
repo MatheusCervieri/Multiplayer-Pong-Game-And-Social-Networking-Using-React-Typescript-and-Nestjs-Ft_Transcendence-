@@ -108,7 +108,7 @@ useEffect(() => {
   
   return (
     <>
-    {gameRunning === true && gameData.status === 'lobby' && <Lobby gameData={gameData}/>}
+    {gameRunning === true && gameData.status === 'lobby' && <Lobby myName={myName} socket={socket} gameData={gameData}/>}
     {gameRunning === true && myName !== '' && gameData.status === 'playing' && <GameCanvas {...canvasProps} />}
     {gameRunning === true && gameData.status === 'paused' && <GamePauseScream gameData={gameData}/>}
     {gameRunning === false && <GameFinalScream gameData={gameRequestData} myuser={myName} />}
