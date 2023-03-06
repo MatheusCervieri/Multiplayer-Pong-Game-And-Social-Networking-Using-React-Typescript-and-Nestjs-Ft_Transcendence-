@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState, useLayoutEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import GetToken from '../utils/GetToken';
 
@@ -15,6 +15,9 @@ interface GameCanvasProps {
 
 const GameCanvas: React.FC<GameCanvasProps> = (props) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [scaleX, setScaleX] = useState<number>(1);
+  const [scaleY, setScaleY] = useState<number>(1);
   const navigate = useNavigate();
   const { id } = useParams<{ id: string | undefined }>();
   const { racketWidth, racketHeight, racketColor, gameData, socket, myName } = props;
@@ -26,31 +29,46 @@ const GameCanvas: React.FC<GameCanvasProps> = (props) => {
     setWidth(gameData.width);
   }, []);
 
+  useLayoutEffect(() => {
+    const container = containerRef.current;
+    if (container) {
+      const { width: containerWidth, height: containerHeight } = container.getBoundingClientRect();
+      //We're using the getBoundingClientRect() method to get the container size, which takes into account any CSS transforms that may affect the element's size
+      console.log(containerWidth, containerHeight);
+      if (containerWidth < width) {
+        setScaleX(containerWidth / width);
+      }
+      if(containerHeight < height) {
+        setScaleY(containerHeight / height);
+      }
+    }
+  }, [containerRef]);
+  
   useEffect(() => {
-    if (canvasRef.current) {
+    if (canvasRef.current && scaleX && scaleY && racketColor && gameData) {
       const canvas = canvasRef.current;
       const context = canvas.getContext('2d');
-      
+        
       if (context) {
         // Draw the left racket
         context.fillStyle = 'red';
-        context.fillRect(0,0,width, height);
-
+        context.fillRect(0, 0, width * scaleX, height * scaleY);
+  
         context.fillStyle = racketColor;
-        context.fillRect(gameData.player1RacketXPosition, gameData.player1RacketPosition,  gameData.racketWidth,  gameData.racketHeight);
-        
+        context.fillRect(gameData.player1RacketXPosition, gameData.player1RacketPosition, gameData.racketWidth, gameData.racketHeight);
+          
         // Draw the right racket
         context.fillStyle = racketColor;
-        context.fillRect(gameData.player2RacketXPosition, gameData.player2RacketPosition,  gameData.racketWidth,  gameData.racketHeight);
-
+        context.fillRect(gameData.player2RacketXPosition, gameData.player2RacketPosition, gameData.racketWidth, gameData.racketHeight);
+  
         // Draw the ball
         context.beginPath();
-        context.arc(gameData.ballX, gameData.ballY, gameData.ballRadiues , 0, 2 * Math.PI);
+        context.arc(gameData.ballX, gameData.ballY, gameData.ballRadiues, 0, 2 * Math.PI);
         context.fillStyle = "#FFFFFF";
         context.fill();
       }
     }
-  }, [height, width, canvasRef, width, height, racketWidth, racketHeight, racketColor, gameData.player1RacketPosition, gameData.player2RacketPosition, gameData.ballX, gameData.ballY]);
+  }, [scaleX, scaleY, racketColor, gameData, canvasRef, height, width]);
 
   function moveRacket(direction: string)
   {
@@ -88,7 +106,9 @@ const GameCanvas: React.FC<GameCanvasProps> = (props) => {
   return (
     <>
     {gameData.player1Score !== undefined && <div>Player 1: {gameData.player1Score} - Player 2: {gameData.player2Score}</div>}
-    {height !== 0 && width !== 0 && <canvas ref={canvasRef} width={width} height={height} />}
+    <div ref={containerRef}>
+    {height !== 0 && width !== 0 && <canvas ref={canvasRef} width={width * scaleX} height={height * scaleY}  style={{ width: '100%', height: '100%' }}/>}
+    </div>
     </>
   );
 };
