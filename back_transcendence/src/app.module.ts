@@ -37,6 +37,7 @@ import { NotificationService } from './notification/notification.service';
 import { AuthModule } from './auth42/auth.module';
 import { AuthController } from './auth42/auth.controller';
 import { FortyTwoStrategy } from './auth42/fortytwo.strategy';
+import { MailModule } from './mail/mail.module';
 
 
 @Module({
@@ -52,7 +53,7 @@ import { FortyTwoStrategy } from './auth42/fortytwo.strategy';
       entities: [Email],
       autoLoadEntities: true,
       synchronize: true,
-    }), EmailModule, UserModule, ChatRoomModule, MessageModule, ImageModule, GameModule , AuthModule],
+    }), MailModule, EmailModule, UserModule, ChatRoomModule, MessageModule, ImageModule, GameModule , AuthModule],
   controllers: [AppController, SimpleGetController, SimplePostController, SingUpController, NameSetController, UserController, AuthController, LoginController, ChatRoomController, ChatRoomControllerNew, UsersInformationController, ImageController, PublicImageController, GamesController],
   providers: [FortyTwoStrategy , AppService, EmailService, UsersService, ChatRoomService, ChatGateway, MessageService, ImageService, GameGateway, GamesServices, NotificationGateway, NotificationService],
 })

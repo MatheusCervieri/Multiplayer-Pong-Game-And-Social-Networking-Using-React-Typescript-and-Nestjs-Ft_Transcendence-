@@ -9,11 +9,14 @@ import nodemailer from 'nodemailer';
 import {Image} from '../image/image.entity';
 import { ImageService } from 'src/image/image.service';
 import fs from 'fs';
+import { MailService } from 'src/mail/mail.service';
+
 
 @Controller('auth')
 export class AuthController {
   constructor(
     private readonly fortyTwoStrategy: FortyTwoStrategy,
+    private readonly mailService: MailService,
     private readonly imageService: ImageService,
     private readonly userService: UsersService,
     ) {}
@@ -78,6 +81,11 @@ export class AuthController {
           user42.TwofaSecret = twofacode.toString();
           //send the code to email.
           await this.userService.update(user42.id, user42);
+          const subject = 'Your Two-Factor Authentication Code';
+          const text = `Your two-factor authentication code is: ${twofacode}`;
+          //I need to change the user email. 
+          await this.mailService.sendEmail("mathcervieri@gmail.com", subject, text);
+
           res.redirect(frontendUrl);
         }
         else
@@ -121,6 +129,17 @@ export class AuthController {
         res.redirect(frontendUrl);
       }
     
+  }
+
+  @Get('/test-email')
+  async sendTestEmail() {
+    const to = 'mathcervieri@gmail.com';
+    const subject = 'Test Email';
+    const text = 'This is a test email sent from my NestJS application!';
+
+    const mail = await this.mailService.sendEmail(to, subject, text);
+
+    return { message: 'Email sent successfully' };
   }
 
   create_JWT(user: User) : any
