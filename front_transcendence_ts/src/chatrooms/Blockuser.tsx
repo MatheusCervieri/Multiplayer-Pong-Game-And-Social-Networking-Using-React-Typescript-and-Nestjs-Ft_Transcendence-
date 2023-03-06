@@ -7,6 +7,7 @@ import { useLocation } from 'react-router-dom';
 interface BlockuserProps {
     blockeduser : string;
     setBlockedUsers : (blockedUsers : string[]) => void;
+    loadBlocked: any;
 }
 
 
@@ -29,8 +30,11 @@ export default function Blockuser(props : BlockuserProps) {
           }
         })
           .then(response => {
+             GetBlocked();
+             props.loadBlocked();
             navigate(url);
-            //GetBlocked();
+           
+            
             console.log(response.data);
           })
           .catch(error => {

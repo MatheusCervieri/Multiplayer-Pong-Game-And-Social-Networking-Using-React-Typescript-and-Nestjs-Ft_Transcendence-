@@ -498,7 +498,7 @@ else{
     else {
     console.log(blockedUsers);
     console.log(m.user);
-    return <Message username={username} index={index} user={m.user} message={m.message} setBlockedUsers={setBlockedUsers} />
+    return <Message username={username} index={index} user={m.user} message={m.message} setBlockedUsers={setBlockedUsers} loadBlocked={loadBlockedUsers} />
     }
     
     }) }

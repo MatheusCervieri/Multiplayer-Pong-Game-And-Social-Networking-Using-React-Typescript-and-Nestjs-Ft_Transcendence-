@@ -6,6 +6,7 @@ import styled from 'styled-components';
 interface UserOptionsProps {
     user: string;
     setBlockedUsers : (blockedUsers : string[]) => void;
+    loadBlocks: any;
 }
 
 const UserOptionsContainer = styled.div`
@@ -31,7 +32,7 @@ export {OptionButton};
 export default function UserOptions(props: UserOptionsProps) {
   return (
     <UserOptionsContainer>
-        <Blockuser setBlockedUsers={props.setBlockedUsers} blockeduser={props.user}/>
+        <Blockuser setBlockedUsers={props.setBlockedUsers} blockeduser={props.user} loadBlocked={props.loadBlocks}/>
         <OptionButton>Profile</OptionButton>
         <OptionButton>DM</OptionButton>
         <OptionButton>Invite to Play</OptionButton>
