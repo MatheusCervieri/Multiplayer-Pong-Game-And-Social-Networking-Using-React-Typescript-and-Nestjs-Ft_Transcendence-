@@ -2,6 +2,35 @@ import React, { useState } from 'react';
 import instance from '../confs/axios_information';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
+import styled from 'styled-components';
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 10px;
+`;
+
+const Title = styled.p`
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+`;
+
+const Button = styled.button`
+  background-color: #00b8d9;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  margin: 10px;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #0066a0;
+  }
+`;
 
 const Dashboard = () => {
     const [username, setUsername] = useState("John Doe");
@@ -10,7 +39,7 @@ const Dashboard = () => {
     
     const handleLogout = () => {
       localStorage.removeItem('token');
-      navigate('../login');
+      navigate('../42');
       // Add other logout logic here, such as clearing session data, etc.
     };
 
@@ -55,17 +84,19 @@ const Dashboard = () => {
     navigate('../watchgame');
   }
 
-    return (
+  return (
+    <Container>
+      <Title>Welcome, {username}!</Title>
       <div>
-        <p>Welcome, {username}!</p>
-        <button onClick={findGame}>Find a Game!</button>
-        <button onClick={watchGame}>Watch a Game!</button>
-        <button onClick={() => {navigate('/chat')}}>Chat!</button>
-        <button onClick={() => {navigate('/ranking')}}>Ranking!</button>
-        <button onClick={() => {navigate('/myprofile')}}>My Profile!</button>
-        <button onClick={handleLogout}>Log Out</button>
+        <Button onClick={findGame}>Find a Game</Button>
+        <Button onClick={watchGame}>Watch a Game</Button>
+        <Button onClick={() => {navigate('/chat')}}>Chat</Button>
+        <Button onClick={() => {navigate('/ranking')}}>Ranking</Button>
+        <Button onClick={() => {navigate('/myprofile')}}>My Profile</Button>
+        <Button onClick={handleLogout}>Log Out</Button>
       </div>
-    );
+    </Container>
+  );
   };
   
   export default Dashboard;
