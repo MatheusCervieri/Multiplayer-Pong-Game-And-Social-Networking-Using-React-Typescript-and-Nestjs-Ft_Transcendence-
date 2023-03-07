@@ -74,7 +74,7 @@ const SetProfileImage: React.FC = () => {
       if(response.data.statusCode === 200)
       {
         toast.success(response.data.message);
-        navigate('/dashboard');
+        navigate('/myperfil');
       }
       if(response.data.error.status === 400)
       {

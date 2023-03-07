@@ -45,7 +45,11 @@ const FormButton = styled.button`
   }
 `;
 
-const Setname = () => {
+interface SetNameMyPerfilProps {
+  closeModal: () => void;
+}
+
+const SetNameMyPerfil = (props: SetNameMyPerfilProps) => {
   const [name, setName] = useState('');
   const navigate = useNavigate();
 
@@ -66,7 +70,7 @@ const Setname = () => {
           toast.error("Name already taken, choose another one");
         }
         else
-          navigate('/setprofileimage');
+          props.closeModal();
       })
       .catch(error => {
         console.error(error);
@@ -86,4 +90,4 @@ const Setname = () => {
   );
 }
 
-export default Setname;
+export default SetNameMyPerfil;

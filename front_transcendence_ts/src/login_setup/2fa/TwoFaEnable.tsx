@@ -1,15 +1,60 @@
 import React, { useEffect } from 'react'
 import { toast } from 'react-toastify';
 import  instance from '../../confs/axios_information';
+import styled from 'styled-components';
+import { Navigate, useNavigate } from 'react-router-dom';
 
-//Checklsit
-//Create a endpoint to enable to factor authentication
-//When the user login check if the user has 2fa enabled, if it has enable redirect the user to the page to enter the code
-//Create an endpoint that accepts the code and checks if it matches the code stored in the database for the user. If it does, return a JWT token. If it doesn't, return an error.
+const TwoFaWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 32px;
+`;
 
+const Title = styled.h1`
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 16px;
+`;
+
+const Text = styled.p`
+  margin-bottom: 5px;
+`;
+
+const Form = styled.form`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+const Label = styled.label`
+  font-size: 18px;
+  margin-bottom: 8px;
+`;
+
+const Input = styled.input`
+  padding: 8px 16px;
+  border-radius: 4px;
+  margin-bottom: 16px;
+`;
+
+const Button = styled.button`
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 16px;
+  margin-top: 16px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #0056b3;
+  }
+`;
 
 export default function TwoFa() {
   const [TwoFaStatus, setTwoFaStatus] = React.useState(false);
+  const navigate = useNavigate();
 
   async function enable2FA(event: any)
   {
@@ -32,10 +77,10 @@ export default function TwoFa() {
       } 
       else
         toast.success("2fa enabled");
+        navigate('myperfil');
         GetTwoFaStatus();
     } catch (error : any) {
       console.error(error);
-      //toast.error(error.message);
   }
   }
   async function disable2FA()
@@ -50,6 +95,7 @@ export default function TwoFa() {
       console.log(response.data);
       toast.success("2fa disabled");
       GetTwoFaStatus();
+      navigate('myperfil');
     } catch (error) {
       console.error(error);
     }
@@ -77,16 +123,22 @@ export default function TwoFa() {
 
   return (
     <>
-    {TwoFaStatus ? <h1>2fa enabled</h1> : <h1>2fa disabled</h1>}
-    {!TwoFaStatus &&
-    <form onSubmit={enable2FA}>
-      <label htmlFor="email">Email:</label>
-      <input type="email" id="email" name="email" required />
-
-      <button type="submit">Enable 2fa</button>
-    </form>
-    }
-    {TwoFaStatus && <button onClick={disable2FA}>Disable 2fa</button>}
+    <TwoFaWrapper>
+      <Title>{TwoFaStatus ? '2fa is enabled!' : '2fa is disabled!'}</Title>
+      {!TwoFaStatus && <Text>Please, enter your email to enable 2fa!</Text>}
+      <br>
+      </br>
+      {!TwoFaStatus && 
+        <Form onSubmit={enable2FA}>
+          <Label htmlFor="email">Email:</Label>
+          <Input type="email" id="email" name="email" required />
+          <Button type="submit">Enable 2fa</Button>
+        </Form>
+      }
+      {TwoFaStatus && 
+        <Button onClick={disable2FA}>Disable 2fa</Button>
+      }
+    </TwoFaWrapper>
     </>
   )
 }

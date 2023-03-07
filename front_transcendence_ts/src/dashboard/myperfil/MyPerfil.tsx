@@ -2,6 +2,8 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import  instance, { serverurl } from '../../confs/axios_information';
 import styled from 'styled-components';
+import Modal from 'react-modal';
+import SetNameMyPerfil from './SetNameMyPerfil';
 
 const UserInfoWrapper = styled.div`
   display: flex;
@@ -45,7 +47,7 @@ const UserInfoLabel = styled.p`
 `;
 
 const MatchHistoryWrapper = styled.div`
-  margin-top: -16px;
+  margin-top: 0px;
   background-color: #f2f2f2;
   padding: 16px;
   border-radius: 4px;
@@ -83,6 +85,7 @@ const MatchHistoryItem = styled.li`
 const MyPerfil: React.FC = () => {
   const [userInformation, setUserInformation] = useState<any>([]);
   const [matchHistory, setMatchHistory] = useState<any[]>([]);
+  const [isChangeNameOpen, setChangeNameOpen] = useState(false);
 
   function getUserInformation()
   {
@@ -130,6 +133,17 @@ const MyPerfil: React.FC = () => {
 
   const handleNameEdit = () => {
     // Handle name edit here
+    setChangeNameOpen(true);
+   
+  };
+
+  const toggleNameModal = () => {
+    setChangeNameOpen(false);
+    getUserInformation();
+  }
+
+  const handleTwoFa = () => {
+
   };
   
  
@@ -140,6 +154,9 @@ const MyPerfil: React.FC = () => {
       <ProfileImage src={serverurl + "/publicimage/profileimage/" + userInformation.id} alt="Player" />
       <EditButton onClick={handlePictureEdit}>Edit Picture</EditButton>
       <UserName>{userInformation.name}</UserName>
+      <Modal isOpen={isChangeNameOpen} onRequestClose={toggleNameModal}>
+        <SetNameMyPerfil closeModal={toggleNameModal}/>
+      </Modal>
       <EditButton onClick={handleNameEdit}>Edit Name</EditButton>
       <UserInfoItem>
         <UserInfoLabel>Wins:</UserInfoLabel>
@@ -153,6 +170,7 @@ const MyPerfil: React.FC = () => {
         <UserInfoLabel>Ranking:</UserInfoLabel>
         <p>{userInformation.rankingP}</p>
       </UserInfoItem>
+      <EditButton onClick={handleTwoFa}>TwoFa Configuracion</EditButton>
       <MatchHistoryWrapper>
         <MatchHistoryTitle>Match History</MatchHistoryTitle>
         <MatchHistoryList>
