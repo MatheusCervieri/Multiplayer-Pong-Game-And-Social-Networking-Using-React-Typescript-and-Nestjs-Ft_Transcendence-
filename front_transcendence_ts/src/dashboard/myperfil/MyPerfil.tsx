@@ -4,6 +4,8 @@ import  instance, { serverurl } from '../../confs/axios_information';
 import styled from 'styled-components';
 import Modal from 'react-modal';
 import SetNameMyPerfil from './SetNameMyPerfil';
+import SetProfileImageMyProfile from './SetProfileImageMyPerfil';
+import TwoFa from '../../login_setup/2fa/TwoFaEnable'
 
 const UserInfoWrapper = styled.div`
   display: flex;
@@ -82,10 +84,48 @@ const MatchHistoryItem = styled.li`
 
 `;
 
+const customModalStyles = {
+  content: {
+    width: '30%',
+    height: '30%',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)'
+  }
+};
+
+const CustomModal = styled(Modal)`
+  .ReactModal__Overlay {
+    opacity: 0;
+    transition: opacity 200ms ease-in-out;
+  }
+
+  .ReactModal__Overlay--after-open {
+    opacity: 1;
+  }
+
+  .ReactModal__Overlay--before-close {
+    opacity: 0;
+  }
+
+  .ReactModal__Content {
+    ${customModalStyles.content}
+  }
+
+  @media (max-width: 768px) {
+    .ReactModal__Content {
+      width: 80%;
+      height: 50%;
+    }
+  }
+`;
+
 const MyPerfil: React.FC = () => {
   const [userInformation, setUserInformation] = useState<any>([]);
   const [matchHistory, setMatchHistory] = useState<any[]>([]);
   const [isChangeNameOpen, setChangeNameOpen] = useState(false);
+  const [isPictureModalOpen, setPictureModalOpen] = useState(false);
+  const [isTwoFaModalOpen , setTwoFaModalOpen] = useState(false);
 
   function getUserInformation()
   {
@@ -128,8 +168,13 @@ const MyPerfil: React.FC = () => {
 
 
   const handlePictureEdit = () => {
-    // Handle picture edit here
+    setPictureModalOpen(true);
   };
+
+  const togglePictureModal = () => {
+    setPictureModalOpen(false);
+    getUserInformation();
+  }
 
   const handleNameEdit = () => {
     // Handle name edit here
@@ -143,9 +188,12 @@ const MyPerfil: React.FC = () => {
   }
 
   const handleTwoFa = () => {
-
+    setTwoFaModalOpen(true);
   };
   
+  const toggleTwoFaModal = () => {
+    setTwoFaModalOpen(false);
+  }
  
     
 
@@ -154,9 +202,15 @@ const MyPerfil: React.FC = () => {
       <ProfileImage src={serverurl + "/publicimage/profileimage/" + userInformation.id} alt="Player" />
       <EditButton onClick={handlePictureEdit}>Edit Picture</EditButton>
       <UserName>{userInformation.name}</UserName>
-      <Modal isOpen={isChangeNameOpen} onRequestClose={toggleNameModal}>
+      <CustomModal isOpen={isChangeNameOpen} onRequestClose={toggleNameModal}>
         <SetNameMyPerfil closeModal={toggleNameModal}/>
-      </Modal>
+      </CustomModal>
+      <CustomModal  isOpen={isPictureModalOpen} onRequestClose={togglePictureModal}>
+        <SetProfileImageMyProfile closeModal={toggleNameModal}/>
+      </CustomModal>
+      <CustomModal  isOpen={isTwoFaModalOpen} onRequestClose={toggleTwoFaModal}>
+        <TwoFa closeModal={toggleTwoFaModal} ></TwoFa>
+      </CustomModal>
       <EditButton onClick={handleNameEdit}>Edit Name</EditButton>
       <UserInfoItem>
         <UserInfoLabel>Wins:</UserInfoLabel>

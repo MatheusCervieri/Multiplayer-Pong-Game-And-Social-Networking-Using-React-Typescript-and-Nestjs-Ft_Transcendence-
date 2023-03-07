@@ -52,7 +52,11 @@ const Button = styled.button`
   }
 `;
 
-export default function TwoFa() {
+interface TwoFaProps {
+  closeModal: () => void;
+}
+
+export default function TwoFa(props : TwoFaProps) {
   const [TwoFaStatus, setTwoFaStatus] = React.useState(false);
   const navigate = useNavigate();
 
@@ -77,7 +81,7 @@ export default function TwoFa() {
       } 
       else
         toast.success("2fa enabled");
-        navigate('myperfil');
+        props.closeModal();
         GetTwoFaStatus();
     } catch (error : any) {
       console.error(error);
@@ -95,7 +99,7 @@ export default function TwoFa() {
       console.log(response.data);
       toast.success("2fa disabled");
       GetTwoFaStatus();
-      navigate('myperfil');
+      props.closeModal();
     } catch (error) {
       console.error(error);
     }

@@ -39,7 +39,11 @@ const Button = styled.button`
   }
 `;
 
-const SetProfileImage: React.FC = () => {
+interface SetProfileImageMyProfileProps {
+  closeModal: () => void;
+}
+
+const SetProfileImageMyProfile = (props: SetProfileImageMyProfileProps) => {
   const [image, setImage] = useState<File | null>(null);
   const navigate = useNavigate();
 
@@ -74,7 +78,7 @@ const SetProfileImage: React.FC = () => {
       if(response.data.statusCode === 200)
       {
         toast.success(response.data.message);
-        navigate('/myperfil');
+        props.closeModal();
       }
       if(response.data.error.status === 400)
       {
@@ -94,4 +98,4 @@ const SetProfileImage: React.FC = () => {
   );
 };
 
-export default SetProfileImage;
+export default SetProfileImageMyProfile;

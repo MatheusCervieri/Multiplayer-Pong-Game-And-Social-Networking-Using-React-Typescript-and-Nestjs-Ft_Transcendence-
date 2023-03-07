@@ -43,7 +43,6 @@ export default function Displayroute() {
         <Route path="/auth" element={<AuthCallback  />} />
         <Route path="/authregister" element={<AuthCallbackRegister  />} />
         <Route path="/twofa" element={<SendTwoFaCode  />} />
-        <Route path="/enabletwofa" element={<TwoFaEnable  />} />
         <Route path="/setname" element={<Setname />} />
         <Route path="/setprofileimage" element={<SetProfileImage />} />
         <Route path="/dashboard" element={<Dashboard />} />
