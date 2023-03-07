@@ -148,16 +148,17 @@ export default function Profile() {
         <MatchHistoryTitle>Match History</MatchHistoryTitle>
         <MatchHistoryList>
         {matchHistory.map((match, index) => {
+        const [player1Name, player2Name] = match.name.split(" vs ");
         if (match.winnerId === userInformation.id) {
           return (
             <MatchHistoryItem key={index} className="winner">
-              {match.name}, Winner: {match.winnerName}
+               {player1Name} ({match.player1FinalScore}) vs {player2Name} ({match.player2FinalScore})
             </MatchHistoryItem>
           );
         } else if (match.looserId === userInformation.id) {
           return (
             <MatchHistoryItem key={index} className="loser">
-             {match.name}, Loser: {userInformation.name}
+              {player1Name} ({match.player1FinalScore}) vs {player2Name} ({match.player2FinalScore})
             </MatchHistoryItem>
           );
         } else {
