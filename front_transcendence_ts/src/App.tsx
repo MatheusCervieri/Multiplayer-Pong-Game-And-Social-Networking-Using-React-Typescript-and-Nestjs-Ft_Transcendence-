@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import game from './confs/game_information';
 import Displayroute from './Displayroute';
-import Header from './login_setup/header_setup/header_setup';
+import Header from './header/Header';
 import { createGlobalStyle } from 'styled-components';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -27,7 +27,7 @@ function App() {
   return (
     <>
     <GlobalStyle />
-    <Header game={game} />
+    <Header/>
     <ToastContainer />
     <br></br>
     <Displayroute/>

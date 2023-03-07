@@ -2,7 +2,54 @@ import React, { useEffect } from 'react';
 import {useState} from 'react';
 import { useNavigate } from 'react-router-dom';
 import  instance from '../confs/axios_information';
+import styled from 'styled-components';
 
+const Container = styled.div`
+  margin-top: 20px;
+`;
+
+const Title = styled.h2`
+  font-size: 24px;
+  text-align: center;
+  margin-bottom: 10px;
+`;
+
+const List = styled.ul`
+  list-style: none;
+  margin: 0;
+  padding: 0;
+`;
+
+const ListItem = styled.li`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  padding: 10px;
+  background-color: #f2f2f2;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+`;
+
+const Name = styled.span`
+  font-size: 18px;
+  font-weight: bold;
+`;
+
+const Button = styled.button<{ color: string }>`
+  padding: 5px 10px;
+  border: none;
+  border-radius: 4px;
+  background-color: ${({ color }) => color};
+  color: #fff;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+
+  &:hover {
+    background-color: ${({ color }) => color === "#f44336" ? "#e53935" : "#00b8d9"};
+  }
+`;
 
 
 const RunningGames = () => {
@@ -35,19 +82,19 @@ const RunningGames = () => {
       });
     }
 
-  return (
-    <div>
-      <h2>Running Games:</h2>
-      <ul>
-        {games.map((game) => (
-          <li key={game.id}>
-            <span>{game.name}</span>
-            <button onClick={() => watchBtn(game.id)}>Watch</button>
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
+    return (
+      <Container>
+        <Title>Running Games:</Title>
+        <List>
+          {games.map((game) => (
+            <ListItem key={game.id}>
+              <Name>{game.name}</Name>
+              <Button color="#00b8d9" onClick={() => watchBtn(game.id)}>Watch</Button>
+            </ListItem>
+          ))}
+        </List>
+      </Container>
+    );
 }
 
 export default RunningGames;
