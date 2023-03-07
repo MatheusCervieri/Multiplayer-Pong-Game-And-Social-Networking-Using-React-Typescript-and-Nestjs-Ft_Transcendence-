@@ -125,17 +125,19 @@ export default function Notification(props: NotificationProps) {
     }
   
     return (
-      <Container>
+      <>
          {
         inviteDiv && invitationData &&
+        <Container>
         <Content>
           <Title>You have a game invitation!</Title>
           <Message>{invitationData.playerThatInvited.name} has invited you to play a game!</Message>
           <Button color="#4caf50" onClick={acceptInvitation}>Accept Invitation</Button>
           <Button color="#f44336" onClick={declineInvitation}>Decline Invitation</Button>
         </Content>
+        </Container>
         }
-      </Container>
+     </>
     );
   
 }
