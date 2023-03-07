@@ -24,10 +24,9 @@ export class UserController {
     const user = await this.userService.findOneByName(params.name);
     if (user)
     {
-      const userprofile = {
-        name: user.name,
-        email: user.email,
-      }
+      const users = await this.userService.GetUsersRanking();
+      const userprofile = users.find((user) => user.id == request.user_id); 
+      //return sucessufull message with userprofile 
       return userprofile;
     }
     return "Invalid user";
