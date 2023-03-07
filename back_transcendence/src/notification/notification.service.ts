@@ -55,7 +55,9 @@ export class NotificationService {
     //validate if the playerToPlay status is online and not in a game and offline. 
     console.log("Chegou na função invite game");
     const InvitedPlayerStatus = await this.checkUsersStatus(InvitedUser.id);
-    
+    const playerThatInvited = this.connectedUsers.find(c => c.user.id === PlayerThatInvited.id);
+    const invitedPlayer = this.connectedUsers.find(c => c.user.id === InvitedUser.id);
+
     if(InvitedPlayerStatus == "Online")
     {
       //create a invitation. 
@@ -75,9 +77,6 @@ export class NotificationService {
       }
       else
       {
-
-        const playerThatInvited = this.connectedUsers.find(c => c.user.id === PlayerThatInvited.id);
-        const invitedPlayer = this.connectedUsers.find(c => c.user.id === InvitedUser.id);
         const gamedatabase = await this.gameService.createInviteGame(playerThatInvited, invitedPlayer);
         invitation.id = gamedatabase.id;
         this.invitations.push(invitation);
@@ -93,6 +92,8 @@ export class NotificationService {
      }
       //invite to play.
     }
+    else
+      playerThatInvited.emit("message", "Player is not avaliable to play!");
   }
   async declineInvite(invitation : invitation)
   {

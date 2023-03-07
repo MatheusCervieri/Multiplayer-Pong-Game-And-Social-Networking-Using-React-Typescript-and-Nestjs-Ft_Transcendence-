@@ -1,6 +1,26 @@
 import React, { useRef, useEffect, useState, useLayoutEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import GetToken from '../utils/GetToken';
+import styled from 'styled-components';
+
+const GameContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 20px;
+`;
+
+
+const ScoreContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f2f2f2;
+  padding: 10px;
+  border-radius: 4px;
+  margin-bottom: 10px;
+  font-size: 24px;
+`;
 
 interface GameCanvasProps {
   width: number;
@@ -50,20 +70,29 @@ const GameCanvas: React.FC<GameCanvasProps> = (props) => {
         
       if (context) {
         // Draw the left racket
-        context.fillStyle = 'red';
+        context.fillStyle = "#00b8d9";
         context.fillRect(0, 0, width * scaleX, height * scaleY);
-  
-        context.fillStyle = racketColor;
+
+        context.beginPath();
+        context.moveTo(0, 0);
+        context.lineTo(width * scaleX, 0);
+        context.moveTo(0, height * scaleY);
+        context.lineTo(width * scaleX, height * scaleY);
+        context.strokeStyle = "orange";
+        context.lineWidth = 10;
+        context.stroke();
+        
+
+        context.fillStyle = "orange";
         context.fillRect(gameData.player1RacketXPosition, gameData.player1RacketPosition, gameData.racketWidth, gameData.racketHeight);
           
         // Draw the right racket
-        context.fillStyle = racketColor;
+        context.fillStyle = "orange";
         context.fillRect(gameData.player2RacketXPosition, gameData.player2RacketPosition, gameData.racketWidth, gameData.racketHeight);
   
         // Draw the ball
         context.beginPath();
         context.arc(gameData.ballX, gameData.ballY, gameData.ballRadiues, 0, 2 * Math.PI);
-        context.fillStyle = "#FFFFFF";
         context.fill();
       }
     }
@@ -103,12 +132,15 @@ const GameCanvas: React.FC<GameCanvasProps> = (props) => {
 
  
   return (
-    <>
-    {gameData.player1Score !== undefined && <div>Player 1: {gameData.player1Score} - Player 2: {gameData.player2Score}</div>}
-    <div ref={containerRef} style={{ maxWidth: "360px", maxHeight: "270px" }}>
+   
+     <GameContainer>
+    {gameData.player1Score !== undefined && 
+    <ScoreContainer>{gameData.player1Score} - {gameData.player2Score}
+    </ScoreContainer>}
+    <div ref={containerRef} style={{ maxWidth: "360px", maxHeight: "270px", border: "2px solid #FFFFFF", borderRadius: "4px"}}>
     {height !== 0 && width !== 0 && <canvas ref={canvasRef} width={width * scaleX} height={height * scaleY}  style={{ width: '100%', height: '100%' }}/>}
     </div>
-    </>
+      </GameContainer>
   );
 };
 

@@ -98,6 +98,7 @@ const Users = (props : UserProps) => {
     .then(response => {
       console.log(response.data);
       setUsers(response.data);
+      //setUsers(sortUsersByStatus(users));
     })
     .catch(error => {
       console.error(error);
@@ -144,6 +145,23 @@ const Users = (props : UserProps) => {
       console.error(error);
     });
   }
+
+  function sortUsersByStatus(users: any[]): any[] {
+    return users.sort((a, b) => {
+      if (a.status === "online" && b.status !== "online") {
+        return -1; // a comes first
+      } else if (a.status !== "online" && b.status === "online") {
+        return 1; // b comes first
+      } else if (a.status === "playing" && b.status !== "playing") {
+        return -1; // a comes first
+      } else if (a.status !== "playing" && b.status === "playing") {
+        return 1; // b comes first
+      } else {
+        return 0; // no change in order
+      }
+    });
+  }
+ 
   /*
 
   */

@@ -64,6 +64,10 @@ export class NotificationGateway implements OnGatewayConnection, OnGatewayDiscon
           this.notificationService.InviteGame(user, playerToPlay);
             //send the invitation to the playerToPlay.
         }
+        else
+        {
+          client.emit("message", "You can´t invite yourself to play.");
+        }
       }
     }
   }
