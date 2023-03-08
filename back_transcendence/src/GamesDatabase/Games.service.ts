@@ -306,13 +306,13 @@ export class GamesServices {
     gamedatabase.player1FinalScore = rtGame.player1Score;
     gamedatabase.player2FinalScore = rtGame.player2Score;
    
-    if(rtGame.player1PauseTime > 0)
+    if(rtGame.timeToPausePlayer1 > 0)
     {
       gamedatabase.winnerName = rtGame.player1Name;
       gamedatabase.winnerId = gamedatabase.player1Id;
       gamedatabase.looserId = gamedatabase.player2Id;
     }
-    if(rtGame.player2PauseTime > 0)
+    if(rtGame.timeToPausePlayer2 > 0)
     {
       gamedatabase.winnerName = rtGame.player2Name;
       gamedatabase.winnerId = gamedatabase.player2Id;
@@ -327,6 +327,7 @@ export class GamesServices {
 
   updateGame(gameId: string, rtGame: RTGameRoomInterface) {
     rtGame.elepsedTime = new Date().getTime() - rtGame.creationDate;
+    
     if(rtGame.status === 'lobby')
     {
     rtGame.timeToStart = rtGame.lobbyTime - rtGame.elepsedTime;
@@ -355,13 +356,11 @@ export class GamesServices {
       {
         rtGame.status = 'paused';
         rtGame.pausedtime = new Date().getTime();
-       
       }
       if(rtGame.player2IsConnected === false)
       {
         rtGame.status = 'paused';
         rtGame.pausedtime = new Date().getTime();
-       
       }
     }
     if(rtGame.status === 'paused')
@@ -372,13 +371,15 @@ export class GamesServices {
       }
       if(rtGame.player1IsConnected === false)
       {
-        rtGame.player1PauseTime = rtGame.player1PauseTime - (new Date().getTime() - rtGame.pausedtime);
+        //elepsedtime = tempoatual - tempoqueojogofoipausado.
+        //timetodisconect = tempodepausa - elepsedtime
+        rtGame.timeToPausePlayer1 = rtGame.player1PauseTime - (new Date().getTime() - rtGame.pausedtime);
       }
       if(rtGame.player2IsConnected === false)
       {
-        rtGame.player2PauseTime = rtGame.player2PauseTime - (new Date().getTime() - rtGame.pausedtime);
+        rtGame.timeToPausePlayer2 = rtGame.player2PauseTime - (new Date().getTime() - rtGame.pausedtime);
       }
-      if (rtGame.player1PauseTime <= 0 || rtGame.player2PauseTime <= 0) 
+      if (rtGame.timeToPausePlayer1  <= 0 || rtGame.timeToPausePlayer2 <= 0) 
       {
         if(rtGame.player1IsConnected && rtGame.player2IsConnected)
         {
@@ -387,7 +388,6 @@ export class GamesServices {
         else
         {
           this.finishgamePaused(gameId, rtGame);
-          //FINISH GAME BECAUSE OF PAUSED TIME. 
         }
       }
       if(rtGame.player1IsConnected && rtGame.player2IsConnected)

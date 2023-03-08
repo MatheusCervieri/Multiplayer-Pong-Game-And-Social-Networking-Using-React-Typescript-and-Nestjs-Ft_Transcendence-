@@ -27,8 +27,8 @@ export default function GamePauseScream(props:  GamePauseScreamProps) {
     const { gameData } = props;
   return (
     <Container>
-    {!gameData.player1IsConnected && <Text>Player 1 is not connected, he has {Math.floor(gameData.player1PauseTime / 1000)} seconds to reconnect</Text>}
-    {!gameData.player2IsConnected && <Text>Player 2 is not connected, he has {Math.floor(gameData.player2PauseTime / 1000)} seconds to reconnect</Text>}
+    {!gameData.player1IsConnected && <Text>Player 1 is not connected, he has {Math.floor(gameData.timeToPausePlayer1 / 1000)} seconds to reconnect</Text>}
+    {!gameData.player2IsConnected && <Text>Player 2 is not connected, he has {Math.floor(gameData.timeToPausePlayer2 / 1000)} seconds to reconnect</Text>}
   </Container>
     )
 }

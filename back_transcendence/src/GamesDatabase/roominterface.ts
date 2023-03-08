@@ -33,6 +33,8 @@ export interface RTGameRoomInterface {
     firstBallPosition: number,
     player1PauseTime: number,
     player2PauseTime: number,
+    timeToPausePlayer1: number,
+    timeToPausePlayer2: number,
     pausedtime: number,
     lobbyTime: number,
 }
@@ -71,7 +73,9 @@ export const defaultGameRoom : RTGameRoomInterface = {
     ballVy: 7,
     firstBallPosition: 100,
     pausedtime: 0,
-    player1PauseTime: 100000,
-    player2PauseTime: 100000,
+    player1PauseTime: 10000,
+    player2PauseTime: 10000,
+    timeToPausePlayer1: 3000, //random number
+    timeToPausePlayer2: 3000,
     lobbyTime: 10000,
 };
