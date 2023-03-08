@@ -63,6 +63,9 @@ async getUserWhithTheirStatus(@Req() request: any): Promise<any> {
       delete user.password;
       return user;
     });
+    //remove the user that make the request from the array
+    const index = sanitizedUsers.findIndex((user) => user.id == request.user_id);
+    sanitizedUsers.splice(index, 1);
     return sanitizedUsers;
   } catch (error) {
     console.error(error);
@@ -183,6 +186,9 @@ async getFriends(@Req() request: any, @Body() body: any): Promise<any[]> {
       delete user.password;
       return user;
     });
+    //remove the user that make the request from the array
+    const index = sanitizedFriends.findIndex((user) => user.id == request.user_id);
+    sanitizedFriends.splice(index, 1);
     return sanitizedFriends;
   } catch (error) {
     console.error(error);
@@ -208,6 +214,11 @@ async Enable2fa(@Req() request: any, @Body() data: any): Promise<any> {
 
     user.TwofaAactive = true;
     user.email = data.email;
+    //Check if the email is already used by other user
+    const userWithSameEmail = await this.userService.findOneEmail(data.email);
+    if (userWithSameEmail) {
+      throw new HttpException('Email already used', HttpStatus.BAD_REQUEST);
+    }
     await this.userService.update(request.user_id, user);
 
     return { message: '2FA enabled' };

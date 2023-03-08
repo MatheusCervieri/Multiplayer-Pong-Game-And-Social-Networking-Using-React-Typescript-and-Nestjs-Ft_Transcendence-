@@ -92,7 +92,7 @@ const Dashboard = () => {
         <Button onClick={watchGame}>Watch a Game</Button>
         <Button onClick={() => {navigate('/chat')}}>Chat</Button>
         <Button onClick={() => {navigate('/ranking')}}>Ranking</Button>
-        <Button onClick={() => {navigate('/myprofile')}}>My Profile</Button>
+        <Button onClick={() => {navigate('/myperfil')}}>My Profile</Button>
         <Button onClick={handleLogout}>Log Out</Button>
       </div>
     </Container>
