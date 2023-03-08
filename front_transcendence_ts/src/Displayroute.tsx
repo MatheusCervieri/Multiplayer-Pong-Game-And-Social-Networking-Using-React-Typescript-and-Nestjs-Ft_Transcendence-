@@ -1,5 +1,5 @@
 
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, RouteMatch } from "react-router-dom";
 import Singup from "./login_setup/singup/singup";
 import Login from   "./login_setup/login/Login";
 import Setname from "./login_setup/Setname/Setname";
@@ -27,6 +27,7 @@ import TwoFaEnable from "./login_setup/2fa/TwoFaEnable";
 import { AuthCallbackRegister } from "./42api/AuthCallbackRegister";
 import Friends from "./dashboard/Friends";
 import MyPerfil from "./dashboard/myperfil/MyPerfil";
+import Header from "./header/Header";
 
 
 
@@ -35,6 +36,7 @@ const socket = io("http://localhost:8003");
 export default function Displayroute() {
   return (
     <BrowserRouter>
+    <Header/>
     <Notification socket={socket}/>
       <Routes>
         <Route path="/" element={<Singup />} />

@@ -15,6 +15,7 @@ const HeaderWrapper = styled.header`
 const Title = styled.h1`
   font-size: 2rem;
   margin: 0;
+  cursor: pointer;
 `;
 
 const Nav = styled.nav`
@@ -34,6 +35,7 @@ const ProfileImage = styled.img`
   height: 3em;
   width: 3em;
   object-fit: cover;
+  border-radius: 50%;
 `;
 
 const UserName = styled.p`
@@ -41,17 +43,49 @@ const UserName = styled.p`
 `;
 
 
+const Menu = styled.ul<{open : boolean}>`
+  position: absolute;
+  color: white;
+  top: 4rem;
+  right: 0;
+  background-color: #00b8d9;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  border-radius: 0.25rem;
+  z-index: 1;
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 0.2s ease-out;
+  list-style: none;
+  padding: 0; /* remove built-in padding */
+
+  ${({ open }) =>
+    open &&
+    `
+    max-height: 20rem;
+  `}
+`;
+
+const MenuItem = styled.li`
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  color: black;
+
+  cursor: pointer;
+
+  &:hover {
+    background-color: #f1f1f1;
+  }
+`;
+
 type HeaderProps = {
   showNav?: boolean;
 };
 
 
-//Image
-//Playername
-//Social 
-
 const Header: React.FC<HeaderProps> = ({ showNav = true }) => {
   const [user, setUserInformation] = useState<any>({});
+  const [showMenu, setShowMenu] = useState(false);
+  const navigate = useNavigate();
 
 
 
@@ -79,19 +113,30 @@ const Header: React.FC<HeaderProps> = ({ showNav = true }) => {
 
   function TitleClick()
   {
-    alert("teste");
+    navigate('/dashboard');
   }
+
+  function handleMenuClick() {
+    setShowMenu(!showMenu);
+  }
+
 
   return (
     <HeaderWrapper>
       <Title onClick={TitleClick}>Multiplayer Pong</Title>
       {showNav && (
         <Nav>
-          <NavLink href="/">Home</NavLink>
-          <NavLink href="/about">About</NavLink>
-          <NavLink href="/contact">Contact</NavLink>
           <UserName>{user.name}</UserName>
-          {user.id && <ProfileImage src={serverurl + "/publicimage/profileimage/" + user.id }></ProfileImage>}
+          {user.id && <ProfileImage onClick={handleMenuClick} src={serverurl + "/publicimage/profileimage/" + user.id }></ProfileImage>}
+          <Menu open={showMenu}>
+          <MenuItem onClick={() => {navigate('myperfil')}}>My Profile</MenuItem>
+          <MenuItem onClick={() => {navigate('users')}}>Users</MenuItem>
+          <MenuItem onClick={() => {navigate('friends')}}>Friends</MenuItem>
+          <MenuItem onClick={() => {
+                localStorage.removeItem('token');
+                navigate('../42');
+              }}>Log Out!</MenuItem>
+          </Menu>
         </Nav>
       )}
     </HeaderWrapper>

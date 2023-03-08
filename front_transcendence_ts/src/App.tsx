@@ -27,9 +27,7 @@ function App() {
   return (
     <>
     <GlobalStyle />
-    <Header/>
     <ToastContainer />
-    <br></br>
     <Displayroute/>
     </>
   );
