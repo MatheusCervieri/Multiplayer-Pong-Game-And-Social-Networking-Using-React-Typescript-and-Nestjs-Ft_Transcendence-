@@ -146,6 +146,10 @@ export class UsersService {
   }
 
   async findWithImage(id: number): Promise<User> {
+    if (!id) {
+      throw new Error('Invalid user ID');
+    }
+  
     return await this.usersRepository.findOne({
       where: { id },
       relations: ['image'],

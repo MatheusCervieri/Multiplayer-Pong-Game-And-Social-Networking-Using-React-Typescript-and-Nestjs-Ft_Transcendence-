@@ -22,11 +22,6 @@ export class ImageController {
     private readonly ImageService: ImageService,
     private readonly userService: UsersService) {}
 
-  @Get('hello')
-  async findOne(@Req() request: any): Promise<any> {
-    return "Hello World";
-  }
-
   @Post('upload')
   @UseInterceptors(FileInterceptor('image', {
     storage: diskStorage({
@@ -40,11 +35,6 @@ export class ImageController {
     }
   ,)}))
   async uploadImage(@UploadedFile() file: any, @Req() request: any): Promise<any> {
-    
-    //add form validation
-    //Check if user exists
-    //check if the file is a image.
-    //Check if the file size is smaller than 15MB
 
     const userId = request.user_id;
 
@@ -95,9 +85,12 @@ export class ImageController {
       return ({ message: err.message, statusCode: err.statusCode, error: err });
     }
   }
-
   @Get('profileimage/:id')
   async GetProfileImage(@Param('id') id: number, @Req() request : any, @Res() res: Response): Promise<any> {
+    if (!id || isNaN(id)) {
+      // Handle invalid ID
+      return res.status(400).send('Invalid ID');
+    }
     const user = await this.userService.findWithImage(id);
     if (!user || !user.image) {
       // Handle user not found or user without an image

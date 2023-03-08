@@ -23,7 +23,8 @@ export class AuthMiddleware implements NestMiddleware {
       return res.status(401).send('Access denied. No token provided.');
     }
     try {
-      const decoded = jwt.verify(token, 'mysecretkey');
+      const key = process.env.SECRET_KEY;
+      const decoded = jwt.verify(token, key);
       req.user_id = decoded.id;
       //Check if user has two factor authentication enabled
       next();

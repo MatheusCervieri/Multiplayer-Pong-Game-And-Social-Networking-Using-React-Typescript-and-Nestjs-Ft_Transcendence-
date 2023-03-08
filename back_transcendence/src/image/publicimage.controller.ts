@@ -22,6 +22,10 @@ export class PublicImageController {
 
   @Get('profileimage/:id')
   async GetProfileImage(@Param('id') id: number, @Req() request : any, @Res() res: Response): Promise<any> {
+    if (!id || isNaN(id)) {
+      // Handle invalid ID
+      return res.status(400).send('Invalid ID');
+    }
     const user = await this.userService.findWithImage(id);
     if (!user || !user.image) {
       // Handle user not found or user without an image
