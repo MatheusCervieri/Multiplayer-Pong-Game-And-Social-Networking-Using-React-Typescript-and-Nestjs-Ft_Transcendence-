@@ -50,11 +50,11 @@ const Status = styled.span<{ status: string }>`
   font-size: 16px;
   color: ${({ status }) => {
     switch (status) {
-      case "online":
+      case "Online":
         return "#4caf50"; // green
-      case "playing":
+      case "Playing":
         return "#9c27b0"; // purple
-      case "offline":
+      case "Offline":
         return "#f44336"; // red
       default:
         return "#000"; // default color (black)
@@ -97,8 +97,8 @@ const Users = (props : UserProps) => {
   })
     .then(response => {
       console.log(response.data);
-      setUsers(response.data);
-      //setUsers(sortUsersByStatus(users));
+      const sortedUsers = sortUsersByStatus(response.data); // sort the users array by status
+      setUsers(sortedUsers);
     })
     .catch(error => {
       console.error(error);
@@ -147,21 +147,23 @@ const Users = (props : UserProps) => {
   }
 
   function sortUsersByStatus(users: any[]): any[] {
-    return users.sort((a, b) => {
-      if (a.status === "online" && b.status !== "online") {
+    const sortedUsers = [...users];
+  
+    sortedUsers.sort((a, b) => {
+      if (a.status === "Online" && b.status !== "Online") {
         return -1; // a comes first
-      } else if (a.status !== "online" && b.status === "online") {
+      } else if (a.status !== "Online" && b.status === "Online") {
         return 1; // b comes first
-      } else if (a.status === "playing" && b.status !== "playing") {
+      } else if (a.status === "Playing" && b.status !== "Playing") {
         return -1; // a comes first
-      } else if (a.status !== "playing" && b.status === "playing") {
+      } else if (a.status !== "Playing" && b.status === "Playing") {
         return 1; // b comes first
       } else {
         return 0; // no change in order
       }
     });
+    return sortedUsers;
   }
- 
   /*
 
   */

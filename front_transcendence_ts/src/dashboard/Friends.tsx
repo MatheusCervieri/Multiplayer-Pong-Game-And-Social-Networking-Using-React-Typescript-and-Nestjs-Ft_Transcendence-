@@ -50,11 +50,11 @@ const Status = styled.span<{ status: string }>`
   font-size: 16px;
   color: ${({ status }) => {
     switch (status) {
-      case "online":
+      case "Online":
         return "#4caf50"; // green
-      case "playing":
+      case "Playing":
         return "#9c27b0"; // purple
-      case "offline":
+      case "Offline":
         return "#f44336"; // red
       default:
         return "#000"; // default color (black)
@@ -97,7 +97,8 @@ const Friends = (props : UserProps) => {
   })
     .then(response => {
       console.log(response.data);
-      setUsers(response.data);
+      const sortedUsers = sortUsersByStatus(response.data); // sort the users array by status
+      setUsers(sortedUsers);
     })
     .catch(error => {
       console.error(error);
@@ -107,33 +108,46 @@ const Friends = (props : UserProps) => {
     getUserInformation();
   }, []);
 
-  //socket.emit('authenticate', { token: token , game_id: id});
-  /*
-
-  */
+  function sortUsersByStatus(users: any[]): any[] {
+    const sortedUsers = [...users];
+  
+    sortedUsers.sort((a, b) => {
+      if (a.status === "Online" && b.status !== "Online") {
+        return -1; // a comes first
+      } else if (a.status !== "Online" && b.status === "Online") {
+        return 1; // b comes first
+      } else if (a.status === "Playing" && b.status !== "Playing") {
+        return -1; // a comes first
+      } else if (a.status !== "Playing" && b.status === "Playing") {
+        return 1; // b comes first
+      } else {
+        return 0; // no change in order
+      }
+    });
+    return sortedUsers;
+  }
 
   return (
     <Container>
       <Title>Friends</Title>
       <List>
         {users.map((user) => (
+          
           <ListItem key={user.id}>
             <div>
               <Image src={serverurl + "/publicimage/profileimage/" + user.id} alt="Profile" width="50" height="50" />
               {" "}
               <Name>{user.name}</Name>
-              <Status status={user.status}>{user.status}</Status>
+              <Status status={user.status}> {" - "} {user.status}</Status>
             </div>
             <div>
-             
               <Button color="#00b8d9" onClick={() => {
-                console.log(user.name);
                 const token = localStorage.getItem('token');
                 const data = { token: token, playerToPlayName : user.name}
                 props.socket.emit('invite-game', data);
               }}>Invite to Play</Button>
             </div>
-          </ListItem>
+          </ListItem> 
         ))}
       </List>
     </Container>

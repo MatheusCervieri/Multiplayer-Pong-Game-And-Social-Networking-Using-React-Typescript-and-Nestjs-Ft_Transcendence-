@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom';
+import { Navigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import  instance from '../confs/axios_information';
 import styled from "styled-components";
 
@@ -26,11 +27,29 @@ const Winner = styled.h2`
   margin-top: 30px;
 `;
 
+
+const Button = styled.button`
+  background-color: #00b8d9;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  margin: 10px;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #0066a0;
+  }
+`;
+
+
 export default function GameFinalScream(props: GameFinalScreamProps) {
     const { myuser } = props;
     const [gameData, setGameData] = useState<any>();
     const [playersName, setPlayersName] = useState<string[]>([]);
     const { id } = useParams<{ id: string | undefined }>();
+    const navigate = useNavigate();
 
     useEffect(() => {
         if(gameData)
@@ -80,6 +99,7 @@ export default function GameFinalScream(props: GameFinalScreamProps) {
             {gameData.winnerName !== myuser && gameData.winnerName !== "ERROR1" && (
               <Winner>{gameData.winnerName} Won!</Winner>
             )}
+            <Button onClick={() => navigate('/dashboard')}>Dashboard</Button>
           </div>
         )}
       </Container>

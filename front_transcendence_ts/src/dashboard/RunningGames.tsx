@@ -58,7 +58,7 @@ const RunningGames = () => {
 
     function watchBtn(gameid: any)
     {
-      navigate('game/'  + gameid);
+      navigate('../game/'  + gameid);
     }
 
     useEffect(() => {
