@@ -133,8 +133,22 @@ export class ChatRoomControllerNew {
         delete u.password;
       });
     }
+
+    if (Array.isArray(room.bannedusers)) {
+      room.bannedusers.forEach(u => {
+        delete u.token;
+        delete u.password;
+      });
+    }
   
     return room;
+  }
+
+  private removeTokenAndPasswordFromUsers(users: any[]): any[] {
+    return users.map(u => {
+      const { token, password, ...rest } = u;
+      return rest;
+    });
   }
 
   @Get('room-user-info/:id')
@@ -205,7 +219,10 @@ export class ChatRoomControllerNew {
       this.ChatRoomService.setNewOwner(room);
       //Leave the room. 
     }
-      return { message: 'Leave the room!', data: room };
+
+    const sanitizedRoom = this.removeTokenAndPasswordFromChatRoom(room);
+
+    return { message: 'Leave the room!', data: sanitizedRoom };
   }catch (error)
   {
     console.log(error);
@@ -216,15 +233,16 @@ export class ChatRoomControllerNew {
 
   @Post('make-admin-room/:id')
   async MakeAdmin(@Req() request: any, @Param('id') id: number, @Body() data: any): Promise<any> {
-    try{
+    try {
       const user = await this.UsersService.findOne(request.user_id);
       if (!user)
-        throw new Error("User not found");
+        throw new Error('User not found');
+
       // Get room using id.
       const room = await this.ChatRoomService.findOwner(id);
       if (!room)
-        throw new Error("Room not found");
-  
+        throw new Error('Room not found');
+
       // Check if user is the owner of the room.
       if (room.owner.id !== user.id) {
         throw new ForbiddenException('You are not authorized to change the room type.');
@@ -232,31 +250,31 @@ export class ChatRoomControllerNew {
 
       const userToMakeAdmin = await this.UsersService.findOneByName(data.name);
       if (!userToMakeAdmin)
-        throw new Error("User to make admin not found");
+        throw new Error('User to make admin not found');
+
       //Check if the user is in the room.
       const roomUsers = await this.ChatRoomService.findUsers(room.id);
       if (!roomUsers.some(u => u.id === userToMakeAdmin.id))
-        throw new Error("User to make admin is not in the room");
+        throw new Error('User to make admin is not in the room');
+
       //Check if the user is admin.
       const roomAdmin = await this.ChatRoomService.findAdminUsers(room.id);
       if (roomAdmin.some(u => u.id === userToMakeAdmin.id))
-        throw new Error("User to make admin is already admin");
-      //If not, make him admin. 
+        throw new Error('User to make admin is already admin');
+
+      //If not, make them admin.
       room.adminusers = roomAdmin;
       room.adminusers.push(userToMakeAdmin);
       await this.ChatRoomService.save(room);
 
-      const data1 = { message: "update-room", roomid: room.id};
-      this.ChatGateway.server.to(room.id.toString()).emit('update-room', data1);
+      const sanitizedRoom = this.removeTokenAndPasswordFromChatRoom(room);
 
-      return { message: 'User is now admin!', data: room };
-    }catch (error)
-    {
+      return { message: 'User is now admin!', data: sanitizedRoom };
+    } catch (error) {
       console.log(error);
       return { message: error };
     }
   }
-
   @Post('remove-admin-room/:id')
   async RemoveAdmin(@Req() request: any, @Param('id') id: number, @Body() data: any): Promise<any> {
       try{
@@ -295,7 +313,7 @@ export class ChatRoomControllerNew {
       const data1 = { message: "updateroom", roomid: room.id};
       console.log(room.id);
       this.ChatGateway.server.to(room.id.toString()).emit('update-room', data1);
-      return { message: 'User is now admin!', data: room };
+      return { message: 'User is now admin!', data: this.removeTokenAndPasswordFromChatRoom(room) };
     }catch (error)
     {
       console.log(error);
@@ -308,23 +326,21 @@ export class ChatRoomControllerNew {
   async GetBlocked(@Req() request: any, @Param('id') id: number, @Body() data: any): Promise<any> {
     // Get the room with the banned users using ID
     const room = await this.ChatRoomService.findRoomWithBlockedUsers(id);
-    //Check if the user that make the request is banned.
-    if (room.bannedusers.some(u => u.id === request.user_id))
-      return { isbanned: true , data: room.bannedusers };
+
+    //Check if the user that made the request is banned.
+    if (room.bannedusers.some(u => u.id === request.user_id)) {
+      const sanitizedBannedUsers = this.removeTokenAndPasswordFromUsers(room.bannedusers);
+      return { isbanned: true , data: sanitizedBannedUsers };
+    }
     
     // Return the banned users
-    return { isbanned: false , data: room.bannedusers };
+    const sanitizedBannedUsers = this.removeTokenAndPasswordFromUsers(room.bannedusers);
+    return { isbanned: false , data: sanitizedBannedUsers };
   }
 
   @Post('block-user-room/:id')
   async BlockUser(@Req() request: any, @Param('id') id: number, @Body() data: any): Promise<any> {
-    //Get user making the request using request;  
-    //Get room using id;
-    //Check if user making the request is the owner of the room or if user is a admin.
-    //Check if user to block is in the room.
-    //Check if user to block is already blocked.
-    //If not, block him.
-    //If yes, throw error.
+   
     try{
       const user = await this.UsersService.findOne(request.user_id);
       if (!user)
@@ -334,7 +350,6 @@ export class ChatRoomControllerNew {
       if (!room)
         throw new Error("Room not found");
   
-      // Check if user is the owner of the room or if user is a admin. If it is a admin or owner, he can block users.
       if (room.owner.id !== user.id) {
         const roomAdmin = await this.ChatRoomService.findAdminUsers(room.id);
         if (!roomAdmin.some(u => u.id === user.id))
@@ -362,7 +377,8 @@ export class ChatRoomControllerNew {
       room.bannedusers = roomBlocked;
       room.bannedusers.push(userToBlock);
       await this.ChatRoomService.save(room);
-      return { message: 'User is now blocked!', data: room };
+      const sanitizedRoom = this.removeTokenAndPasswordFromChatRoom(room);
+      return { message: 'User is now blocked!', data: sanitizedRoom };
     }catch (error)
     {
       console.log(error);
@@ -416,7 +432,8 @@ export class ChatRoomControllerNew {
       room.bannedusers = roomBlocked;
       room.bannedusers = room.bannedusers.filter(u => u.id !== userToUnBlock.id);
       await this.ChatRoomService.save(room);
-      return { message: 'User is now unblocked!', data: room };
+      const sanitizedRoom = this.removeTokenAndPasswordFromChatRoom(room);
+      return { message: 'User is now unblocked!', data: sanitizedRoom };
     }catch (error)
     {
       console.log(error);
@@ -470,7 +487,8 @@ async MuteUser(@Req() request: any, @Param('id') id: number, @Body() data: any):
       room.mutedusers = roomMuted;
       room.mutedusers.push(userToMute);
       await this.ChatRoomService.save(room);
-      return { message: 'User is now muted!', data: room };
+      const sanitizedRoom = this.removeTokenAndPasswordFromChatRoom(room);
+      return { message: 'User is now muted!', data: sanitizedRoom };
     }catch (error)
     {
       console.log(error);
@@ -524,7 +542,8 @@ async UnMuteUser(@Req() request: any, @Param('id') id: number, @Body() data: any
       room.mutedusers = roomMuted;
       room.mutedusers = room.mutedusers.filter(u => u.id !== userToUnMute.id);
       await this.ChatRoomService.save(room);
-      return { message: 'User is now unmuted!', data: room };
+      const sanitizedRoom = this.removeTokenAndPasswordFromChatRoom(room);
+      return { message: 'User is now unmuted!', data: sanitizedRoom };
     }catch (error)
     {
       console.log(error);
@@ -579,7 +598,9 @@ async GetRoomUsersStatus(@Req() request: any, @Param('id') id: number): Promise<
         
         return user;
       })
-      return { message: 'Users and their status in the room', data: {room, users} };
+      const sanitizedRoom = this.removeTokenAndPasswordFromChatRoom(room);
+      const sanitizedUsers = this.removeTokenAndPasswordFromUsers(users);
+      return { message: 'Users and their status in the room', data: {sanitizedRoom, sanitizedUsers} };
     }catch (error)
     {
       console.log(error);
