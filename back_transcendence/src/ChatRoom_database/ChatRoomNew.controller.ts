@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Delete, HttpCode, HttpStatus, Post, Req, HttpException, ForbiddenException, Inject } from '@nestjs/common';
+import { Body, Controller, Get, Delete, HttpCode, HttpStatus, Post, Req, HttpException, ForbiddenException, InternalServerErrorException, NotFoundException, Inject } from '@nestjs/common';
 import { ChatRoomService } from './ChatRoom.service';
 import { UseInterceptors } from '@nestjs/common';
 import { AuthMiddleware } from '../user_database/auth.middleware'
@@ -19,7 +19,9 @@ export class ChatRoomControllerNew {
 
   @Post('create-room')
   async create_room(@Req() request: any, @Body() data : any): Promise<any> {
-    console.log("Create room!!!!");
+ 
+    try
+    {
     const new_ChatRoom = new ChatRoom();
     new_ChatRoom.name = data.name;
     new_ChatRoom.type = data.type;
@@ -27,54 +29,113 @@ export class ChatRoomControllerNew {
     new_ChatRoom.adm = data.adm;
 
     let chat = await this.ChatRoomService.create(new_ChatRoom);
-    
-    //Add a new user. 
+
+    // Check if chat exists
+    if (!chat) {
+      throw new NotFoundException('Chat not found');
+    }
+
+    // Add a new user
     const user = await this.UsersService.findOne(request.user_id);
 
+    // Check if user exists
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
     const room = await this.ChatRoomService.findOne(chat.id);
-  
+
+    // Check if room exists
+    if (!room) {
+      throw new NotFoundException('Room not found');
+    }
+
     room.users = await this.ChatRoomService.findUsers(room.id);
-  
+
     room.users.push(user);
-    
+
     await this.ChatRoomService.save(room);
- 
     //Add as owner.
     chat = await this.ChatRoomService.findOne(chat.id);
     chat.owner = user;
     await this.ChatRoomService.update(chat.id, chat);
 
-
     //Add as admin. 
     chat = await this.ChatRoomService.findOne(chat.id);
     chat.adminusers = await this.ChatRoomService.findAdminUsers(chat.id);
-    console.log(chat.adminusers);
     chat.adminusers.push(user);
 
     await this.ChatRoomService.save(chat);
     return chat;
+    }
+    catch (e) {
+      return e;
+    }
 
   }
 
   //Teria que ser feito umas validações aqui. 
   @Post('add-user-room/:id')
   async addUserToChatRoom(@Req() request: any, @Param() params: any, @Body() userToAdd: any): Promise<any> {
-    const user = await this.UsersService.findOne(request.user_id);
-    const room = await this.ChatRoomService.findRoomWithJustUsers(params.id);
-    console.log(room);
+    try {
+      const user = await this.UsersService.findOne(request.user_id);
+      if (!user) {
+        throw new NotFoundException('User Not Found!');
+      }
+      const roomId = params.id;
+      const room = await this.ChatRoomService.findRoomWithJustUsers(roomId);
   
-    // Check if the user is already in the room
-    const isUserInRoom = room.users.some(u => u.id === user.id);
-    if (isUserInRoom) {
-      console.log('User is already in the room');
-      return room;
+      // Check if the room exists
+      if (!room) {
+        throw new NotFoundException('Room not found');
+      }
+  
+      // Check if the user is already in the room
+      const isUserInRoom = room.users.some(u => u.id === user.id);
+      if (isUserInRoom) {
+        console.log('User is already in the room');
+        return this.removeTokenAndPasswordFromChatRoom(room);
+      }
+  
+      // Add the user to the room and save it
+      const userToAdd = await this.UsersService.findOne(user.id);
+  
+      // Check if the user exists
+      if (!userToAdd) {
+        throw new NotFoundException('User not found');
+      }
+  
+      room.users.push(userToAdd);
+      await this.ChatRoomService.save(room);
+  
+      return this.removeTokenAndPasswordFromChatRoom(room);
+    } catch (err) {
+      throw new InternalServerErrorException(err.message);
     }
-  
-    // Add the user to the room and save it
-    room.users.push(user);
-    return await this.ChatRoomService.save(room);
   }
   
+  private removeTokenAndPasswordFromChatRoom(room: ChatRoom): ChatRoom {
+    if (Array.isArray(room.users)) {
+      room.users.forEach(u => {
+        delete u.token;
+        delete u.password;
+      });
+    } 
+  
+    if (room.owner) {
+      delete room.owner.token;
+      delete room.owner.password;
+    }
+  
+    if (Array.isArray(room.adminusers)) {
+      room.adminusers.forEach(u => {
+        delete u.token;
+        delete u.password;
+      });
+    }
+  
+    return room;
+  }
 
   @Get('room-user-info/:id')
   async getChatRoomInfo(@Param('id') id: number): Promise<any> {
@@ -83,7 +144,9 @@ export class ChatRoomControllerNew {
       
       console.log(chatRoom);
 
-      return chatRoom[0];
+      const sanitizedChatRoom = this.removeTokenAndPasswordFromChatRoom(chatRoom[0]);
+
+      return sanitizedChatRoom;
 
     } catch (error) {
       console.error(error);
@@ -112,7 +175,9 @@ export class ChatRoomControllerNew {
     // If yes, change the type.
     const updatedRoom = await this.ChatRoomService.updateRoomType(room.id, data.type, data.password);
 
-    return { message: 'Room type updated successfully.', data: updatedRoom };
+    const sanitizedRoom = this.removeTokenAndPasswordFromChatRoom(updatedRoom);
+
+    return { message: 'Room type updated successfully.', data: sanitizedRoom };
   }
 
   @Post('leave-room/:id')
