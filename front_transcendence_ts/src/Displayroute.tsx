@@ -52,7 +52,7 @@ export default function Displayroute() {
         <Route path='/users' element={<><Header/><Users socket={socket}/></>} />
         <Route path='chat/:id' element={<><Header/><Chatroom socket={socket}/></>} />
         <Route path='game/:id' element={<><Header/><Game/></>} />
-        <Route path='profile/:name' element={<Profile/>} />
+        <Route path='profile/:name' element={<><Header/><Profile/></>} />
       </Routes>
     </BrowserRouter>
   )

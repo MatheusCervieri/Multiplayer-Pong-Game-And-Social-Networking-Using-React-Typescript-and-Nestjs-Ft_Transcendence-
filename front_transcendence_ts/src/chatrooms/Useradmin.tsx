@@ -93,12 +93,16 @@ const UserAdmin : any = (props : UserAdminProps) => {
   const { id } = useParams<{ id: string | undefined }>();
   
   useEffect(() => {
+    console.log("TESTESSSSSDAS SADSA DSA DASDSA DASD ASD");
+    console.log("PROPS INFORMATION", props.information);
     setInformation(props.information);
-
+    console.log("INFORMATION", information);
+   
   },[]);
+ 
 
   useEffect(() => {
-    handlePassword(props.information.room);
+    handlePassword(props.information.sanitizedRoom);
     setuserPrivilleges(props.myStatus);
     setUsers(props.information.users);
     console.log("USERSSSSSSSSS", users);
@@ -266,11 +270,12 @@ const UserAdmin : any = (props : UserAdminProps) => {
 
 
   return (
-    <Container>
+   <>{props.information &&
+  <Container>
   {showSetRoomType && <SetRoomType setShowSetRoomType={setShowSetRoomType} />}
   {showOwner && <PassButton onClick={handleSetPassBtn}>Set Password</PassButton> }
   <br></br>
-  <Owner>Owner: {props.information.room.owner.name}</Owner>
+  <Owner>Owner: {props.information.sanitizedRoom.owner.name}</Owner>
   <Input
     type="text"
     placeholder="Search users..."
@@ -305,8 +310,8 @@ const UserAdmin : any = (props : UserAdminProps) => {
       ))}
     </ul>
   </UserListContainer>
-</Container>
-  );
+</Container>}</>
+              );
 };
 
 export default UserAdmin;

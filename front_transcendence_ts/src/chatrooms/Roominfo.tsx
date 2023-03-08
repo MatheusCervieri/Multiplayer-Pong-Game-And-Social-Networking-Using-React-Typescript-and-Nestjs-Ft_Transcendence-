@@ -57,8 +57,9 @@ export default function Roominfo(props: RoominfoProps) {
             'Authorization': `Bearer ${token}`
           }
         });
-            console.log("Response data ", response.data.data);
-            props.setUserInformation(response.data.data); //room, userStatus: {user, userStatus}
+            console.log("Response data blablabla", response.data.data);
+            props.setUserInformation(response.data.data); 
+            //room, userStatus: {user, userStatus}
             console.log("Information", props.UserInformation);
             props.setShowInfo(!props.showInfo);
             return 0;

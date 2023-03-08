@@ -37,11 +37,12 @@ export class UserController {
 async findProfileByName(@Param() params: any, @Req() request: any): Promise<any> {
   try {
     // Get the user profile and exclude the token and password fields
-    const userName = params.name;
-    const user = await this.userService.findOneByName(userName);
-    if (user) {
+    const userName = decodeURIComponent(params.name);
+    
+    const userProfile = await this.userService.findOneByName(userName);
+    if (userProfile) {
       const users = await this.userService.GetUsersRanking();
-      const userprofile = users.find((user) => user.id == request.user_id);
+      const userprofile = users.find((user) => user.id == userProfile.id);
       delete userprofile.token;
       delete userprofile.password;
       return userprofile;
