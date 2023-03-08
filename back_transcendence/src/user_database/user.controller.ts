@@ -13,7 +13,7 @@ import { validate } from 'class-validator';
 export class UserController {
   constructor(private readonly userService: UsersService) {}
 
-  @Get('findOne')
+  @Get()
   async findOne(@Req() request: any): Promise<any> {
     try {
       // Get the user object and exclude the token and password fields
