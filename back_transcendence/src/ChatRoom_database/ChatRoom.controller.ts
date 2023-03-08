@@ -14,13 +14,19 @@ export class ChatRoomController {
     private readonly UsersService: UsersService
     ) {}
 
+  private removeTokenAndPasswordFromChatRoom(room: any): any {
+    const { token, password, ...rest } = room;
+    return rest;
+  }
+
   @Get('get-rooms')
   async findAllPublic(@Req() request: any): Promise<any> {
     const privateRooms = await this.ChatRoomService.findAllPrivate();
     const publicRooms = await this.ChatRoomService.findAllPublic();
     const protectedRooms = await this.ChatRoomService.findAllProtected();
     const rooms = privateRooms.concat(publicRooms, protectedRooms);
-    return rooms;
+    const sanitizedRooms = rooms.map(r => this.removeTokenAndPasswordFromChatRoom(r));
+    return sanitizedRooms;
   }
 
   @Get('get-room-created/:id')
@@ -46,7 +52,8 @@ export class ChatRoomController {
       // Perform the necessary logic to check if the room with the given id is created
       const room = await this.ChatRoomService.findOne(roomId);
       if (room) {
-        return { room };
+        const sanitizedRoom = this.removeTokenAndPasswordFromChatRoom(room);
+        return { room: sanitizedRoom };
       } else {
         return { status: 404, message: 'Room is not found' };
       }
@@ -60,7 +67,8 @@ export class ChatRoomController {
     const username = decodeURIComponent(params.user);
     const user = await this.UsersService.findOneByName(username);
     const DmsRooms = await this.ChatRoomService.findDMsByUser(user);
-    return DmsRooms;
+    const sanitizedRooms = DmsRooms.map(r => this.removeTokenAndPasswordFromChatRoom(r));
+    return sanitizedRooms;
   }
 
   @Get('get-dms2/:user')
@@ -72,8 +80,8 @@ export class ChatRoomController {
     const RoomsWithSpecificUser = RoomsDMS.filter(chatRoom => {
       return chatRoom.users.some(user => user.id === useroficial.id);
     });
-    console.log(RoomsWithSpecificUser);
-    return RoomsWithSpecificUser;
+    const sanitizedRooms = RoomsWithSpecificUser.map(r => this.removeTokenAndPasswordFromChatRoom(r));
+    return sanitizedRooms;
   }
 
   @Get('get-room-messages/:id')
@@ -90,58 +98,47 @@ export class ChatRoomController {
 }
 */
 
-  @Post('create-room')
-  async create_room(@Req() request: any, @Body() data : any): Promise<any> {
-    const new_ChatRoom = new ChatRoom();
-    new_ChatRoom.name = data.name;
-    new_ChatRoom.type = data.type;
-    new_ChatRoom.password = data.password;
-    new_ChatRoom.adm = data.adm;
-    return await this.ChatRoomService.create(new_ChatRoom);
 
-    //quando o room é criado a gente precisa adicionar o owner. 
-  }
-
-  @Post('create-room-dm')
+@Post('create-room-dm')
   async create_room_dm(@Req() request: any, @Body() data : any): Promise<any> {
     const new_ChatRoom = new ChatRoom();
     new_ChatRoom.name = data.name;
     new_ChatRoom.type = data.type;
     new_ChatRoom.password = data.password;
     new_ChatRoom.adm = data.adm;
-    console.log("New dm");
   
-      const user = await this.UsersService.findOneByName(data.users[0]);
-      if (!user) {
-        throw new HttpException('User not found', HttpStatus.NOT_FOUND);
-      }
-      const user2 = await this.UsersService.findOneByName(data.users[1]);
-      if (!user) {
-        throw new HttpException('User not found', HttpStatus.NOT_FOUND);
-      }
+    const user = await this.UsersService.findOneByName(data.users[0]);
+    if (!user) {
+      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+    }
+    const user2 = await this.UsersService.findOneByName(data.users[1]);
+    if (!user2) {
+      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+    }
+    
     const dmroom = await this.ChatRoomService.create(new_ChatRoom);
     dmroom.users =  await this.ChatRoomService.findUsers(dmroom.id);
     dmroom.users.push(user);
     dmroom.users.push(user2);
     await this.ChatRoomService.save(dmroom);
-    console.log(dmroom);
-    return dmroom;
+    
+    const sanitizedRoom = this.removeTokenAndPasswordFromChatRoom(dmroom);
+    return sanitizedRoom;
   }
 
   @Post('add-user-room/:id')
   async AddUsersToChatRoom(@Param() params: any, @Body() data : any): Promise<any> {
-    console.log("Add user to room! ");
     const user = await this.UsersService.findOneByName(data.name);
     if (!user) {
       throw new HttpException('User not found', HttpStatus.NOT_FOUND);
     }
     const room = await this.ChatRoomService.findOne(params.id);
-  
     room.users = await this.ChatRoomService.findUsers(room.id);
-  
     room.users.push(user);
     
-    return await this.ChatRoomService.save(room);
+    await this.ChatRoomService.save(room);
+    const sanitizedRoom = this.removeTokenAndPasswordFromChatRoom(room);
+    return sanitizedRoom;
   }
 
   @Get('room-users/:id')
