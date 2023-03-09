@@ -2,6 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import  instance, { serverurl } from '../confs/axios_information';
+import Modal from 'react-modal';
+import Users from '../dashboard/Users';
+import Friends from '../dashboard/Friends';
+import RunningGames from '../dashboard/RunningGames';
 
 const HeaderWrapper = styled.header`
   display: flex;
@@ -77,14 +81,28 @@ const MenuItem = styled.li`
   }
 `;
 
+
+
+const CustomModal = styled(Modal)`
+  margin: 100px;
+
+  @media (max-width: 768px) {
+    margin: 50px;
+  }
+`;
+
 type HeaderProps = {
   showNav?: boolean;
+  socket: any;
 };
 
 
-const Header: React.FC<HeaderProps> = ({ showNav = true }) => {
+const Header: React.FC<HeaderProps> = ({ showNav = true, socket }) => {
   const [user, setUserInformation] = useState<any>({});
   const [showMenu, setShowMenu] = useState(false);
+  const [showUsersModal, setShowUsersModal] = useState(false);
+  const [showFriendsModal, setShowFriendsModal] = useState(false);
+  const [showWatchGamesModal, setShowWatchGamesModal] = useState(false);
   const navigate = useNavigate();
 
 
@@ -120,8 +138,24 @@ const Header: React.FC<HeaderProps> = ({ showNav = true }) => {
     setShowMenu(!showMenu);
   }
 
+  function TogleUserModal()
+  {
+    setShowUsersModal(false);
+  }
+
+  function TogleFriendsModal()
+  {
+    setShowFriendsModal(false);
+  }
+
+  function TogleWatchGames()
+  {
+    setShowWatchGamesModal(false);
+  }
+
 
   return (
+    <>
     <HeaderWrapper>
       <Title onClick={TitleClick}>Multiplayer Pong</Title>
       {showNav && (
@@ -130,8 +164,20 @@ const Header: React.FC<HeaderProps> = ({ showNav = true }) => {
           {user.id && <ProfileImage onClick={handleMenuClick} src={serverurl + "/publicimage/profileimage/" + user.id }></ProfileImage>}
           <Menu open={showMenu}>
           <MenuItem onClick={() => {navigate('../myperfil')}}>My Profile</MenuItem>
-          <MenuItem onClick={() => {navigate('../users')}}>Users</MenuItem>
-          <MenuItem onClick={() => {navigate('../friends')}}>Friends</MenuItem>
+          <MenuItem onClick={() => {
+            setShowUsersModal(true)
+            setShowMenu(false);
+            }}>Users</MenuItem>
+             
+          <MenuItem onClick={() => {
+            setShowFriendsModal(true)
+            setShowMenu(false);
+
+          }}>Friends</MenuItem>
+          <MenuItem onClick={() => {
+            setShowWatchGamesModal(true)
+            setShowMenu(false);
+          }}>Watch Games</MenuItem>
           <MenuItem onClick={() => {
                 localStorage.removeItem('../token');
                 navigate('../42');
@@ -140,6 +186,16 @@ const Header: React.FC<HeaderProps> = ({ showNav = true }) => {
         </Nav>
       )}
     </HeaderWrapper>
+    <CustomModal isOpen={showUsersModal}  onRequestClose={TogleUserModal}>
+      <Users socket={socket}/>
+    </CustomModal>
+    <CustomModal isOpen={showFriendsModal}  onRequestClose={TogleFriendsModal}>
+      <Friends socket={socket}/>
+    </CustomModal>
+    <CustomModal isOpen={showWatchGamesModal}  onRequestClose={TogleWatchGames}>
+      <RunningGames/>
+    </CustomModal>
+    </>
   );
 };
 

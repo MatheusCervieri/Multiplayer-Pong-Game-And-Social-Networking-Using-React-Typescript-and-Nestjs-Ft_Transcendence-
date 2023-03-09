@@ -32,28 +32,28 @@ const socket = io("http://localhost:8003");
 export default function Displayroute() {
   return (
     <BrowserRouter>
-    <Notification socket={socket}/>
-      <Routes>
-        <Route path="/42" element={<><LoginHeader/>< Authapi /></>}/>
-        <Route path="/" element={<><LoginHeader/><> <Singup /></></>} />
-        <Route path="/login" element={<><LoginHeader/><Login  /></>} />
-        <Route path="/auth" element={<><Header/><AuthCallback  /></>} />
-        <Route path="/authregister" element={<><Header/><AuthCallbackRegister  /></>} />
-        <Route path="/twofa" element={<><Header/><SendTwoFaCode  /></>} />
-        <Route path="/setname" element={<><LoginHeader/><Setname /></>} />
-        <Route path="/setprofileimage" element={<><LoginHeader/><SetProfileImage /></>} />
-        <Route path="/dashboard" element={<><Header/><Dashboard /></>} />
-        <Route path="/myperfil" element={<><Header/> <MyPerfil /></>} />
-        <Route path="/friends" element={<><Header/><Friends socket={socket} /></>} />
-        <Route path='/chat' element={<><Header/><ChatInterface /></>} />
-        <Route path='/findgame' element={<><Header/><FindGame /></>} />
-        <Route path='/watchgame' element={<><Header/><RunningGames/></>} />
-        <Route path='/ranking' element={<><Header/><Ranking/></>} />
-        <Route path='/users' element={<><Header/><Users socket={socket}/></>} />
-        <Route path='chat/:id' element={<><Header/><Chatroom socket={socket}/></>} />
-        <Route path='game/:id' element={<><Header/><Game/></>} />
-        <Route path='profile/:name' element={<><Header/><Profile/></>} />
-      </Routes>
-    </BrowserRouter>
+  <Notification socket={socket} />
+  <Routes>
+    <Route path="/42" element={<><LoginHeader/><Authapi /></>}/>
+    <Route path="/" element={<><LoginHeader/><> <Singup /></></>} />
+    <Route path="/login" element={<><LoginHeader/><Login  /></>} />
+    <Route path="/auth" element={<><Header socket={socket}/><AuthCallback  /></>} />
+    <Route path="/authregister" element={<><Header socket={socket}/><AuthCallbackRegister  /></>} />
+    <Route path="/twofa" element={<><Header socket={socket}/><SendTwoFaCode  /></>} />
+    <Route path="/setname" element={<><LoginHeader/><Setname /></>} />
+    <Route path="/setprofileimage" element={<><LoginHeader/><SetProfileImage /></>} />
+    <Route path="/dashboard" element={<><Header socket={socket}/><Dashboard /></>} />
+    <Route path="/myperfil" element={<><Header socket={socket}/><MyPerfil /></>} />
+    <Route path="/friends" element={<><Header socket={socket}/><Friends socket={socket} /></>} />
+    <Route path='/chat' element={<><Header socket={socket}/><ChatInterface /></>} />
+    <Route path='/findgame' element={<><Header socket={socket}/><FindGame /></>} />
+    <Route path='/watchgame' element={<><Header socket={socket}/><RunningGames/></>} />
+    <Route path='/ranking' element={<><Header socket={socket}/><Ranking/></>} />
+    <Route path='/users' element={<><Header socket={socket}/><Users socket={socket}/></>} />
+    <Route path='chat/:id' element={<><Header socket={socket}/><Chatroom socket={socket}/></>} />
+    <Route path='game/:id' element={<><Header socket={socket}/><Game/></>} />
+    <Route path='profile/:name' element={<><Header socket={socket}/><Profile/></>} />
+  </Routes>
+</BrowserRouter>
   )
 }
