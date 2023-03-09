@@ -6,7 +6,6 @@ import GetToken from '../utils/GetToken';
 import  instance from '../confs/axios_information';
 import axios from 'axios';
 import { serverurl } from '../confs/axios_information';
-import Privateroomdiv from './Privateroomdiv';
 import UserSearch from '../utils/components/Usersearch';
 import GetUserData from '../utils/GetUserData';
 import Message from './Message';
@@ -147,7 +146,7 @@ interface ChatRoomProps {
 const Chatroom = (props: ChatRoomProps) => {
 const [ messages, setMessages ] = useState<{id: number , user: string, message:string}[]>([]);
 const { id } = useParams<{ id: string | undefined }>();
-const [ message, setMessage ] = useState<string>('Test Message');
+const [ message, setMessage ] = useState<string>('');
 const [username, setUsername] = useState<string>('');
 const [data, setData] = useState<{id: string, name: string, adm: string | null , type: string | null , password:string | null }>();
 const [renderPage, SetRenderPage] = useState<boolean>(false);
@@ -205,7 +204,7 @@ async function start()
             }
             else 
             {
-            console.log(response.data.room);
+            console.log("ROOMMM ATT CHATROOM", response.data.room);
             setData(response.data.room);
             InitializeRoom(response.data.room, userdata.name);
             }
@@ -387,10 +386,11 @@ function handleRoom(){
 
 const addUserToChatRoom = async (userName : string, roomId : string | undefined) => {
   const token = localStorage.getItem('token');
+  const data = {
+    name: userName,
+  }
   try {
-    const response = await axios.post(serverurl + `/room/add-user-room/${roomId}`, {
-      name: userName
-    }, 
+    const response = await axios.post(serverurl + `/room/add-user-room/${roomId}`, data, 
     {
       headers: {
         'Authorization': `Bearer ${token}`
@@ -402,6 +402,7 @@ const addUserToChatRoom = async (userName : string, roomId : string | undefined)
     console.error(error);
   }
 };
+
 
 function AddUserToRoom(user : string)
 {

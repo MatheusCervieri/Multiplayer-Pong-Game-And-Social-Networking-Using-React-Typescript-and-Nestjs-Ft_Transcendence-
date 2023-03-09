@@ -52,8 +52,7 @@ export class ChatRoomController {
       // Perform the necessary logic to check if the room with the given id is created
       const room = await this.ChatRoomService.findOne(roomId);
       if (room) {
-        const sanitizedRoom = this.removeTokenAndPasswordFromChatRoom(room);
-        return { room: sanitizedRoom };
+        return { room: room };
       } else {
         return { status: 404, message: 'Room is not found' };
       }
@@ -128,6 +127,7 @@ export class ChatRoomController {
 
   @Post('add-user-room/:id')
   async AddUsersToChatRoom(@Param() params: any, @Body() data : any): Promise<any> {
+    console.log("teste");
     const user = await this.UsersService.findOneByName(data.name);
     if (!user) {
       throw new HttpException('User not found', HttpStatus.NOT_FOUND);

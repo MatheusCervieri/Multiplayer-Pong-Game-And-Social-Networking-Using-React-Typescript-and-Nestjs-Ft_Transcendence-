@@ -88,6 +88,7 @@ const UserSearch = (props: UserSearchProps) => {
   
     return (
       <Container>
+        <br></br>
       <Input type="text" value={searchTerm} onChange={handleSearchInput} />
       <Ul>
       {filteredUsers.slice(0, 5).map((user, index) => {

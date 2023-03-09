@@ -76,11 +76,11 @@ export class ChatRoomControllerNew {
 
   //Teria que ser feito umas validações aqui. 
   @Post('add-user-room/:id')
-  async addUserToChatRoom(@Req() request: any, @Param() params: any, @Body() userToAdd: any): Promise<any> {
+  async addUserToChatRoom(@Req() request: any, @Param() params: any, @Body() data: any): Promise<any> {
     try {
       const user = await this.UsersService.findOne(request.user_id);
       if (!user) {
-        throw new NotFoundException('User Not Found!');
+        throw new NotFoundException('User(Request) Not Found!');
       }
       const roomId = params.id;
       const room = await this.ChatRoomService.findRoomWithJustUsers(roomId);
@@ -91,14 +91,14 @@ export class ChatRoomControllerNew {
       }
   
       // Check if the user is already in the room
-      const isUserInRoom = room.users.some(u => u.id === user.id);
+      const isUserInRoom = room.users.some(u => u.name === data.name);
       if (isUserInRoom) {
         console.log('User is already in the room');
         return this.removeTokenAndPasswordFromChatRoom(room);
       }
   
       // Add the user to the room and save it
-      const userToAdd = await this.UsersService.findOne(user.id);
+      const userToAdd = await this.UsersService.findOneByName(data.name);
   
       // Check if the user exists
       if (!userToAdd) {
