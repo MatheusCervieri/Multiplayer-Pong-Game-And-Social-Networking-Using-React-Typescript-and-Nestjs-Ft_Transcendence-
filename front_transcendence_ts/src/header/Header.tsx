@@ -129,11 +129,11 @@ const Header: React.FC<HeaderProps> = ({ showNav = true }) => {
           <UserName>{user.name}</UserName>
           {user.id && <ProfileImage onClick={handleMenuClick} src={serverurl + "/publicimage/profileimage/" + user.id }></ProfileImage>}
           <Menu open={showMenu}>
-          <MenuItem onClick={() => {navigate('myperfil')}}>My Profile</MenuItem>
-          <MenuItem onClick={() => {navigate('users')}}>Users</MenuItem>
-          <MenuItem onClick={() => {navigate('friends')}}>Friends</MenuItem>
+          <MenuItem onClick={() => {navigate('../myperfil')}}>My Profile</MenuItem>
+          <MenuItem onClick={() => {navigate('../users')}}>Users</MenuItem>
+          <MenuItem onClick={() => {navigate('../friends')}}>Friends</MenuItem>
           <MenuItem onClick={() => {
-                localStorage.removeItem('token');
+                localStorage.removeItem('../token');
                 navigate('../42');
               }}>Log Out!</MenuItem>
           </Menu>
