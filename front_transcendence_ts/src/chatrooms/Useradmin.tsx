@@ -17,6 +17,8 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  border: 2px solid #007bff;
+  margin: 15px;
 `;
 
 const Owner = styled.div`
@@ -104,7 +106,7 @@ const UserAdmin : any = (props : UserAdminProps) => {
   useEffect(() => {
     handlePassword(props.information.sanitizedRoom);
     setuserPrivilleges(props.myStatus);
-    setUsers(props.information.users);
+    setUsers(props.information.sanitizedUsers);
     console.log("USERSSSSSSSSS", users);
   },[information, props.information, props.myStatus]);
 
@@ -272,6 +274,7 @@ const UserAdmin : any = (props : UserAdminProps) => {
   return (
    <>{props.information &&
   <Container>
+    <br></br>
   {showSetRoomType && <SetRoomType setShowSetRoomType={setShowSetRoomType} />}
   {showOwner && <PassButton onClick={handleSetPassBtn}>Set Password</PassButton> }
   <br></br>

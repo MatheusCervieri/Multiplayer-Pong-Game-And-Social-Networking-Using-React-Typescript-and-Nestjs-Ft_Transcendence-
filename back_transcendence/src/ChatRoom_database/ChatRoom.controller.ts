@@ -87,6 +87,7 @@ export class ChatRoomController {
   async findMessages(@Param() params: any): Promise<any> {
     return await this.ChatRoomService.findMessages(params.id);
   }
+  
 /*
   export interface Room {
     id: number;

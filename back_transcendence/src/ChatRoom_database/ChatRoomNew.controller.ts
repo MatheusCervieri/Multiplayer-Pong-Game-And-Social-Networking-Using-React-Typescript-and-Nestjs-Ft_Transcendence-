@@ -268,7 +268,9 @@ export class ChatRoomControllerNew {
       await this.ChatRoomService.save(room);
 
       const sanitizedRoom = this.removeTokenAndPasswordFromChatRoom(room);
-
+      const data1 = { message: "update-room", roomid: room.id};
+      this.ChatGateway.server.to(room.id.toString()).emit('update-room', data1);
+      
       return { message: 'User is now admin!', data: sanitizedRoom };
     } catch (error) {
       console.log(error);
