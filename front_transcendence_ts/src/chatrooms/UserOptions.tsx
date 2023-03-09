@@ -39,7 +39,6 @@ export default function UserOptions(props: UserOptionsProps) {
     <UserOptionsContainer>
         <Blockuser setBlockedUsers={props.setBlockedUsers} blockeduser={props.user} loadBlocked={props.loadBlocks}/>
         <ProfileBtn name={props.user}></ProfileBtn>
-        <DmBtn name={props.user} me={props.me}></DmBtn>
         <InviteToPlayBtn name={props.user} me={props.me} socket={props.socket}></InviteToPlayBtn>
     </UserOptionsContainer>
   )

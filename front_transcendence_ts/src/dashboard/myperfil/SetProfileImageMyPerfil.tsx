@@ -83,6 +83,7 @@ const SetProfileImageMyProfile = (props: SetProfileImageMyProfileProps) => {
       if(response.data.error.status === 400)
       {
         toast.error(response.data.message);
+        props.closeModal();
       }
     } catch (error) {
      
