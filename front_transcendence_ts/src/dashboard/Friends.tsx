@@ -9,11 +9,39 @@ interface UserProps {
 
 const Container = styled.div`
   margin-top: 20px;
+  margin: 15px
+`;
+
+const Scroller = styled.div`
+  height: 400px;
+  overflow-y: scroll;
+  border-radius: 10px;
+  padding: 10px;
+  margin: 5px;
+  margin-left: auto; 
+
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: #00b8d9;
+    border-radius: 4px;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
 `;
 
 const Title = styled.h2`
   font-size: 24px;
   margin-bottom: 10px;
+  color: #00b8d9;
 `;
 
 const List = styled.ul`
@@ -30,6 +58,7 @@ const ListItem = styled.li`
   padding: 10px;
   background-color: #f2f2f2;
   border-radius: 4px;
+  border: 2px solid #00b8d9;
 
   & > div {
     display: flex;
@@ -129,6 +158,7 @@ const Friends = (props : UserProps) => {
 
   return (
     <Container>
+    <Scroller>
       <Title>Friends</Title>
       <List>
         {users.map((user) => (
@@ -150,6 +180,7 @@ const Friends = (props : UserProps) => {
           </ListItem> 
         ))}
       </List>
+      </Scroller>
     </Container>
   );
 

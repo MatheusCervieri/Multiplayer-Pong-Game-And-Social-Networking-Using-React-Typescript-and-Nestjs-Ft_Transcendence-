@@ -26,14 +26,6 @@ const Nav = styled.nav`
   display: flex;
 `;
 
-const NavLink = styled.a`
-  color: #fff;
-  margin-right: 1rem;
-  text-decoration: none;
-  &:hover {
-    text-decoration: underline;
-  }
-`;
 
 const ProfileImage = styled.img`
   height: 3em;
@@ -85,6 +77,7 @@ const MenuItem = styled.li`
 
 const CustomModal = styled(Modal)`
   margin: 100px;
+  border: 2px solid #00b8d9;
 
   @media (max-width: 768px) {
     margin: 50px;

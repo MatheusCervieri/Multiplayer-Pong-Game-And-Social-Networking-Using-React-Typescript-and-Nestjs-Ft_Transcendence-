@@ -51,6 +51,33 @@ const Button = styled.button<{ color: string }>`
   }
 `;
 
+const Scroller = styled.div`
+  height: 400px;
+  overflow-y: scroll;
+  border-radius: 10px;
+  padding: 10px;
+  margin: 5px;
+  margin-left: auto; 
+
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: #00b8d9;
+    border-radius: 4px;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+`;
+
+
 
 const RunningGames = () => {
     const [games, setGames] = useState<any[]>([]);
@@ -84,6 +111,7 @@ const RunningGames = () => {
 
     return (
       <Container>
+        <Scroller>
         <Title>Running Games:</Title>
         <List>
           {games.map((game) => (
@@ -93,6 +121,7 @@ const RunningGames = () => {
             </ListItem>
           ))}
         </List>
+        </Scroller>
       </Container>
     );
 }

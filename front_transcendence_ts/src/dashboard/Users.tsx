@@ -4,9 +4,35 @@ import { toast } from "react-toastify";
 import styled from "styled-components";
 
 const Container = styled.div`
-  background-color: #f2f2f2;
   border-radius: 10px;
+  border-color: blue;
   padding: 20px;
+`;
+
+const Scroller = styled.div`
+  height: 400px;
+  overflow-y: scroll;
+  border-radius: 10px;
+  padding: 10px;
+  margin: 5px;
+  margin-left: auto; 
+
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: #00b8d9;
+    border-radius: 4px;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
 `;
 
 const Title = styled.h2`
@@ -29,6 +55,8 @@ const ListItem = styled.li`
   padding: 10px;
   background-color: #f2f2f2;
   border-radius: 4px;
+  border: 2px solid #00b8d9;
+  
 
   & > div {
     display: flex;
@@ -170,6 +198,7 @@ const Users = (props : UserProps) => {
 
   return (
     <Container>
+      <Scroller>
       <Title>Users</Title>
       <List>
         {users.map((user) => (
@@ -200,6 +229,7 @@ const Users = (props : UserProps) => {
           </ListItem>
         ))}
       </List>
+      </Scroller>
     </Container>
   );
 };

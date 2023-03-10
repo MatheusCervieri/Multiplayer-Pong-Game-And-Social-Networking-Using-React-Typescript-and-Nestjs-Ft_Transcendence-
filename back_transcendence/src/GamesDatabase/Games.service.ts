@@ -200,15 +200,15 @@ export class GamesServices {
     const { width, height, ballRadiues, ballX, ballY, ballVx, ballVy } = rtGame;
   
     // Check for collision with the right or left walls
-    if (ballX + ballRadiues > (width + ballRadiues * 2 + 2)) {
-      rtGame.ballX = rtGame.firstBallPosition;
-      rtGame.ballY = rtGame.firstBallPosition; 
+    if (ballX + ballRadiues > (width + ballRadiues * 2 + 10)) {
+      rtGame.ballX = rtGame.firstBallPositionX;
+      rtGame.ballY = rtGame.firstBallPositionY; 
       rtGame.player1Score += 1; // Ball collided with right wall
       rtGame.ballVx = -Math.abs(ballVx); // Reverse ball velocity in x direction
     } 
-    else if (ballX - ballRadiues < (0 - ballRadiues * 2 - 2)) { // Ball collided with left wall
-      rtGame.ballX = rtGame.firstBallPosition;
-      rtGame.ballY = rtGame.firstBallPosition;
+    else if (ballX - ballRadiues < (0 - ballRadiues * 2 - 10)) { // Ball collided with left wall
+      rtGame.ballX = rtGame.firstBallPositionX;
+      rtGame.ballY = rtGame.firstBallPositionY;
       rtGame.player2Score += 1;  
       rtGame.ballVx = Math.abs(ballVx); // Reverse ball velocity in x direction
     }
