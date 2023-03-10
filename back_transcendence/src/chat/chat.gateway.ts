@@ -9,6 +9,7 @@ import { MessageService } from 'src/ChatRoom_database/Message.service';
 
 //https://socket.io/pt-br/docs/v3/rooms/ 
 
+
 @WebSocketGateway(8001, {cors: '*' })
 export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   constructor(

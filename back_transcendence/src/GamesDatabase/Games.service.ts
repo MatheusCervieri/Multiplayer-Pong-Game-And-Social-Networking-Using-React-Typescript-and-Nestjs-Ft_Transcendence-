@@ -242,6 +242,7 @@ export class GamesServices {
   async finishGame(gameId: string , rtGame: RTGameRoomInterface)
   {
     rtGame.status = 'finished';
+    this.updateGame(gameId, rtGame);
     const gamedatabase = await this.findGame(gameId);
     gamedatabase.player1FinalScore = rtGame.player1Score;
     gamedatabase.player2FinalScore = rtGame.player2Score;
@@ -280,23 +281,24 @@ export class GamesServices {
     gamedatabase.isRunning = false;
     await this.save(gamedatabase);
     //remove game from rtGames
+    console.log("GAME ID", gameId);
+    //remove all games with this id from rtGames
+
     this.rtGames.delete(gameId);
+    this.rtGames.delete(gameId.toString());
+    console.log("This is a rtGames map: " , this.rtGames);
   }
 
   async finishgameDecline(gameId: string)
   {
+    //we need to set the time the lobby to 0;
+    //We need to update the rtGame.
+
     const rtGame = this.rtGames.get(gameId.toString());
-    console.log("Rt Game", rtGame);
-    rtGame.status = 'finished';
-    const gamedatabase = await this.findGame(gameId);
-    gamedatabase.player1FinalScore = 0;
-    gamedatabase.player2FinalScore = 0;
-    gamedatabase.winnerName = "ERROR2";
-    gamedatabase.winnerId = 0;
-    gamedatabase.isRunning = false;
-    await this.save(gamedatabase);
+    rtGame.timeToStart = 0;
+
     //remove game from rtGames
-    this.rtGames.delete(gameId.toString());
+    this.updateGame(gameId, rtGame);
   }
 
   async finishgamePaused(gameId: string, rtGame: RTGameRoomInterface)
@@ -330,7 +332,8 @@ export class GamesServices {
     
     if(rtGame.status === 'lobby')
     {
-    rtGame.timeToStart = rtGame.lobbyTime - rtGame.elepsedTime;
+    if(rtGame.timeToStart != 0)
+      rtGame.timeToStart = rtGame.lobbyTime - rtGame.elepsedTime;
       if (rtGame.timeToStart <= 0) 
       {
         rtGame.timeToStart = 0;

@@ -97,8 +97,11 @@ export class NotificationService {
   }
   async declineInvite(invitation : invitation)
   {
-    //remove the invitation from the invitations array. 
+    console.log("Decline invitation -- - - -- - -- -- ");
+    //remove the invitation from the invitations array.
+    console.log(this.invitations); 
     this.invitations = this.invitations.filter(i => i.id !== invitation.id);
+    console.log(this.invitations); 
     //finish the game in the database.
     console.log("invitation id", invitation.id);
     await this.gameService.finishgameDecline(invitation.id);
