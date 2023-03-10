@@ -12,6 +12,7 @@ const Title = styled.h2`
   font-size: 24px;
   text-align: center;
   margin-bottom: 10px;
+  color: #00b8d9;
 `;
 
 const List = styled.ul`
@@ -28,7 +29,7 @@ const ListItem = styled.li`
   padding: 10px;
   background-color: #f2f2f2;
   border-radius: 4px;
-  border: 1px solid #ccc;
+  border: 1px solid #00b8d9;
 `;
 
 const Name = styled.span`
