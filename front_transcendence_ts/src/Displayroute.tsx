@@ -24,6 +24,7 @@ import Friends from "./dashboard/Friends";
 import MyPerfil from "./dashboard/myperfil/MyPerfil";
 import Header from "./header/Header";
 import LoginHeader from "./header/LoginHeader";
+import TestLogin from "./login_setup/TestLogin/TestLogin";
 
 
 
@@ -35,6 +36,7 @@ export default function Displayroute() {
   <Notification socket={socket} />
   <Routes>
     <Route path="/42" element={<><LoginHeader/><Authapi /></>}/>
+    <Route path="/test" element={<><LoginHeader/><TestLogin /></>}/>
     <Route path="/" element={<><LoginHeader/><> <Singup /></></>} />
     <Route path="/login" element={<><LoginHeader/><Login  /></>} />
     <Route path="/auth" element={<><Header socket={socket}/><AuthCallback  /></>} />
