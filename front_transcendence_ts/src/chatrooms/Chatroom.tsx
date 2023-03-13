@@ -488,7 +488,7 @@ if (renderPage == false && promptShown == true)
   return (
     <FormContainer>
       <Label htmlFor="passwordInput">Password:</Label>
-      <PasswordInput type="password" id="passwordInput" onChange={(event) => setEnteredPassword(event.target.value)} />
+      <PasswordInput type="password" id="passwordInput" onChange={(event: React.ChangeEvent<HTMLInputElement>) => setEnteredPassword(event.target.value)} />
       <SubmitButton onClick={handlePassword} id="submitPasswordButton">Submit</SubmitButton>
     </FormContainer>
   );
@@ -523,7 +523,7 @@ else{
     }) }
     </MessageContainer>
     <InputContainer>
-    <Input type="text" id="message" value={message} onChange={(e) => setMessage(e.target.value)} onKeyDown={handleKeyDown}/>
+    <Input type="text" id="message" value={message} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setMessage(e.target.value)} onKeyDown={handleKeyDown}/>
     <SendButton onClick={handleSendMessage}>Send!</SendButton>
     </InputContainer>
     </Container>

@@ -83,7 +83,7 @@ const SetNameMyPerfil = (props: SetNameMyPerfilProps) => {
      <h3>Choose Your Name:</h3>
     <FormLabel>
       
-      <FormInput type="name" value={name} onChange={(event) => setName(event.target.value)} />
+    <FormInput type="name" value={name} onChange={(event: React.ChangeEvent<HTMLInputElement>) => setName(event.target.value)} />
     </FormLabel>
     <FormButton type="submit">Create Name!</FormButton>
   </FormContainer>

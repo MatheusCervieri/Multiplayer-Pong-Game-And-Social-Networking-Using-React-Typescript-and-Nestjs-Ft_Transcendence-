@@ -63,7 +63,7 @@ const TestLogin: React.FC = () => {
   return (
     <TestLoginContainer>
         <h3>Create a Test User To Use The Game!</h3>
-      <Input type="text" value={inputValue} onChange={(e) => setInputValue(e.target.value)} />
+        <Input type="text" value={inputValue} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setInputValue(e.target.value)} />
       <Button onClick={handleClick}>Create a Test User!</Button>
     </TestLoginContainer>
   );
