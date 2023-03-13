@@ -50,8 +50,10 @@ export class NotificationGateway implements OnGatewayConnection, OnGatewayDiscon
   async inviteToPlay(client: CustomSocket, data : { token: string, playerToPlayName : string}) {
     //validate the token.
     console.log("invite-game");
-    const user = await this.userService.findOneByToken(data.token);
-    if(user)
+    if (data.token)
+    {
+      const user = await this.userService.findOneByToken(data.token);
+      if(user)
     {
       //validate if the playerToPlayName is a valid player.
       const playerToPlay = await this.userService.findOneByName(data.playerToPlayName);
@@ -70,7 +72,11 @@ export class NotificationGateway implements OnGatewayConnection, OnGatewayDiscon
         }
       }
     }
+    }
+    else
+      client.emit("meessage", "You need to be logged in to invite someone to play.")
   }
+
 
   @SubscribeMessage('decline-invite')
   async declineInvitation(client: CustomSocket, data : { token: string, invitation: invitation}) {
