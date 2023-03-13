@@ -8,7 +8,6 @@ import { RTGameRoomInterface, defaultGameRoom } from './roominterface'
 import  instance from '../confs/axios_information';
 import GameFinalScream from './GameFinalScream';
 import GamePauseScream from './GamePauseScream';
-import game from '../confs/game_information';
 
 const socket = io("http://localhost:8002");
 

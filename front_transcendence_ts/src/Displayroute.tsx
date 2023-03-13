@@ -1,7 +1,5 @@
 
 import { BrowserRouter, Routes, Route, RouteMatch } from "react-router-dom";
-import Singup from "./login_setup/singup/singup";
-import Login from   "./login_setup/login/Login";
 import Setname from "./login_setup/Setname/Setname";
 import Dashboard from "./dashboard/dashboard";
 import ChatInterface from "./chatrooms/ChatInterface";
@@ -18,7 +16,6 @@ import Ranking from "./dashboard/Ranking";
 import Authapi from "./42api/Authapi";
 import {AuthCallback} from "./42api/AuthCallback";
 import SendTwoFaCode from "./login_setup/2fa/SendTwofaCode";
-import TwoFaEnable from "./login_setup/2fa/TwoFaEnable";
 import { AuthCallbackRegister } from "./42api/AuthCallbackRegister";
 import Friends from "./dashboard/Friends";
 import MyPerfil from "./dashboard/myperfil/MyPerfil";
@@ -35,10 +32,8 @@ export default function Displayroute() {
     <BrowserRouter>
   <Notification socket={socket} />
   <Routes>
-    <Route path="/42" element={<><LoginHeader/><Authapi /></>}/>
     <Route path="/test" element={<><LoginHeader/><TestLogin /></>}/>
-    <Route path="/" element={<><LoginHeader/><> <Singup /></></>} />
-    <Route path="/login" element={<><LoginHeader/><Login  /></>} />
+    <Route path="/" element={<><LoginHeader/><> <Authapi /></></>} />
     <Route path="/auth" element={<><Header socket={socket}/><AuthCallback  /></>} />
     <Route path="/authregister" element={<><Header socket={socket}/><AuthCallbackRegister  /></>} />
     <Route path="/twofa" element={<><Header socket={socket}/><SendTwoFaCode  /></>} />

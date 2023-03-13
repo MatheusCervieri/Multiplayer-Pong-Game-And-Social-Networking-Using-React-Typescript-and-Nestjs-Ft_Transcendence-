@@ -1,17 +1,7 @@
-import React, { useEffect } from 'react';
-import game from './confs/game_information';
 import Displayroute from './Displayroute';
-import Header from './header/Header';
 import { createGlobalStyle } from 'styled-components';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { io } from 'socket.io-client';
-import { useNavigate } from 'react-router-dom';
-
-
-
-
-
 
 const GlobalStyle = createGlobalStyle`
   body {
