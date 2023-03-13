@@ -4,6 +4,7 @@ import { ChatRoom } from './ChatRoom.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Message } from './ChatRoom.entity';
 import {User} from '../user_database/user.entity';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class ChatRoomService {
@@ -203,6 +204,13 @@ async findRoomWithBlockedUsers(id: number): Promise<ChatRoom> {
   }
   return room;
 }
+
+async hashPassword(password: string): Promise<string> {
+  const saltOrRounds = 10;
+  const hash = await bcrypt.hash(password, saltOrRounds);
+  return hash;
+}
+
   
   async deleteAll(): Promise<void> {
     await this.roomsRepository.clear();

@@ -7,6 +7,8 @@ import { Param } from '@nestjs/common';
 import { UsersService } from '../user_database/user.service';
 import { RouterModule } from '@nestjs/core';
 
+
+
 @Controller('chatdata')
 //@UseInterceptors(AuthMiddleware)
 export class ChatRoomController {
@@ -104,7 +106,7 @@ export class ChatRoomController {
     const new_ChatRoom = new ChatRoom();
     new_ChatRoom.name = data.name;
     new_ChatRoom.type = data.type;
-    new_ChatRoom.password = data.password;
+    new_ChatRoom.password = await this.ChatRoomService.hashPassword(data.password);
     new_ChatRoom.adm = data.adm;
   
     const user = await this.UsersService.findOneByName(data.users[0]);

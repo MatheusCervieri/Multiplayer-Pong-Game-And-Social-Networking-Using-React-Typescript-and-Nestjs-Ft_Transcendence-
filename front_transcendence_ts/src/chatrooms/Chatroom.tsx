@@ -262,22 +262,36 @@ function StartRoom()
   LoadMessages();
 }
 
-function handlePassword()
+async function handlePassword()
 {
   if (!data)
   {
     return;
   }
-
-  if (enteredPassowrd === data.password)
-  {
-    StartRoom();
-    AddUserToRoom(username);
+  //make a instance resquest to serverurl + room + checkpassword/:id with the password in the data object
+  const token = localStorage.getItem('token');
+  const dataP = {
+    password: enteredPassowrd,
   }
-  else
-  {
-    alert("Wrong password!");
-  }
+  axios.post(serverurl + '/room/checkpassword/' + id, dataP, { headers: { Authorization: `Bearer ${token}` } })
+  .then(response => {
+    // handle success
+    console.log("IS password correct:", response.data.data.isPasswordCorrect);
+    if (response.data.data.isPasswordCorrect)
+    {
+      StartRoom();
+      AddUserToRoom(username);
+    }
+    else
+    {
+      toast.error("Wrong Password");
+    }
+  })
+  .catch(error => {
+    // handle error
+    console.log(error);
+    //navigate('/chat');
+  });
 }
 
 function isStringInArray(string: string | undefined, arrayOfStrings: string[]) {

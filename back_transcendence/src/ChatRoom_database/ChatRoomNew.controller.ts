@@ -7,6 +7,7 @@ import { Param } from '@nestjs/common';
 import { UsersService } from '../user_database/user.service';
 import { RouterModule } from '@nestjs/core';
 import { ChatGateway } from 'src/chat/chat.gateway';
+import * as bcrypt from 'bcrypt';
 
 @Controller('room')
 @UseInterceptors(AuthMiddleware)
@@ -25,7 +26,7 @@ export class ChatRoomControllerNew {
     const new_ChatRoom = new ChatRoom();
     new_ChatRoom.name = data.name;
     new_ChatRoom.type = data.type;
-    new_ChatRoom.password = data.password;
+    new_ChatRoom.password = await this.ChatRoomService.hashPassword(data.password);
     new_ChatRoom.adm = data.adm;
 
     let chat = await this.ChatRoomService.create(new_ChatRoom);
@@ -187,7 +188,7 @@ export class ChatRoomControllerNew {
     }
 
     // If yes, change the type.
-    const updatedRoom = await this.ChatRoomService.updateRoomType(room.id, data.type, data.password);
+    const updatedRoom = await this.ChatRoomService.updateRoomType(room.id, data.type, await this.ChatRoomService.hashPassword(data.password));
 
     const sanitizedRoom = this.removeTokenAndPasswordFromChatRoom(updatedRoom);
 
@@ -498,6 +499,8 @@ async MuteUser(@Req() request: any, @Param('id') id: number, @Body() data: any):
     }
 }
 
+
+
 @Post('unmute-user-room/:id')
 async UnMuteUser(@Req() request: any, @Param('id') id: number, @Body() data: any): Promise<any> {
    //Get user making the request using request;  
@@ -653,5 +656,31 @@ async MyPrivllegesatroom(@Req() request: any, @Param('id') id: number): Promise<
     console.log(error);
     return { message: error };
   }
+}
+
+
+@Post('checkpassword/:id')
+async CheckPassword(@Req() request: any, @Param('id') id: number, @Body() data: {password : string}): Promise<any> {
+  try{
+    const user = await this.UsersService.findOne(request.user_id);
+    if (!user)
+      throw new Error("User not found");
+    // Get room using id.
+    const room = await this.ChatRoomService.findOne(id);
+    if (!room)
+      throw new Error("Room not found");
+
+
+    const isPasswordCorrect = await bcrypt.compare(data.password, room.password);
+    if (!isPasswordCorrect)
+      throw new Error("Password is incorrect");
+
+    return { message: 'Password is correct', data: {isPasswordCorrect} };
+}
+catch (error)
+{
+  console.log(error);
+  return { message: error };
+}
 }
 }
