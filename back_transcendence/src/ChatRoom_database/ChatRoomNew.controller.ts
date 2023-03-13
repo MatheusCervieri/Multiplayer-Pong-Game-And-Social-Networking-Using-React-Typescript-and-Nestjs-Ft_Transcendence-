@@ -141,7 +141,7 @@ export class ChatRoomControllerNew {
         delete u.password;
       });
     }
-  
+    delete room.password;
     return room;
   }
 
@@ -278,6 +278,7 @@ export class ChatRoomControllerNew {
       return { message: error };
     }
   }
+  
   @Post('remove-admin-room/:id')
   async RemoveAdmin(@Req() request: any, @Param('id') id: number, @Body() data: any): Promise<any> {
       try{
