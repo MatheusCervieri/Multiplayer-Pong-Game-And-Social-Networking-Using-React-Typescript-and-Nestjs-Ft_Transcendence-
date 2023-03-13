@@ -1,5 +1,5 @@
 import {Controller , Post , Body, Get, Res, Req} from '@nestjs/common';
-import { SingUpDTO } from '../singup/singup.dto';
+import { SingUpDTO } from './singup/singup.dto';
 import { UsersService } from 'src/user_database/user.service';
 import { User } from 'src/user_database/user.entity';
 import { ImageService } from 'src/image/image.service';

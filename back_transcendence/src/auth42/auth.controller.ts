@@ -4,11 +4,8 @@ import { FortyTwoStrategy } from './fortytwo.strategy';
 import { UsersService } from '../user_database/user.service';
 import { User } from '../user_database/user.entity';
 import * as jwt from 'jsonwebtoken';
-import { create } from 'domain';
-import nodemailer from 'nodemailer';
 import {Image} from '../image/image.entity';
 import { ImageService } from 'src/image/image.service';
-import fs from 'fs';
 import { MailService } from 'src/mail/mail.service';
 
 

@@ -2,19 +2,12 @@ import { Module, NestModule } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { SimpleGetController } from './simple-get.controller';
-import { SimplePostController } from './simple-post.controller';
-import { Email } from './email.entity';
-import { EmailModule } from './Email.module';
-import { EmailService } from './services/email.service';
-import { SingUpController } from './singup/SingUp.controller';
 import { UserModule } from './user_database/user.module';
 import { UsersService } from './user_database/user.service';
 import { NameSetController } from './choose_name/Nameset.controller';
 import { RequestMethod, MiddlewareConsumer } from '@nestjs/common';
 import { AuthMiddleware } from './user_database/auth.middleware';
 import { UserController } from './user_database/user.controller';
-import { LoginController } from './login/Login.controller';
 import { ChatGateway } from './chat/chat.gateway';
 import { ChatRoomController } from './ChatRoom_database/ChatRoom.controller';
 import { ChatRoomService } from './ChatRoom_database/ChatRoom.service';
@@ -50,12 +43,11 @@ import { MailModule } from './mail/mail.module';
       username: 'myuser',
       password: 'mypassword',
       database: 'mydb',
-      entities: [Email],
       autoLoadEntities: true,
       synchronize: true,
-    }), MailModule, EmailModule, UserModule, ChatRoomModule, MessageModule, ImageModule, GameModule , AuthModule],
-  controllers: [AppController, SimpleGetController, SimplePostController, SingUpController, NameSetController, UserController, AuthController, LoginController, ChatRoomController, ChatRoomControllerNew, UsersInformationController, ImageController, PublicImageController, GamesController],
-  providers: [FortyTwoStrategy , AppService, EmailService, UsersService, ChatRoomService, ChatGateway, MessageService, ImageService, GameGateway, GamesServices, NotificationGateway, NotificationService],
+    }), MailModule, UserModule, ChatRoomModule, MessageModule, ImageModule, GameModule , AuthModule],
+  controllers: [AppController, NameSetController, UserController, AuthController, ChatRoomController, ChatRoomControllerNew, UsersInformationController, ImageController, PublicImageController, GamesController],
+  providers: [FortyTwoStrategy , AppService, UsersService, ChatRoomService, ChatGateway, MessageService, ImageService, GameGateway, GamesServices, NotificationGateway, NotificationService],
 })
 export class AppModule implements NestModule{
   configure(consumer: MiddlewareConsumer) {
