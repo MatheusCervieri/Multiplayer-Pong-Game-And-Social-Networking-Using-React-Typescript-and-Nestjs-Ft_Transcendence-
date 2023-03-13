@@ -34,10 +34,10 @@ const Login = () => {
     try {
       const response = await instance.post('login', dto);
       localStorage.setItem('token', response.data);
-      console.log(response.data);
+      
       return 0;
     } catch (error) {
-      console.log(error);
+      
       return 1;
     }
   }

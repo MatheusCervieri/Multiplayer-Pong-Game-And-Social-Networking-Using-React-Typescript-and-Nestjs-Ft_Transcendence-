@@ -60,7 +60,7 @@ const Setname = () => {
       }
     })
       .then(response => {
-        console.log(response.data);
+        
         if (response.data.status === 400)
         {
           toast.error("Name already taken, choose another one");

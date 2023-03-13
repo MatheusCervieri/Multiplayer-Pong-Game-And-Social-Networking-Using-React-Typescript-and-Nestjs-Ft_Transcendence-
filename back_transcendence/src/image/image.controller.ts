@@ -76,12 +76,12 @@ export class ImageController {
     }
     newImage.user = user;
     const image = await this.ImageService.create(newImage);
-    console.log(image);
-    console.log(file);
+    
+    
     return ({message: "Image uploaded successfully", statusCode: 200, image: image});
     }
     catch (err) {
-      console.log(err);
+      
       return ({ message: err.message, statusCode: err.statusCode, error: err });
     }
   }

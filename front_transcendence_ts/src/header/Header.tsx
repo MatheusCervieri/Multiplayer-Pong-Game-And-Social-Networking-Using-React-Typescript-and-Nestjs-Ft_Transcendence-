@@ -109,8 +109,8 @@ const Header: React.FC<HeaderProps> = ({ showNav = true, socket }) => {
     }
   })
     .then((response: any) => {
-      console.log(response.data);
-      console.log(response.data.id);
+      
+      
       setUserInformation(response.data);
     })
     .catch((error : any) => {

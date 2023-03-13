@@ -53,7 +53,7 @@ export class GamesController {
     try
     {
       const user = await this.UsersService.findOneByName(decodedname);
-      console.log(user.id, user.name);
+      
       const history = await this.GameService.getGamesByPlayerId(user.id);
     return history;
     }

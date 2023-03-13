@@ -124,7 +124,7 @@ const Users = (props : UserProps) => {
     }
   })
     .then(response => {
-      console.log(response.data);
+      
       const sortedUsers = sortUsersByStatus(response.data); // sort the users array by status
       setUsers(sortedUsers);
     })
@@ -148,7 +148,7 @@ const Users = (props : UserProps) => {
     }
   })
     .then(response => {
-      console.log(response.data);
+      
       toast.success("Friend added!");
     })
     .catch(error => {
@@ -166,7 +166,7 @@ const Users = (props : UserProps) => {
     }
   })
     .then(response => {
-      console.log(response.data);
+      
       toast.success("User blocked");
     })
     .catch(error => {
@@ -214,7 +214,7 @@ const Users = (props : UserProps) => {
             <div>
               
               <Button color="#00b8d9" onClick={() => {
-                console.log(user.name);
+                
                 const token = localStorage.getItem('token');
                 const data = { token: token, playerToPlayName : user.name}
                 props.socket.emit('invite-game', data);

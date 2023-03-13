@@ -18,10 +18,10 @@ async function PostSingup2(dto: dtotype): Promise<number> {
   try {
     const response = await instance.post('/sing-up', dto);
     localStorage.setItem('token', response.data);
-    console.log(response.data);
+    
     return 0;
   } catch (error) {
-    console.log(error);
+    
     return 1;
   }
 }

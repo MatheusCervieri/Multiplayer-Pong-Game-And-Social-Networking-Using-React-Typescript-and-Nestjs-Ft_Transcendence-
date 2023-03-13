@@ -37,7 +37,7 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
   
   handleConnection(client: Socket) {
     this.connectedUsers.push(client.id);
-    console.log(`Client connected: ${client.id}`);
+    
   }
 
   handleDisconnect(client: CustomSocket) {
@@ -46,17 +46,17 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
     this.gameService.handleQueueDisconnect(client);
     if(client.user)
       this.gameService.disconnect(client.user.name, client.gameRoomId);
-    console.log(`Client ${client.id} disconnected: ${client.id}`);
+    
   }
 
   @SubscribeMessage('authenticate')
   async authenticate(client: CustomSocket, data : { token: string, game_id: string}) {
-    console.log("SUPER TEST");
+    
     const user = await this.userService.findOneByToken(data.token);
     client.user = user;
     client.gameRoomId = data.game_id;
     client.join(data.game_id);
-    console.log(`Client ${client.user.name} authenticated: ${user.name} ${data.game_id}`);
+    
     this.gameService.authenticate(user.name, data.game_id);
   
     //Create a function at gameservice that att the rtgame information about connected users. 
@@ -72,14 +72,14 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @SubscribeMessage('vote-game-type')
   async voteGameType(client: CustomSocket, data : { token: string, game_id: string, smallRacket: boolean, longerGame: boolean}) 
   {
-    console.log("vote-game-type");
+    
     const user = await this.userService.findOneByToken(data.token);
     this.gameService.voteGame(user.name, data.game_id, data.smallRacket, data.longerGame);
   }
 
   @SubscribeMessage('join-queue')
   async handleJoinQueue(client: Socket, data : { token: string }) {
-    console.log("Join queue"); 
+     
     this.gameService.handleQueue(data, client);
   }
 

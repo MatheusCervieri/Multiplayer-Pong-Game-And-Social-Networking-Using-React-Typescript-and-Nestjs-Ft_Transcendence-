@@ -156,7 +156,7 @@ export class ChatRoomService {
     room.users = room.users.filter((user) => user.id !== userId);
     await this.roomsRepository.save(room);
     } catch (error) {
-      console.log(error);
+      
     }
   }
 

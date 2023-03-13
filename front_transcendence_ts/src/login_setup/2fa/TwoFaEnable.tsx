@@ -66,16 +66,16 @@ export default function TwoFa(props : TwoFaProps) {
     event.preventDefault(); // prevent the default form submission
 
     const email = event.target.elements.email.value;
-    console.log(email);
+    
     try {
       const response = await instance.post('/userdata/enable-2fa', {email},  {
         headers: {
           'Authorization': `Bearer ${token}`
         }
       });
-      console.log(response.data);
+      
   
-      console.log(response.data.status);
+      
       if (response.data.status === 400) {
         toast.error(response.data.message)
       } 
@@ -96,7 +96,7 @@ export default function TwoFa(props : TwoFaProps) {
           'Authorization': `Bearer ${token}`
         }
       });
-      console.log(response.data);
+      
       toast.success("2fa disabled");
       GetTwoFaStatus();
       props.closeModal();
@@ -115,7 +115,7 @@ export default function TwoFa(props : TwoFaProps) {
         }
       });
       setTwoFaStatus(response.data);
-      console.log(response.data);
+      
     } catch (error) {
       console.error(error);
     }

@@ -35,14 +35,14 @@ export class SingUpController {
     constructor(private readonly UsersService: UsersService) {}
     @Post()
     async handleData(@Body() data: SingUpDTO) {
-        console.log(data);
+        
         const user = make_user(data);
         await this.UsersService.create(user);
         const savedUser = await this.UsersService.findOneEmail(user.email) ;
         const token = create_JWT(savedUser);
         set_token(savedUser, token);
-        console.log(savedUser.token);
-        console.log("ID: ", savedUser.id);
+        
+        
         await this.UsersService.update(savedUser.id, savedUser);
         return (token);
     }

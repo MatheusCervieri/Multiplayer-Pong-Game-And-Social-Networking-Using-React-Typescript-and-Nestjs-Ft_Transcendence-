@@ -29,7 +29,7 @@ useEffect(() => {
 
 useEffect(() => {
 socket.on("message", messageListener);
-console.log("Oi");
+
 return () => {
   socket.off("message", messageListener);
 }

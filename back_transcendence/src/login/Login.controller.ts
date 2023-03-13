@@ -40,7 +40,7 @@ export class LoginController {
         }
         catch (e)
         {
-            console.log(e);
+            
             return e;
         }   
 }
@@ -70,7 +70,7 @@ async fortyTwoLoginCallback(@Body() data: {name : string}, @Res() res: any) {
     const userWithImage = await this.UsersService.findWithImage(databaseuser.id);
     userWithImage.image = imagedatabase;
     await this.UsersService.update(databaseuser.id, userWithImage);
-    console.log("USER ID TO GET IMAGE ", databaseuser.id);
+    
 
     //encoding the token
     return res.json(databaseuser.token);

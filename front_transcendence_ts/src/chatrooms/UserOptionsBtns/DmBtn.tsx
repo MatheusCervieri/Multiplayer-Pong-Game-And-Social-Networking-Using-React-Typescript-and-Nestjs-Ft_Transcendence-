@@ -27,16 +27,16 @@ export default function DmBtn(props : DmProps) {
     }
     const response = await instance.post('chatdata/create-room-dm', data );
     navigate('/chat/' + response.data.id);
-    console.log(response.data);
+    
     return 0;
     } catch (error) {
-    console.log(error);
+    
     return 1;
     }
   }
     function handleBtn(){
       PostNewRoom(props.name);
-      console.log("Profile button clicked");
+      
     }
 
 

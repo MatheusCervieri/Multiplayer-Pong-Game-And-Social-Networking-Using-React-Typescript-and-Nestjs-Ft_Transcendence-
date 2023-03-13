@@ -89,7 +89,7 @@ export default function Profile() {
   const [matchHistory, setMatchHistory] = useState<any[]>([]);
 
   async function getUserInformation(){
-    console.log(name);
+    
     const token = localStorage.getItem('token');
     axios.get(serverurl + '/userdata/profile/' + name,{
     headers: {
@@ -97,12 +97,12 @@ export default function Profile() {
     }
   })
     .then((response) => {
-      console.log(response.data);
+      
       setUserInformation(response.data);
       getMatchHistory();
     })
     .catch((error) => {
-      console.log(error);
+      
     });
   }
   
@@ -114,11 +114,11 @@ export default function Profile() {
     }
   })
     .then((response) => {
-      console.log(response.data);
+      
       setMatchHistory(response.data);
     }) 
     .catch((error) => {
-      console.log(error);
+      
     });
   }
 

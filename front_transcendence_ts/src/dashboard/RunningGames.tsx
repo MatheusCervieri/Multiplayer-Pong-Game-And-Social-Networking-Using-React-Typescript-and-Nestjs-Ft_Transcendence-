@@ -102,7 +102,7 @@ const RunningGames = () => {
       }
     })
       .then(response => {
-        console.log(response.data);
+        
         setGames(response.data);
       })
       .catch(error => {

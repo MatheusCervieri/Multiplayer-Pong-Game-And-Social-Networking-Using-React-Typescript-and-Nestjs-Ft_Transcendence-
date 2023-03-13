@@ -95,10 +95,10 @@ const UserAdmin : any = (props : UserAdminProps) => {
   const { id } = useParams<{ id: string | undefined }>();
   
   useEffect(() => {
-    console.log("TESTESSSSSDAS SADSA DSA DASDSA DASD ASD");
-    console.log("PROPS INFORMATION", props.information);
+    
+    
     setInformation(props.information);
-    console.log("INFORMATION", information);
+    
    
   },[]);
  
@@ -107,7 +107,7 @@ const UserAdmin : any = (props : UserAdminProps) => {
     handlePassword(props.information.sanitizedRoom);
     setuserPrivilleges(props.myStatus);
     setUsers(props.information.sanitizedUsers);
-    console.log("USERSSSSSSSSS", users);
+    
   },[information, props.information, props.myStatus]);
 
   useEffect(() => {
@@ -158,10 +158,10 @@ const UserAdmin : any = (props : UserAdminProps) => {
             'Authorization': `Bearer ${token}`
           }
         });
-            console.log("Response from setAdmButtonClick: " + response.data);
+            
             return 0;
             } catch (error) {
-            console.log(error);
+            
             return 1;
             }
 
@@ -179,10 +179,10 @@ const UserAdmin : any = (props : UserAdminProps) => {
             'Authorization': `Bearer ${token}`
           }
         });
-            console.log("Response from undoAdmBtnClick: " + response.data);
+            
             return 0;
             } catch (error) {
-            console.log(error);
+            
             return 1;
             }
   }
@@ -198,14 +198,14 @@ const UserAdmin : any = (props : UserAdminProps) => {
             'Authorization': `Bearer ${token}`
           }
         });
-            console.log("Response from setAdmButtonClick: " + response.data);
+            
             return 0;
             } catch (error) {
-            console.log(error);
+            
             return 1;
             }
 
-    console.log("BlockUserClick");
+    
   }
 
   async function UnblockUserClick(username: string)
@@ -219,13 +219,13 @@ const UserAdmin : any = (props : UserAdminProps) => {
             'Authorization': `Bearer ${token}`
           }
         });
-            console.log("Response from undoAdmBtnClick: " + response.data);
+            
             return 0;
             } catch (error) {
-            console.log(error);
+            
             return 1;
             }
-    console.log("UnBlockUserClick");
+    
   }
 
   async function MuteUserClick(username: string)
@@ -239,13 +239,13 @@ const UserAdmin : any = (props : UserAdminProps) => {
             'Authorization': `Bearer ${token}`
           }
         });
-            console.log("Response from setAdmButtonClick: " + response.data);
+            
             return 0;
             } catch (error) {
-            console.log(error);
+            
             return 1;
             }
-    console.log("BlockUserClick");
+    
   }
 
   async function UnMuteUserClick(username: string)
@@ -259,14 +259,14 @@ const UserAdmin : any = (props : UserAdminProps) => {
             'Authorization': `Bearer ${token}`
           }
         });
-            console.log("Response from undoAdmBtnClick: " + response.data);
+            
             return 0;
             } catch (error) {
-            console.log(error);
+            
             return 1;
             }
-    console.log("UnBlockUserClick");
-    console.log("BlockUserClick");
+    
+    
   }
 
 

@@ -54,11 +54,11 @@ export default function GameFinalScream(props: GameFinalScreamProps) {
     useEffect(() => {
         if(gameData)
         {
-            console.log("Game data", gameData);
-            console.log(gameData.name);
+            
+            
             const splitstr = gameData.name.split(" vs ");
             setPlayersName(splitstr);
-            console.log(splitstr[0], splitstr[1]);
+            
         }
     }, [gameData]);
 
@@ -75,7 +75,7 @@ export default function GameFinalScream(props: GameFinalScreamProps) {
       }
     })
       .then((response) => {
-        console.log(response.data);
+        
         setGameData(response.data);
 
       })

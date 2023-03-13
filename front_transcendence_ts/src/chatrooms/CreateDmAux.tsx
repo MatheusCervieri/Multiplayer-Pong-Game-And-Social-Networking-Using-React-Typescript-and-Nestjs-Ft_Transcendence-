@@ -42,7 +42,7 @@ async function loadDms()
       })
     .catch(error => {
       // handle error
-      console.log(error);
+      
       return null;
     });
 }
@@ -60,21 +60,21 @@ async function loadDms()
         //PostRoomUser(response.data.id, userdm);
         //PostRoomUser(response.data.id, props.username).then(() => navigate('/chat/' + response.data.id));
         navigate('/chat/' + response.data.id);
-        console.log(response.data);
+        
         return 0;
         } catch (error) {
-        console.log(error);
+        
         return 1;
         }
     }
     
     async function PostRoomUser(roomid: number, username: string)
     { try {
-        console.log("Room User Name", username);
+        
       const response = await axios.post(serverurl + `/room/add-user-room/${roomid}`, {
         name: username
       });
-      console.log(username);
+      
       return response.data;
     } catch (error) {
       alert(error);
@@ -90,10 +90,10 @@ async function loadDms()
       }
     
     function handleUser(user: any) {
-      console.log("wtf");
-      console.log("DMS:", props.dms);
+      
+      
         loadDms().then(() => {
-            console.log(props.dms);
+            
             const objects = findObjectsWithMatchingUserName(props.dms, user).length > 0;
             if (objects)
             {

@@ -45,7 +45,7 @@ const ChatInterface: React.FC = () => {
 
 
     const handleCreateRoom = (data: any) => {
-        console.log(newRoomName); 
+         
         PostNewRoom(data);
         setNewRoomName('');
       };
@@ -65,10 +65,10 @@ const ChatInterface: React.FC = () => {
         PostRoomUser(response.data.id).then((data) => {
           navigate('/chat/' + response.data.id);
         });
-        console.log(response.data);
+        
         return 0;
         } catch (error) {
-        console.log(error);
+        
         return 1;
         }
     }
@@ -94,10 +94,10 @@ const ChatInterface: React.FC = () => {
         try {
         const response = await instance.get('chatdata/get-rooms');
         setRooms(response.data);
-        console.log(response.data);
+        
         return 0;
         } catch (error) {
-        console.log(error);
+        
         return 1;
         }
     }

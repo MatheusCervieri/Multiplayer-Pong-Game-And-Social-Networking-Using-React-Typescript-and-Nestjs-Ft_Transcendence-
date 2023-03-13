@@ -21,12 +21,12 @@ export default function SendTwoFaCode() {
         code : code,
       }
       const response = await instance.post('/auth/2fa', data);
-      console.log("WTFFFF ");
-      console.log("Response data" , response.data.token);
+      
+      
       localStorage.setItem('token', response.data.token);
       navigate('../dashboard');
     } catch (error : any) {
-      console.log(error);
+      
     }
   };
 

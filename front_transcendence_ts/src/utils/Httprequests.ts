@@ -13,7 +13,7 @@ export async function getReq(url: string) : Promise<any>
             return response;
         })
         .catch((error) => {
-          console.log(error);
+          
           return null; 
         });
 }
@@ -26,11 +26,11 @@ export async function postReq(url: string, data: any) : Promise<any> {
         }
       })
         .then((response) => {
-            console.log("Teste", response.data);
+            
             return response.data;
         })
         .catch((error) => {
-          console.log(error);
+          
           return Promise.reject(error); 
         });
 }

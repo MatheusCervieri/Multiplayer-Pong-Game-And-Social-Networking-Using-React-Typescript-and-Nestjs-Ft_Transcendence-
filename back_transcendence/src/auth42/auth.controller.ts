@@ -28,14 +28,14 @@ export class AuthController {
   @Post('2fa')
   async TwoFa(@Req() req, @Res() res, @Body() data: any) {
     try {
-      console.log(data.name);
+      
       const user = await this.userService.findOneByName(data.name);
-      console.log(user);
-      console.log("Code generated", user.TwofaCodeGenerated);
-      console.log(user.TwofaSecret, data.code);
+      
+      
+      
       if (user) {
         if (user.TwofaCodeGenerated === true) {
-          console.log(user.TwofaSecret, data.code);
+          
           if (user.TwofaSecret === data.code) {
             // Return a response with the token of the user.
             const token = user.token;
@@ -52,7 +52,7 @@ export class AuthController {
         }
       }
     } catch (e) {
-      console.log(e);
+      
       throw new HttpException(e.message, HttpStatus.BAD_REQUEST);
     }
   }
@@ -70,7 +70,7 @@ export class AuthController {
       {
         //Logou
         const token = user42.token;
-        console.log(token);
+        
         
         if(user42.TwofaAactive === true)
         {
@@ -121,7 +121,7 @@ export class AuthController {
         const userWithImage = await this.userService.findWithImage(databaseuser.id);
         userWithImage.image = imagedatabase;
         await this.userService.update(databaseuser.id, userWithImage);
-        console.log("USER ID TO GET IMAGE ", databaseuser.id);
+        
 
         //encoding the token
         res.cookie('loginToken',token);

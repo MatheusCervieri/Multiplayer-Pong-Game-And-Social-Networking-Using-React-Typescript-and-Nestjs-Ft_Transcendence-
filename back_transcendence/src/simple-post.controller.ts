@@ -8,7 +8,7 @@ export class SimplePostController {
     {}
     @Post()
     async handleData(@Body() data: any) {
-        console.log(data);
+        
         const email = new Email();
         email.email = data.email;
         await this.emailService.create(email);

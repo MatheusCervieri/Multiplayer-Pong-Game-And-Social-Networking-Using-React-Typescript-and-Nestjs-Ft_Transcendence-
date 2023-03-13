@@ -30,7 +30,7 @@ export default function Game() {
     }
   })
     .then(response => {
-      console.log(response.data);
+      
       setGameRequestData(response.data);
       setGameRunning(response.data.isRunning);
     })
@@ -65,7 +65,7 @@ export default function Game() {
         setIsConnected(false);
     });
     socket.on('game-update', (data: any) => {
-      //console.log(data);
+      //
       setGameData(data);
       if(data.status === 'finished')
       {
@@ -88,7 +88,7 @@ export default function Game() {
 
 useEffect(() => {
   const token = localStorage.getItem('token');
-  console.log("Game running", gameRunning);
+  
   if(gameRunning === true)
     socket.emit('authenticate', { token: token , game_id: id});
   GetToken(navigate, setMyName);

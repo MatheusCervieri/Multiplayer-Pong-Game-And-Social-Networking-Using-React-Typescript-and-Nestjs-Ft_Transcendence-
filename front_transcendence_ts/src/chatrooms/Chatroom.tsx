@@ -204,14 +204,14 @@ async function start()
             }
             else 
             {
-            console.log("ROOMMM ATT CHATROOM", response.data.room);
+            
             setData(response.data.room);
             InitializeRoom(response.data.room, userdata.name);
             }
           })
           .catch(error => {
             // handle error
-            console.log(error);
+            
     });
 }
 
@@ -224,12 +224,12 @@ function LoadMessages()
   axios.get(serverurl + '/chatdata/get-room-messages/' + id)
     .then(response => {
       // handle success
-      console.log(response.data);
+      
       setMessages(response.data);
       })
     .catch(error => {
       // handle error
-      console.log(error);
+      
       return null;
     });
 }
@@ -276,7 +276,7 @@ async function handlePassword()
   axios.post(serverurl + '/room/checkpassword/' + id, dataP, { headers: { Authorization: `Bearer ${token}` } })
   .then(response => {
     // handle success
-    console.log("IS password correct:", response.data.data.isPasswordCorrect);
+    
     if (response.data.data.isPasswordCorrect)
     {
       StartRoom();
@@ -289,7 +289,7 @@ async function handlePassword()
   })
   .catch(error => {
     // handle error
-    console.log(error);
+    
     //navigate('/chat');
   });
 }
@@ -297,15 +297,15 @@ async function handlePassword()
 function isStringInArray(string: string | undefined, arrayOfStrings: string[]) {
   if(string)
   {
-    console.log("Chegou aqui");
-    console.log(string);
+    
+    
     return arrayOfStrings.includes(string);
     
   }
   }
 
 const InitializeRoom = (data: any, user_name? : string) => {
-  console.log(data.type);
+  
     if (data.type === 'public')
     {
       StartRoom();
@@ -317,13 +317,13 @@ const InitializeRoom = (data: any, user_name? : string) => {
     }
     if (data.type === 'private')
     {
-      console.log("PRIVATEEEE");
+      
       
       //Check if the user is in the room
     axios.get(serverurl + '/chatdata/room-users/' + id)
     .then(response => {
       // handle success
-      console.log("Username:", user_name, "Reponse:" , response.data);
+      
       if(isStringInArray(user_name, response.data) == true)
       {
         StartRoom();
@@ -335,7 +335,7 @@ const InitializeRoom = (data: any, user_name? : string) => {
       })
     .catch(error => {
       // handle error
-      console.log(error);
+      
       navigate('/chat');
     });
     }
@@ -344,7 +344,7 @@ const InitializeRoom = (data: any, user_name? : string) => {
       axios.get(serverurl + '/chatdata/room-users/' + id)
     .then(response => {
       // handle success
-      console.log("Username:", user_name, "Reponse:" , response.data);
+      
       if(isStringInArray(user_name, response.data) == true)
       {
         StartRoom();
@@ -356,7 +356,7 @@ const InitializeRoom = (data: any, user_name? : string) => {
       })
     .catch(error => {
       // handle error
-      console.log(error);
+      
       navigate('/chat');
     });
     }
@@ -365,7 +365,7 @@ const InitializeRoom = (data: any, user_name? : string) => {
 
 useEffect(() => {
   socket.on('update-room', (data) => {
-    console.log("update-room", data);
+    
     UpdateUserInformation();
     GetMyStatusInTheRoom();
   });
@@ -410,7 +410,7 @@ const addUserToChatRoom = async (userName : string, roomId : string | undefined)
         'Authorization': `Bearer ${token}`
       }
     });
-    console.log("ADDED USER TO CHAT ROOM", response.data);
+    
     return response.data;
   } catch (error) {
     console.error(error);
@@ -446,12 +446,12 @@ async function GetMyStatusInTheRoom()
             'Authorization': `Bearer ${token}`
           }
         });
-            console.log("Response from GetMyStatusInTheRoom: ");
-            console.log(response.data.status);
+            
+            
             setMyStatus(response.data.status);
             return 0;
             } catch (error) {
-            console.log(error);
+            
             return 1;
             }
   }
@@ -465,13 +465,13 @@ async function GetMyStatusInTheRoom()
         'Authorization': `Bearer ${token}`
       }
     });
-        console.log("Response data ", response.data.data);
+        
         setUserInformation(response.data.data); //room, userStatus: {user, userStatus}
-        console.log("Information", UserInformation);
+        
     
         return 0;
         } catch (error) {
-        console.log(error);
+        
         return 1;
         }
 };
@@ -515,8 +515,8 @@ else{
     if (blockedUsers.indexOf(m.user) !== -1) {
     }
     else {
-    console.log(blockedUsers);
-    console.log(m.user);
+    
+    
     return <Message username={username} socket={props.socket} index={index} user={m.user} message={m.message} setBlockedUsers={setBlockedUsers} loadBlocked={loadBlockedUsers} />
     }
     

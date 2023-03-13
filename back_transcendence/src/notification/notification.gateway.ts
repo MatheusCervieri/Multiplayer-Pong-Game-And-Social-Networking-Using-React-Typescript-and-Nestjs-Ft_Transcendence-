@@ -28,12 +28,12 @@ export class NotificationGateway implements OnGatewayConnection, OnGatewayDiscon
   @WebSocketServer() server;
 
   handleConnection(client: Socket) {
-    console.log(`Client connected: ${client.id}`);
+    
   }
 
   handleDisconnect(client: Socket) {
     this.notificationService.disconnectClient(client);
-    console.log(`Client ${client.id} disconnected: ${client.id}`);
+    
   }
 
   @SubscribeMessage('authenticate')
@@ -49,7 +49,7 @@ export class NotificationGateway implements OnGatewayConnection, OnGatewayDiscon
   @SubscribeMessage('invite-game')
   async inviteToPlay(client: CustomSocket, data : { token: string, playerToPlayName : string}) {
     //validate the token.
-    console.log("invite-game");
+    
     if (data.token)
     {
       const user = await this.userService.findOneByToken(data.token);

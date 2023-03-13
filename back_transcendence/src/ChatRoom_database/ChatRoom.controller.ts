@@ -130,7 +130,7 @@ export class ChatRoomController {
 
   @Post('add-user-room/:id')
   async AddUsersToChatRoom(@Param() params: any, @Body() data : any): Promise<any> {
-    console.log("teste");
+    
     const user = await this.UsersService.findOneByName(data.name);
     if (!user) {
       throw new HttpException('User not found', HttpStatus.NOT_FOUND);

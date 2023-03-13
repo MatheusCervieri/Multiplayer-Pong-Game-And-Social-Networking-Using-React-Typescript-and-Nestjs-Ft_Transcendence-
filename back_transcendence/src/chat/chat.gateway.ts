@@ -21,49 +21,49 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   handleConnection(client: Socket) {
     this.connectedUsers.push(client.id);
-    console.log(`Client connected: ${client.id}`);
+    
   }
 
   handleDisconnect(client: Socket) {
     this.connectedUsers = this.connectedUsers.filter(user => user !== client.id);
-    console.log(`Client ${client.id} disconnected: ${client.id}`);
+    
   }
 
   @SubscribeMessage('join-room')
   handleJoinRoom(client: Socket, data : { name: string , room_id: string}) {
     client.join(data.room_id);
-    console.log(`Client ${client.id} joined room: ${data.room_id}`);
+    
   }
 
 
   @SubscribeMessage('leave-room')
   handleLeaveRoom(client: Socket, room: string) {
     client.leave(room);
-    console.log(`Client ${client.id} left room: ${room}`);
+    
   }
 
   @SubscribeMessage('update-room')
   updateRoom(client: Socket, data: { message:string, roomid: string}) {
-    console.log("EBAAAAAAAAAAAAAAAAAAAA  Received update-room:");
-    console.log(data.message, data.roomid);
+    
+    
     this.server.to(data.roomid).emit('update-room', data);
   }
 
   @SubscribeMessage('message')
   async handleMessage(client: Socket, data: { user:string , message:string, roomid: string}) {
-    console.log("Received message: ", data, client.id);
+    
     const room = await this.ChatRoomService.findRoomWithUsers(Number(data.roomid)) as ChatRoom;
-    console.log("Users in the room", room.users);
-    console.log("User that send the message", data.user);
+    
+    
     const user = room.users.find(user => user.name === data.user);
     if (user === undefined) {
-      console.log("User is not in the room!");
+      
     }
     else if (room.bannedusers.find(banneduser => banneduser.id === user.id) !== undefined) {
-      console.log("User is banned!");
+      
     }
     else if (room.mutedusers.find(muteduser => muteduser.id === user.id) !== undefined) {
-      console.log("User is muted!");
+      
     }
     else{
       this.server.to(data.roomid).emit('message', data);

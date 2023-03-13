@@ -36,11 +36,11 @@ export default function Leaveroom() {
                 'Authorization': `Bearer ${token}`
             }
             });
-                console.log(response.data);
+                
                 navigate('/chat');
                 return 0;
                 } catch (error) {
-                console.log(error);
+                
                 navigate('/chat');
                 return 1;
             }

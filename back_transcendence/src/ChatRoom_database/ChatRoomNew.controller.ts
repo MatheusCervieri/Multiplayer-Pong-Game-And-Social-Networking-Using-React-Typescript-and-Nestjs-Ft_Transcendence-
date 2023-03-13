@@ -94,7 +94,7 @@ export class ChatRoomControllerNew {
       // Check if the user is already in the room
       const isUserInRoom = room.users.some(u => u.name === data.name);
       if (isUserInRoom) {
-        console.log('User is already in the room');
+        
         return this.removeTokenAndPasswordFromChatRoom(room);
       }
   
@@ -157,7 +157,7 @@ export class ChatRoomControllerNew {
     try {
       const chatRoom = await this.ChatRoomService.findRoomUsers(id);
       
-      console.log(chatRoom);
+      
 
       const sanitizedChatRoom = this.removeTokenAndPasswordFromChatRoom(chatRoom[0]);
 
@@ -177,7 +177,7 @@ export class ChatRoomControllerNew {
       throw new Error("User not found");
     // Get room using id.
     const room = await this.ChatRoomService.findOwner(id);
-    console.log(room);
+    
     if (!room)
       throw new Error("Room not found");
 
@@ -226,7 +226,7 @@ export class ChatRoomControllerNew {
     return { message: 'Leave the room!', data: sanitizedRoom };
   }catch (error)
   {
-    console.log(error);
+    
     return { message: error };
 
   }
@@ -274,11 +274,11 @@ export class ChatRoomControllerNew {
       
       return { message: 'User is now admin!', data: sanitizedRoom };
     } catch (error) {
-      console.log(error);
+      
       return { message: error };
     }
   }
-  
+
   @Post('remove-admin-room/:id')
   async RemoveAdmin(@Req() request: any, @Param('id') id: number, @Body() data: any): Promise<any> {
       try{
@@ -315,12 +315,12 @@ export class ChatRoomControllerNew {
       room.adminusers = room.adminusers.filter(u => u.id !== userToRemoveAdmin.id);
       await this.ChatRoomService.save(room);
       const data1 = { message: "updateroom", roomid: room.id};
-      console.log(room.id);
+      
       this.ChatGateway.server.to(room.id.toString()).emit('update-room', data1);
       return { message: 'User is now admin!', data: this.removeTokenAndPasswordFromChatRoom(room) };
     }catch (error)
     {
-      console.log(error);
+      
       return { message: error };
     } 
    
@@ -385,7 +385,7 @@ export class ChatRoomControllerNew {
       return { message: 'User is now blocked!', data: sanitizedRoom };
     }catch (error)
     {
-      console.log(error);
+      
       return { message: error };
     }
   }
@@ -440,7 +440,7 @@ export class ChatRoomControllerNew {
       return { message: 'User is now unblocked!', data: sanitizedRoom };
     }catch (error)
     {
-      console.log(error);
+      
   }
 }
 
@@ -495,7 +495,7 @@ async MuteUser(@Req() request: any, @Param('id') id: number, @Body() data: any):
       return { message: 'User is now muted!', data: sanitizedRoom };
     }catch (error)
     {
-      console.log(error);
+      
       return { message: error };
     }
 }
@@ -552,7 +552,7 @@ async UnMuteUser(@Req() request: any, @Param('id') id: number, @Body() data: any
       return { message: 'User is now unmuted!', data: sanitizedRoom };
     }catch (error)
     {
-      console.log(error);
+      
       return { message: error };
     }
     
@@ -568,7 +568,7 @@ async GetRoomUsersStatus(@Req() request: any, @Param('id') id: number): Promise<
         throw new Error("User not found");
       // Get room using id.
       const room = await this.ChatRoomService.findOwner(id);
-      console.log(room);
+      
       if (!room)
         throw new Error("Room not found");
 
@@ -609,7 +609,7 @@ async GetRoomUsersStatus(@Req() request: any, @Param('id') id: number): Promise<
       return { message: 'Users and their status in the room', data: {sanitizedRoom, sanitizedUsers} };
     }catch (error)
     {
-      console.log(error);
+      
       return { message: error };
     }
 }
@@ -654,7 +654,7 @@ async MyPrivllegesatroom(@Req() request: any, @Param('id') id: number): Promise<
     return { message: 'Your status in the room', status };
   }catch (error)
   {
-    console.log(error);
+    
     return { message: error };
   }
 }
@@ -680,7 +680,7 @@ async CheckPassword(@Req() request: any, @Param('id') id: number, @Body() data: 
 }
 catch (error)
 {
-  console.log(error);
+  
   return { message: error };
 }
 }

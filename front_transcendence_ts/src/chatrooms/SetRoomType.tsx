@@ -89,12 +89,12 @@ const SetRoomType = (props: SetRoomTypeProps) => {
         'Authorization': `Bearer ${token}`
       }
     });
-        console.log(response.data);
+        
         toast.success("Room type changed!");
         props.setShowSetRoomType(false);
         return 0;
         } catch (error) {
-        console.log(error);
+        
         props.setShowSetRoomType(false);
         return 1;
         }

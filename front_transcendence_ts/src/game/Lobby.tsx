@@ -87,7 +87,7 @@ export default function Lobby(props : LobbyProps) {
     if (props.myName === gameData.player1Name || props.myName === gameData.player2Name)
     {
     const token = localStorage.getItem('token');
-    console.log("Small Racket", smallRacket, "Longer game", longerGame);
+    
     const data = { token: token, game_id: id,  smallRacket: smallRacket, longerGame: longerGame };
     props.socket.emit('vote-game-type', data);
     toast.success("Vote sent");

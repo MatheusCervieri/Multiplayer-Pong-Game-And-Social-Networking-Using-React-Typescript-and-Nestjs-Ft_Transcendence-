@@ -35,7 +35,7 @@ export class GamesServices {
     newgame.player2Id = player2.user.id;
     const databaseGame = await this.gamesRepository.save(newgame); 
     const rtGame = Object.assign({}, defaultGameRoom); 
-    console.log("RT GAME", defaultGameRoom);
+    
     rtGame.id = databaseGame.id;
     rtGame.type = 'invite';
     rtGame.player1Name = player1.user.name;
@@ -55,14 +55,14 @@ export class GamesServices {
     newgame.player2Id = player2.user.id;
     const databaseGame = await this.gamesRepository.save(newgame); 
     const rtGame = Object.assign({}, defaultGameRoom); //One of the problens is here. 
-    console.log("RT GAME", defaultGameRoom);
+    
     rtGame.id = databaseGame.id;
     rtGame.player1Name = player1.user.name;
     rtGame.player2Name = player2.user.name;
     rtGame.creationDate = new Date().getTime();
     rtGame.status = "lobby";
     this.rtGames.set(databaseGame.id.toString(), rtGame);
-    console.log(this.rtGames);
+    
     player1.client.emit('game-found', { id : databaseGame.id });
     player2.client.emit('game-found', { id: databaseGame.id });
     return databaseGame;
@@ -121,7 +121,7 @@ export class GamesServices {
     }
 
     if(rtGame.player1IsConnected === false && rtGame.player2IsConnected === false) {
-      console.log("Game is finished"); 
+       
       //this.rtGames.delete(gameId);
     }
     
@@ -133,7 +133,7 @@ export class GamesServices {
   async voteGame(username: string, game_id: string, smallRacket: boolean, longerGame: boolean)
   {
     const rtGame = this.rtGames.get(game_id);
-    console.log(smallRacket, longerGame);
+    
     if(rtGame.player1Name === username)
     {
         rtGame.player1SmallRacketVote = smallRacket;
@@ -281,12 +281,12 @@ export class GamesServices {
     gamedatabase.isRunning = false;
     await this.save(gamedatabase);
     //remove game from rtGames
-    console.log("GAME ID", gameId);
+    
     //remove all games with this id from rtGames
 
     this.rtGames.delete(gameId);
     this.rtGames.delete(gameId.toString());
-    console.log("This is a rtGames map: " , this.rtGames);
+    
   }
 
   async finishgameDecline(gameId: string)
@@ -294,11 +294,11 @@ export class GamesServices {
     //we need to set the time the lobby to 0;
     //We need to update the rtGame.
 
-    console.log("Finish game decline!");
+    
     const rtGame = this.rtGames.get(gameId.toString());
-    console.log("RTGAME", rtGame);
+    
     rtGame.timeToStart = 0;
-    console.log("This is a rtGames map in finishGameDecline: " , this.rtGames);
+    
     //remove game from rtGames
     this.rtGames.set(gameId.toString(), rtGame);
     this.gameGateway.server.to(gameId).emit('game-update', rtGame);
@@ -345,7 +345,7 @@ export class GamesServices {
         if(rtGame.player1IsConnected && rtGame.player2IsConnected)
         {
           //Select the gametime - make the necessary changes in the game based in the players votes. 
-          console.log(rtGame.player1LongerGameVote, rtGame.player2LongerGameVote, rtGame.player1SmallRacketVote, rtGame.player2SmallRacketVote);
+          
           if(rtGame.player1LongerGameVote && rtGame.player2LongerGameVote)
             rtGame.gameFinishScore = 20;
           if(rtGame.player1SmallRacketVote && rtGame.player2SmallRacketVote)
@@ -428,7 +428,7 @@ export class GamesServices {
     const user = await this.userService.findOneByToken(data.token);
     if (user)
     {
-      console.log("User found");
+      
       if (this.queue === undefined)
       {
         this.queue = [];
@@ -437,14 +437,14 @@ export class GamesServices {
       if (this.queue.find(x => x.user.id === user.id) === undefined)
       {
         this.queue.push({client, user});
-        console.log("User added to queue");
+        
       }
 
       //Check if the user is already in a running game! 
       for (const [gameId, rtGame] of this.rtGames.entries()) {
         if (rtGame.player1Name === user.name || rtGame.player2Name === user.name)
         {
-          console.log("User is already in a running game!");
+          
           return;
         }
       }
@@ -453,9 +453,9 @@ export class GamesServices {
       {
         const player1 = this.queue.shift();
         const player2 = this.queue.shift();
-        console.log("Queue", this.queue);
+        
         const game = await this.createQueueGame(player1, player2);
-        console.log(this.getRtGame(game.id.toString()));
+        
       }
     }
   }
@@ -486,7 +486,7 @@ export class GamesServices {
 
     if (this.queue) {
       this.queue = this.queue.filter(player => player.client.id !== client.id);
-      console.log("Disconected from queue", client.id);
+      
     }
   }
 

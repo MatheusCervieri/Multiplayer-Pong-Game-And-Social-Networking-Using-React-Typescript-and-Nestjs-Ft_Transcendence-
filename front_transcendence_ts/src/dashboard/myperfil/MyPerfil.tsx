@@ -136,8 +136,8 @@ const MyPerfil: React.FC = () => {
     }
   })
     .then((response: any) => {
-      console.log(response.data);
-      console.log(response.data.id);
+      
+      
       setUserInformation(response.data);
       getMatchHistory(response.data.name);
     })
@@ -157,11 +157,11 @@ const MyPerfil: React.FC = () => {
     }
   })
     .then((response : any) => {
-      console.log(response.data);
+      
       setMatchHistory(response.data);
     })
     .catch((error : any) => {
-      console.log(error);
+      
     });
   }
 

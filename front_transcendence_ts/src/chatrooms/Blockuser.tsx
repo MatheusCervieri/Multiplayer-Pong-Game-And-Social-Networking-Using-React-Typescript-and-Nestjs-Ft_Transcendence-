@@ -35,7 +35,7 @@ export default function Blockuser(props : BlockuserProps) {
             navigate(url);
            
             
-            console.log(response.data);
+            
           })
           .catch(error => {
             console.error(error);
@@ -50,9 +50,9 @@ export default function Blockuser(props : BlockuserProps) {
               }
             })
               .then(response => {
-                console.log("UHULLLLL");
+                
                 props.setBlockedUsers(response.data);
-                console.log(response.data);
+                
               })
               .catch(error => {
                 console.error(error);

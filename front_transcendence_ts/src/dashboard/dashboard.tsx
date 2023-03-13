@@ -49,7 +49,7 @@ const Dashboard = () => {
   
     async function checkToken() {
       const token = localStorage.getItem('token');
-      console.log(token);
+      
       if (!token) {
         navigate('../login');
       } else {
@@ -68,7 +68,7 @@ const Dashboard = () => {
     const LoadUserInformation = (token: string) => {
           fetchData(token)
           .then(data => {
-              console.log(data);
+              
               user_information.name = data.name;
               user_information.email = data.email;
               setUsername(user_information.name);

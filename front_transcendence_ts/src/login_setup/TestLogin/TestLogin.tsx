@@ -52,7 +52,7 @@ const TestLogin: React.FC = () => {
     try {
       const response = await axios.post(serverurl + '/login/testlogin', data
       );
-      console.log(response);
+      
       localStorage.setItem('token', response.data)
       navigate('../dashboard');
     } catch (error) {

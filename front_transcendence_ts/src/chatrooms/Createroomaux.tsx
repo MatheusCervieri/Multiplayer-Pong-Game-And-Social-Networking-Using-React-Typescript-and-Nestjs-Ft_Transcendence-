@@ -102,7 +102,7 @@ const Createroomaux = (props: CreateroomauxProps) => {
     type: roomType.type,
     password: roomType.password,
     };
-    console.log(data);
+    
     props.handleCreateRoom(data);
   }
   

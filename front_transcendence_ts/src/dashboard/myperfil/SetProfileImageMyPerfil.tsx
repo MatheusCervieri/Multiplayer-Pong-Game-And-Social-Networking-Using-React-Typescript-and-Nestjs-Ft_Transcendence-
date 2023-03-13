@@ -74,7 +74,7 @@ const SetProfileImageMyProfile = (props: SetProfileImageMyProfileProps) => {
         }
       });
 
-      console.log(response.data);
+      
       if(response.data.statusCode === 200)
       {
         toast.success(response.data.message);
