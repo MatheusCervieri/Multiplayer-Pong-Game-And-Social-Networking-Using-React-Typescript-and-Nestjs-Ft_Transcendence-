@@ -65,15 +65,12 @@ export class NotificationService {
         playerThatInvited: PlayerThatInvited,
         invitedPlayer: InvitedUser,
         id: 0,
-      }
-      //check if the player already invited someone.
-      
-      const invitationExists = this.invitations.find(i => i.playerThatInvited.id === PlayerThatInvited.id);
-      if(invitationExists)
+    }
+    
+      //Check if player is already in a game intead of checking if the player has a invitation. 
+      if(this.gameService.checkIfUserIsPlaying(playerThatInvited.user.name))
       {
-        const playerThatInvited = this.connectedUsers.find(c => c.user.id === PlayerThatInvited.id);
-        playerThatInvited.emit("message", "You already invited someone.");
-        //return a error message: You already invited someone. 
+        playerThatInvited.emit("message", "You already is in a game!");
       }
       else
       {
@@ -89,8 +86,7 @@ export class NotificationService {
         playerThatInvited.emit("invitation-work", invitation);
         
         console.log("Chegou no final");
-     }
-      //invite to play.
+      }
     }
     else
       playerThatInvited.emit("message", "Player is not avaliable to play!");
