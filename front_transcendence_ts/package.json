@@ -56,6 +56,13 @@
     "@types/js-cookie": "^3.0.3",
     "@types/jsonwebtoken": "^9.0.1",
     "@types/react-modal": "^3.13.1",
-    "eslint-plugin-unused-imports": "^2.0.0"
-  }
+    "eslint": "^8.36.0",
+    "eslint-plugin-react": "^7.32.2",
+    "eslint-plugin-unused-imports": "^2.0.0",
+    "optionator": "^0.9.1"
+  },
+  "description": "This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).",
+  "main": "index.js",
+  "author": "",
+  "license": "ISC"
 }
