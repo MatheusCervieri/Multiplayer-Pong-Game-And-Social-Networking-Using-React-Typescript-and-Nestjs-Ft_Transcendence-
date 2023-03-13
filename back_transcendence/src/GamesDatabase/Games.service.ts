@@ -294,12 +294,17 @@ export class GamesServices {
     //we need to set the time the lobby to 0;
     //We need to update the rtGame.
 
+    console.log("Finish game decline!");
     const rtGame = this.rtGames.get(gameId.toString());
+    console.log("RTGAME", rtGame);
     rtGame.timeToStart = 0;
-
+    console.log("This is a rtGames map in finishGameDecline: " , this.rtGames);
     //remove game from rtGames
-    this.updateGame(gameId, rtGame);
+    this.rtGames.set(gameId.toString(), rtGame);
+    this.gameGateway.server.to(gameId).emit('game-update', rtGame);
   }
+
+
 
   async finishgamePaused(gameId: string, rtGame: RTGameRoomInterface)
   {
@@ -332,8 +337,8 @@ export class GamesServices {
     
     if(rtGame.status === 'lobby')
     {
-    if(rtGame.timeToStart != 0)
-      rtGame.timeToStart = rtGame.lobbyTime - rtGame.elepsedTime;
+      if(rtGame.timeToStart != 0)
+        rtGame.timeToStart = rtGame.lobbyTime - rtGame.elepsedTime;
       if (rtGame.timeToStart <= 0) 
       {
         rtGame.timeToStart = 0;
