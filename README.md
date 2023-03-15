@@ -16,11 +16,9 @@ This is the final project of the core curriculum at 42 School (One of the top te
 
 ## Visual Overview
 
-![Dashboard](readme/dashboard.png)
+![Dashboard](readme/dashboard.png "Dashboard")
 
-Exemplo 2:
-
-![image description](readme/exemplo2.png)
+![Dashboard](readme/privateprofile.png "Private Profile")
 
 ### Setup - Como Usar o Programa!
 
