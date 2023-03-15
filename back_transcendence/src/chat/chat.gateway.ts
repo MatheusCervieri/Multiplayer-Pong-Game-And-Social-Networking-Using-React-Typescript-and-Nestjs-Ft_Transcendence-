@@ -54,24 +54,11 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     
     const room = await this.ChatRoomService.findRoomWithUsers(Number(data.roomid)) as ChatRoom;
     
-    
-    const user = room.users.find(user => user.name === data.user);
-    if (user === undefined) {
-      
-    }
-    else if (room.bannedusers.find(banneduser => banneduser.id === user.id) !== undefined) {
-      
-    }
-    else if (room.mutedusers.find(muteduser => muteduser.id === user.id) !== undefined) {
-      
-    }
-    else{
       this.server.to(data.roomid).emit('message', data);
       const data_message = new Message();
       data_message.user = data.user;
       data_message.message = data.message;
       data_message.chatRoom = room;
       await this.MessageService.create(data_message);
-    }
   }
 }

@@ -69,11 +69,11 @@ const Status = styled.span<{ status: string }>`
   font-size: 16px;
   color: ${({ status }) => {
     switch (status) {
-      case "online":
+      case "Online":
         return "#4caf50"; // green
-      case "playing":
+      case "Playing":
         return "#9c27b0"; // purple
-      case "offline":
+      case "Offline":
         return "#f44336"; // red
       default:
         return "#000"; // default color (black)

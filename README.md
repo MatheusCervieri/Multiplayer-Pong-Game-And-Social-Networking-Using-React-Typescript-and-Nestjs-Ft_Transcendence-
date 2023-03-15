@@ -28,6 +28,44 @@ Online Multiplayer Game:
 
 ![Dashboard](readme/ponggame.png "Online Multiplayer Game")
 
+Public Chat Room:
+
+![Dashboard](readme/publicchatroom.png)
+
+Users Modal:
+
+![Dashboard](readme/usersmodal.png)
+
+Friends Modal:
+
+![Dashboard](readme/friendsmodal.png)
+
+Ranking:
+
+![Dashboard](readme/ranking.png)
+
+Chat Rooms:
+
+![Dashboard](readme/chatrooms.png)
+
+Create Rooms:
+
+![Dashboard](readme/create_room.png)
+
+Room Adm Panel:
+
+![Dashboard](readme/adm_panel.png)
+
+New Direct Message:
+
+![Dashboard](readme/newdm.png)
+
+Final Game Scream:
+
+![Dashboard](readme/finalscream.png)
+
+
+
 ### Setup - Como Usar o Programa!
 
 O primeiro passo para executar o programa é rodar um "make" dentro do diretório. 
