@@ -16,9 +16,17 @@ This is the final project of the core curriculum at 42 School (One of the top te
 
 ## Visual Overview
 
-<img src="readme/dashboard.png" alt="Dashboard screenshot" style="border: 4px solid black; border-radius: 5px;">
+Dashboard:
+
+![Dashboard](readme/dashboard.png "Dashboard")
+
+Private Profile:
 
 ![Dashboard](readme/privateprofile.png "Private Profile")
+
+Online Multiplayer Game:
+
+![Dashboard](readme/ponggame.png "Online Multiplayer Game")
 
 ### Setup - Como Usar o Programa!
 

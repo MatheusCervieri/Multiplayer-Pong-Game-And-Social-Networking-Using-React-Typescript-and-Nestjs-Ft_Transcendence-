@@ -31,6 +31,7 @@ import { AuthModule } from './auth42/auth.module';
 import { AuthController } from './auth42/auth.controller';
 import { FortyTwoStrategy } from './auth42/fortytwo.strategy';
 import { MailModule } from './mail/mail.module';
+import { LoginController } from './TestLogin/Login.controller';
 
 
 @Module({
@@ -46,7 +47,7 @@ import { MailModule } from './mail/mail.module';
       autoLoadEntities: true,
       synchronize: true,
     }), MailModule, UserModule, ChatRoomModule, MessageModule, ImageModule, GameModule , AuthModule],
-  controllers: [AppController, NameSetController, UserController, AuthController, ChatRoomController, ChatRoomControllerNew, UsersInformationController, ImageController, PublicImageController, GamesController],
+  controllers: [AppController, LoginController, NameSetController, UserController, AuthController, ChatRoomController, ChatRoomControllerNew, UsersInformationController, ImageController, PublicImageController, GamesController],
   providers: [FortyTwoStrategy , AppService, UsersService, ChatRoomService, ChatGateway, MessageService, ImageService, GameGateway, GamesServices, NotificationGateway, NotificationService],
 })
 export class AppModule implements NestModule{

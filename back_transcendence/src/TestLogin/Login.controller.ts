@@ -1,5 +1,5 @@
 import {Controller , Post , Body, Get, Res, Req} from '@nestjs/common';
-import { SingUpDTO } from './singup/singup.dto';
+import { SingUpDTO } from '../login(notused)/singup/singup.dto';
 import { UsersService } from 'src/user_database/user.service';
 import { User } from 'src/user_database/user.entity';
 import { ImageService } from 'src/image/image.service';
@@ -14,36 +14,6 @@ export class LoginController {
         private readonly imageService: ImageService
         ) {}
 
-    @Post()
-    async handleData(@Body() data: SingUpDTO) {
-        
-        try
-        {
-        const user = await this.UsersService.findOneEmail(data.email);
-            if (user)
-            {
-                if (user.password === data.password)
-                {
-                    if(user.TwofaAactive === true)
-                    {
-                        //Redirecionar para autenticação de dois fatores. 
-                    }
-                    else 
-                    {
-                        return (user.token);
-                    }
-                }
-                else
-                    throw new Error("Invalid password");
-            }
-        return (user.token);
-        }
-        catch (e)
-        {
-            
-            return e;
-        }   
-}
 @Post('testlogin')
 async fortyTwoLoginCallback(@Body() data: {name : string}, @Res() res: any) {
     //Criar usuário
