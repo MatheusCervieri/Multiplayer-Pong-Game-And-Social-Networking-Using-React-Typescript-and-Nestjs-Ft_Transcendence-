@@ -474,7 +474,7 @@ async function GetMyStatusInTheRoom()
         
         return 1;
         }
-};
+}
 
 function addUserBtn(){
   setShowAddUser(!showAddUser);

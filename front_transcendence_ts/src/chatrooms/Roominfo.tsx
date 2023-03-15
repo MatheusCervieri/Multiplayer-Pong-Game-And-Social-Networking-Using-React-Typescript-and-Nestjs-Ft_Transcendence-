@@ -68,7 +68,7 @@ export default function Roominfo(props: RoominfoProps) {
             props.setShowInfo(!props.showInfo);
             return 1;
             }
-    };
+    }
   
 
     return (

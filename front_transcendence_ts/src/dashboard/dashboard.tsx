@@ -35,7 +35,7 @@ const Button = styled.button`
 const Dashboard = () => {
     const [username, setUsername] = useState("John Doe");
     const navigate = useNavigate();
-    let user_information: {name: string, email: string} = {name: '', email: ''}; 
+    const user_information: {name: string, email: string} = {name: '', email: ''}; 
     
     const handleLogout = () => {
       localStorage.removeItem('token');
