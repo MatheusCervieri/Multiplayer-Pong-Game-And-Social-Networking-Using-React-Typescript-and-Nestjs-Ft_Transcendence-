@@ -3,7 +3,7 @@ sudo chmod -R 777 pgdata
 
 ### Summary!
 
-This fullstack website allows users to play the classic game of pong against others. it also features a range of impressive functionalities, including a login system, user profiles, a match-making system, a group chat interface, a DM system, a ranking system, a friends system, and a two-factor authentication system. This project offers an excellent opportunity to demonstrate technical proficiency across both frontend and backend development. By creating the frontend and backend, this project provides a thorough understanding of the fundamentals needed to develop a full-stack web application.
+This fullstack website allows users to play the classic game of pong against others. it also features a range of impressive functionalities, including a login system, user profiles, a match-making system, a group chat interface, a DM system, a ranking system, a friends system, and a two-factor authentication system. This project offers an excellent opportunity to demonstrate technical proficiency across both frontend and backend development.
 
 This is the final project of the core curriculum at 42 School (One of the top ten most innovative universities according to the WURI 2021 ranking). I completed this project on my own. All projects at 42 School go through three evaluations, and you can see the requirements for delivering the project at the end of this page.
 
@@ -16,7 +16,7 @@ This is the final project of the core curriculum at 42 School (One of the top te
 
 ## Visual Overview
 
-![image description](readme/exemplo_arrumado.png)
+![Dashboard](readme/dashboard.png)
 
 Exemplo 2:
 
