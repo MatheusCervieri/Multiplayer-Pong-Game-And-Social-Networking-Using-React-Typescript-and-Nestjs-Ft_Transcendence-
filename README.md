@@ -13,6 +13,7 @@ This is the final project of the core curriculum at 42 School (One of the top te
 * Backend: Nest.js, Node.js, Express.js, PostgreSQL.
 * Authentication: Passport, JWT.
 * 2FA: SendGrid API.
+* Others: Docker and Docker Compose.
 
 ## Visual Overview
 
@@ -56,7 +57,7 @@ Final Game Scream:
 
 ![Dashboard](readme/finalscream.png)
 
-
+There are additional functionalities in the game. At the end of this README, I will provide a list of all the requirements and tasks completed for this project.
 
 ### Setup - Como Usar o Programa!
 
