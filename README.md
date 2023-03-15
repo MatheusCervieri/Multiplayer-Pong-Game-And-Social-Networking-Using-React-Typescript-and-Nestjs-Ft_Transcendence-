@@ -48,17 +48,9 @@ Chat Rooms:
 
 ![Dashboard](readme/chatrooms.png)
 
-Create Rooms:
-
-![Dashboard](readme/create_room.png)
-
 Room Adm Panel:
 
-![Dashboard](readme/adm_panel.png)
-
-New Direct Message:
-
-![Dashboard](readme/newdm.png)
+![Dashboard](readme/admpanel.png)
 
 Final Game Scream:
 
