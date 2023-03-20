@@ -92,21 +92,20 @@ export class ChatRoomControllerNew {
       }
   
       // Check if the user is already in the room
-      const isUserInRoom = room.users.some(u => u.name === user.name);
-      if (isUserInRoom) {
-        
-        return this.removeTokenAndPasswordFromChatRoom(room);
+      if (room.users.find(u => u.id === user.id)) {
+        throw new HttpException('User already in the room', HttpStatus.BAD_REQUEST);
       }
-  
-      
   
       room.users.push(user);
       await this.ChatRoomService.save(room);
   
       return this.removeTokenAndPasswordFromChatRoom(room);
     } catch (err) {
+      console.log("wtf");
       console.log(err);
-      throw new InternalServerErrorException(err.message);
+      const roomId = params.id;
+      const room = await this.ChatRoomService.findRoomWithJustUsers(roomId);
+      return(room);
     }
   }
   

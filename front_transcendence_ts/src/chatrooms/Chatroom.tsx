@@ -449,6 +449,10 @@ async function GetMyStatusInTheRoom()
             
             
             setMyStatus(response.data.status);
+            console.log("My status", myStatus, response.data.status);
+            if(response.data.status.isBlocked === true)
+              navigate('../dashboard');
+           
             return 0;
             } catch (error) {
             
