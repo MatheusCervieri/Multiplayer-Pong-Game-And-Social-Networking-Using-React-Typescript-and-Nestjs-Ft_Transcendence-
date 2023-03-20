@@ -33,13 +33,13 @@ const Button = styled.button`
 `;
 
 const Dashboard = () => {
-    const [username, setUsername] = useState("John Doe");
+    const [username, setUsername] = useState("");
     const navigate = useNavigate();
     const user_information: {name: string, email: string} = {name: '', email: ''}; 
     
     const handleLogout = () => {
       localStorage.removeItem('token');
-      navigate('../42');
+      navigate('../');
       // Add other logout logic here, such as clearing session data, etc.
     };
 
@@ -51,7 +51,7 @@ const Dashboard = () => {
       const token = localStorage.getItem('token');
       
       if (!token) {
-        navigate('../login');
+        navigate('../');
       } else {
         LoadUserInformation(token);
       }

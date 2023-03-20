@@ -59,6 +59,8 @@ export default function Roominfo(props: RoominfoProps) {
         });
             
             props.setUserInformation(response.data.data); 
+            console.log(response);
+            console.log("User information", response.data.data);
             //room, userStatus: {user, userStatus}
             
             props.setShowInfo(!props.showInfo);
@@ -73,7 +75,6 @@ export default function Roominfo(props: RoominfoProps) {
 
     return (
     <div>
-        
         <RoomImfoButton onClick={handleClick}>Information</RoomImfoButton>
     </div>
   )

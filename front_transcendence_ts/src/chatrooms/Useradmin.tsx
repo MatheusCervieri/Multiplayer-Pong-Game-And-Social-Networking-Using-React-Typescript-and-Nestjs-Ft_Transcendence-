@@ -98,7 +98,7 @@ const UserAdmin : any = (props : UserAdminProps) => {
     
     
     setInformation(props.information);
-    
+    console.log("Information ", props.information);
    
   },[]);
  
@@ -107,6 +107,8 @@ const UserAdmin : any = (props : UserAdminProps) => {
     handlePassword(props.information.sanitizedRoom);
     setuserPrivilleges(props.myStatus);
     setUsers(props.information.sanitizedUsers);
+    console.log("User privilleges", userPrivilleges);
+    console.log("Users", users);
     
   },[information, props.information, props.myStatus]);
 

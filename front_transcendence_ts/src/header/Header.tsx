@@ -172,8 +172,8 @@ const Header: React.FC<HeaderProps> = ({ showNav = true, socket }) => {
             setShowMenu(false);
           }}>Watch Games</MenuItem>
           <MenuItem onClick={() => {
-                localStorage.removeItem('../token');
-                navigate('../42');
+                localStorage.removeItem('token');
+                navigate('../');
               }}>Log Out!</MenuItem>
           </Menu>
         </Nav>

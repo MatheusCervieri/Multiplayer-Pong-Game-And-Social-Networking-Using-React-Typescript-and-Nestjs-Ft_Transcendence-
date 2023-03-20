@@ -81,6 +81,7 @@ export class AuthController {
           const subject = 'Your Two-Factor Authentication Code';
           const text = `Your two-factor authentication code is: ${twofacode}`;
           //I need to change the user email. 
+          console.log(twofacode);
           await this.mailService.sendEmail(user42.email, subject, text);
 
           res.redirect(frontendUrl);

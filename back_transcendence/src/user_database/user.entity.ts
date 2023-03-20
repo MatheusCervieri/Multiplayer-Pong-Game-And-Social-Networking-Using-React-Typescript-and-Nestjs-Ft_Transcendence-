@@ -68,8 +68,6 @@ export class User {
   @JoinTable()
   friends: User[];
 
-  
-
   @OneToOne(() => Image)
   @JoinColumn()
   image: Image;

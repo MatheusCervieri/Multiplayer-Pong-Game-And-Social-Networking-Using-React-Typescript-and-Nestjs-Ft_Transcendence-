@@ -53,7 +53,16 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   async handleMessage(client: Socket, data: { user:string , message:string, roomid: string}) {
     
     const room = await this.ChatRoomService.findRoomWithUsers(Number(data.roomid)) as ChatRoom;
-    
+    console.log(room.users);
+    //check if user is banned from the room.
+    if (room.bannedusers.find(user => user.name === data.user)) {
+      return;
+    }
+    //check if user is muted from the room.
+    if (room.mutedusers.find(user => user.name === data.user)) {
+      return;
+    }
+
       this.server.to(data.roomid).emit('message', data);
       const data_message = new Message();
       data_message.user = data.user;

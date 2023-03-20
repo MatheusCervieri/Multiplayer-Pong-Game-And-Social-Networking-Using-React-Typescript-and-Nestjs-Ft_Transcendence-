@@ -92,25 +92,20 @@ export class ChatRoomControllerNew {
       }
   
       // Check if the user is already in the room
-      const isUserInRoom = room.users.some(u => u.name === data.name);
+      const isUserInRoom = room.users.some(u => u.name === user.name);
       if (isUserInRoom) {
         
         return this.removeTokenAndPasswordFromChatRoom(room);
       }
   
-      // Add the user to the room and save it
-      const userToAdd = await this.UsersService.findOneByName(data.name);
+      
   
-      // Check if the user exists
-      if (!userToAdd) {
-        throw new NotFoundException('User not found');
-      }
-  
-      room.users.push(userToAdd);
+      room.users.push(user);
       await this.ChatRoomService.save(room);
   
       return this.removeTokenAndPasswordFromChatRoom(room);
     } catch (err) {
+      console.log(err);
       throw new InternalServerErrorException(err.message);
     }
   }
@@ -561,7 +556,7 @@ async UnMuteUser(@Req() request: any, @Param('id') id: number, @Body() data: any
 @Get('users-and-status/:id')
 async GetRoomUsersStatus(@Req() request: any, @Param('id') id: number): Promise<any> {
     //Return a list of users in the room with a status array that shows: if the users is blocked, if the users is the admin, if the user is the owner, if the user is muted.
-    
+    console.log();
     try{
       const user = await this.UsersService.findOne(request.user_id);
       if (!user)
@@ -574,8 +569,6 @@ async GetRoomUsersStatus(@Req() request: any, @Param('id') id: number): Promise<
 
       //Check if the user that make the request is in the room
       const roomUsers = await this.ChatRoomService.findUsers(room.id);
-      if (!roomUsers.some(u => u.id === user.id))
-        throw new Error("You are not in the room");
 
       const roomBlocked = await this.ChatRoomService.findBlockedUsers(room.id);
       const roomMuted = await this.ChatRoomService.findMutedUsers(room.id);
@@ -609,7 +602,7 @@ async GetRoomUsersStatus(@Req() request: any, @Param('id') id: number): Promise<
       return { message: 'Users and their status in the room', data: {sanitizedRoom, sanitizedUsers} };
     }catch (error)
     {
-      
+      console.log(error);
       return { message: error };
     }
 }
