@@ -82,8 +82,8 @@ make
 
 ## Index
 
-*  [Summary](#Summary!)
-*  [Main Technologies](##Main-Technologies)
+*  [Summary](#Summary)
+*  [Main Technologies](#Main-Technologies)
 *  [Explicação geral do Encoder!](#explicação-geral-do-encoder)
 *  [Algoritimo de Huffman!](#algoritimo-de-huffman)
 *  [Shared Memory!](#shared-memory)
