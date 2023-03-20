@@ -84,12 +84,11 @@ make
 
 *  [Summary](#Summary)
 *  [Main Technologies](#Main-Technologies)
-*  [Explicação geral do Encoder!](#explicação-geral-do-encoder)
-*  [Algoritimo de Huffman!](#algoritimo-de-huffman)
-*  [Shared Memory!](#shared-memory)
-*  [Quais informações enviamos para o decoder?](#quais-informações-enviamos-para-o-decoder)
-*  [Explicação geral do Decoder!](#explicação-geral-do-decoder)
-*  [Desafio](#desafio)
+*  [Visual Overview](#visual-overview)
+*  [Setup - How to Use?](#Setup---How-to-Use)
+*  [What was done in the project?!](#What-was-done-in-the-project)
+*  [Requirements](#Requirements)
+
 
 
 ### Requirements
