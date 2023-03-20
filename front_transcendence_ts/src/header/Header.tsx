@@ -6,6 +6,7 @@ import Modal from 'react-modal';
 import Users from '../dashboard/Users';
 import Friends from '../dashboard/Friends';
 import RunningGames from '../dashboard/RunningGames';
+import Notification from '../dashboard/Notification';
 
 const HeaderWrapper = styled.header`
   display: flex;
@@ -154,7 +155,7 @@ const Header: React.FC<HeaderProps> = ({ showNav = true, socket }) => {
       {showNav && (
         <Nav>
           <UserName>{user.name}</UserName>
-          {user.id && <ProfileImage onClick={handleMenuClick} src={serverurl + "/publicimage/profileimage/" + user.id }></ProfileImage>}
+          {user.id && <ProfileImage onClick={handleMenuClick} src={serverurl + "/publicimage/profileimage/" + user.id  + "?" + new Date().getTime()}></ProfileImage>}
           <Menu open={showMenu}>
           <MenuItem onClick={() => {navigate('../myperfil')}}>My Profile</MenuItem>
           <MenuItem onClick={() => {

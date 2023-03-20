@@ -6,6 +6,7 @@ import Modal from 'react-modal';
 import SetNameMyPerfil from './SetNameMyPerfil';
 import SetProfileImageMyProfile from './SetProfileImageMyPerfil';
 import TwoFa from '../../login_setup/2fa/TwoFaEnable'
+import { profileEnd } from 'console';
 
 const UserInfoWrapper = styled.div`
   display: flex;
@@ -126,6 +127,7 @@ const MyPerfil: React.FC = () => {
   const [isChangeNameOpen, setChangeNameOpen] = useState(false);
   const [isPictureModalOpen, setPictureModalOpen] = useState(false);
   const [isTwoFaModalOpen , setTwoFaModalOpen] = useState(false);
+  const [profileUrl, setProfileUrl] = useState('');
 
   function getUserInformation()
   {
@@ -145,8 +147,20 @@ const MyPerfil: React.FC = () => {
       console.error(error);
     });
   }
+
+  useEffect(() => {
+    updateProfileUrl();
+  }, [userInformation.id]);
+
+  function updateProfileUrl()
+  {
+    if(userInformation.id)
+      setProfileUrl(serverurl + "/publicimage/profileimage/" + userInformation.id + "?" + new Date().getTime());
+    console.log(profileUrl);
+  }
   useEffect(() => {
     getUserInformation();
+   
   }, []);
 
   async function getMatchHistory(name : string){
@@ -173,6 +187,7 @@ const MyPerfil: React.FC = () => {
 
   const togglePictureModal = () => {
     setPictureModalOpen(false);
+    updateProfileUrl();
     getUserInformation();
   }
 
@@ -199,7 +214,7 @@ const MyPerfil: React.FC = () => {
 
   return (
     <UserInfoWrapper>
-      <ProfileImage src={serverurl + "/publicimage/profileimage/" + userInformation.id} alt="Player" />
+      {profileUrl && <ProfileImage src={profileUrl} alt="Player" />}
       <EditButton onClick={handlePictureEdit}>Edit Picture</EditButton>
       <UserName>{userInformation.name}</UserName>
       <CustomModal isOpen={isChangeNameOpen} onRequestClose={toggleNameModal}>

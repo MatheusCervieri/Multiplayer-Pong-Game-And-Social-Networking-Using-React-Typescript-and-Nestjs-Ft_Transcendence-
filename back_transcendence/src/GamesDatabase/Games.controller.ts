@@ -14,6 +14,8 @@ export class GamesController {
     private readonly ChatGateway: ChatGateway
     ) {}
 
+    
+
   @Get('hello-world')
   async hello(@Req() request: any, @Body() data : any): Promise<any> {
     return "Hello World";
