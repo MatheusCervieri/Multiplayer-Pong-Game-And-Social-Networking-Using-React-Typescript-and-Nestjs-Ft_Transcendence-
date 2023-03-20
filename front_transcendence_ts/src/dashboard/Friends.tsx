@@ -127,6 +127,7 @@ const Friends = (props : UserProps) => {
     .then(response => {
       
       const sortedUsers = sortUsersByStatus(response.data); // sort the users array by status
+      console.log(response.data);
       setUsers(sortedUsers);
     })
     .catch(error => {

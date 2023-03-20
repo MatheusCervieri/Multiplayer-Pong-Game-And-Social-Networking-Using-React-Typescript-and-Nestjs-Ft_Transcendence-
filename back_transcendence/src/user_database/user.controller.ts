@@ -138,6 +138,7 @@ async getUserWhithTheirStatus(@Req() request: any): Promise<any> {
   @Post('addfriend')
   async AddFriend(@Req() request: any, @Body() body: any): Promise<void> {
     try {
+      console.log("Hello");
       // Validate the request data
       const validationErrors = await validate(body);
       if (validationErrors.length > 0) {
@@ -187,9 +188,7 @@ async getFriends(@Req() request: any, @Body() body: any): Promise<any[]> {
       delete user.password;
       return user;
     });
-    //remove the user that make the request from the array
-    const index = sanitizedFriends.findIndex((user) => user.id == request.user_id);
-    sanitizedFriends.splice(index, 1);
+
     return sanitizedFriends;
   } catch (error) {
     console.error(error);
