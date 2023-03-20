@@ -68,64 +68,17 @@ O primeiro passo para executar o programa é rodar um "make" dentro do diretóri
 ```
 make
 ``` 
+### What i did?!
 
-Depois disso, você precisa rodar os programas seguindo a seguinte ordem:
+O primeiro passo para executar o programa é rodar um "make" dentro do diretório. 
 
-```
-./Encoder
-```
-
-```
-./Decoder
-```
-
-```
-./Encoder
-```
-
-A primeira vez que o ./Encoder for rodado você precisa passar para ele parâmetros para ele saber que tipo de texto você quer comprimir.
-
-O programa aceita dois tipos de parâmetros.
-
-A maneira mais simples de usar é passar um texto ou múltiplos textos para o encoder como no exemplo abaixo:
-
-
-Um único texto:
-```
-./Encoder "This text will be compressed"
-```
-
-múltiplos textos:
-```
-./Encoder "This text will be compressed" "This will be compressed too" This will be compressed to.
-```
-
-Você também tem a opção de passar arquivos, ou, múltiplos arquivos de texto para o programa. Para isso você precisa passar a flag "-f" e passar o diretório do arquivo:
-
-```
-./Encoder -f thisfilewillbecompressed.txt
-```
-
-Você também pode passar múltiplos arquivos: 
-```
-./Encoder -f thisfilewillbecompressed.txt text2.txt text3.txt text4.txt 
-```
-
-Depois de rodar o encoder com o texto que você quer que seja comprimido, você precisa rodar o decoder.
-
-Para rodar o decoder é bem simples:
-
-```
-./Decoder
-```
-
-Depois de ter rodado o ./Decoder, você precisa rodar o ./Encoder novamente.
-
-```
-./Encoder
-```
-
-Se você fez tudo certo, ao rodar o Encoder pelo segunda vez, você deve receber esse tipo de mensagem na tela:
+<List>
+        <li>The website allows users to play real-time multiplayer Pong games with a chat feature and complies with specific rules, including using Node and NestJS for the backend, a TypeScript and React for the frontend, and PostgreSQL for the database.</li>
+        <li>The User Account section of the website allows users to log in using the OAuth system of 42 intranet API, choose a unique name and avatar, enable two-factor authentication, add friends, view their status, display their stats, and have a match history including 1v1 games and ladder.</li>
+        <li>The website's chat feature allows users to create public, private or password-protected channels, send direct messages and block other users, while channel owners can set a password, remove it, and appoint other administrators who have specific permissions to kick, ban or mute users, as well as invite users to play Pong games and access their profiles.</li>
+        <li>The website is designed to allow users to play live Pong games against each other and features a matchmaking system for finding opponents, a customizable Pong game that is true to the original 1972 version, and the ability to select a default version without any extra features. The game is also responsive to ensure optimal gameplay.</li>
+        <li>Ensuring full functionality of the website necessitates tackling security concerns such as hashing any stored passwords, safeguarding against SQL injections, and incorporating server-side validation for forms and user input.</li>
+</List>
 
 ![image description](readme/comousar.png)
 
