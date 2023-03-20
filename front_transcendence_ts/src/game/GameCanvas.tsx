@@ -140,6 +140,7 @@ const GameCanvas: React.FC<GameCanvasProps> = (props) => {
     <div ref={containerRef} style={{ maxWidth: "360px", maxHeight: "270px", border: "2px solid #FFFFFF", borderRadius: "4px"}}>
     {height !== 0 && width !== 0 && <canvas ref={canvasRef} width={width * scaleX} height={height * scaleY}  style={{ width: '100%', height: '100%' }}/>}
     </div>
+    <p>If you are playing use W and S to move!</p>
       </GameContainer>
   );
 };

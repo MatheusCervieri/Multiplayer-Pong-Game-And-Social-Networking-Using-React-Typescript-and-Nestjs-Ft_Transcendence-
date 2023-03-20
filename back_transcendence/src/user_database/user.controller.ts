@@ -21,7 +21,6 @@ export class UserController {
       const user = await this.userService.findOne(userId);
       if (user) {
         delete user.token;
-        delete user.password;
         return user;
       } else {
         // If user does not exist, return an error message
@@ -44,7 +43,6 @@ async findProfileByName(@Param() params: any, @Req() request: any): Promise<any>
       const users = await this.userService.GetUsersRanking();
       const userprofile = users.find((user) => user.id == userProfile.id);
       delete userprofile.token;
-      delete userprofile.password;
       return userprofile;
     }
     return { error: 'Invalid user' };
@@ -61,7 +59,6 @@ async getUserWhithTheirStatus(@Req() request: any): Promise<any> {
     const users = await this.userService.GetUsersAndStatus();
     const sanitizedUsers = users.map((user) => {
       delete user.token;
-      delete user.password;
       return user;
     });
     //remove the user that make the request from the array
@@ -81,7 +78,6 @@ async getUserWhithTheirStatus(@Req() request: any): Promise<any> {
       const users = await this.userService.GetUsersRanking();
       const sanitizedUsers = users.map((user) => {
         delete user.token;
-        delete user.password;
         return user;
       });
       return sanitizedUsers;
@@ -103,7 +99,6 @@ async getUserWhithTheirStatus(@Req() request: any): Promise<any> {
         const users = await this.userService.GetUsersRanking();
         const userprofile = users.find((user) => user.id == request.user_id);
         delete userprofile.token;
-        delete userprofile.password;
         return userprofile;
       } else {
         // If user does not exist, return an error message
@@ -162,7 +157,6 @@ async getBlockedUsers(@Req() request: any): Promise<User[]> {
     const blockedUsers = blockingUser.blocks;
     const sanitizedBlockedUsers = blockedUsers.map((user) => {
       delete user.token;
-      delete user.password;
       return user;
     });
     return sanitizedBlockedUsers;

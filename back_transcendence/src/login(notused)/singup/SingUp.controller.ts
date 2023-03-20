@@ -9,7 +9,6 @@ function make_user(data: SingUpDTO)
 {
     const user = new User();
     user.email = data.email;
-    user.password = data.password;
     user.name = "";
     return user;
 }

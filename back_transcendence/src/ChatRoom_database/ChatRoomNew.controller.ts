@@ -113,26 +113,26 @@ export class ChatRoomControllerNew {
     if (Array.isArray(room.users)) {
       room.users.forEach(u => {
         delete u.token;
-        delete u.password;
+ 
       });
     } 
   
     if (room.owner) {
       delete room.owner.token;
-      delete room.owner.password;
+    
     }
   
     if (Array.isArray(room.adminusers)) {
       room.adminusers.forEach(u => {
         delete u.token;
-        delete u.password;
+       
       });
     }
 
     if (Array.isArray(room.bannedusers)) {
       room.bannedusers.forEach(u => {
         delete u.token;
-        delete u.password;
+      
       });
     }
     delete room.password;
