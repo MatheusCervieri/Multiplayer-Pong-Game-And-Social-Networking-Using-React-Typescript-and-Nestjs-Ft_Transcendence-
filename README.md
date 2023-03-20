@@ -80,10 +80,10 @@ make
 
 ![image description](readme/comousar.png)
 
-## Sumary
+## Index
 
-*  [Resumo](#resumo)
-*  [Setup - Como Usar o Programa!](#setup---como-usar-o-programa)
+*  [Summary](#Summary!)
+*  [Main Technologies](##Main-Technologies)
 *  [Explicação geral do Encoder!](#explicação-geral-do-encoder)
 *  [Algoritimo de Huffman!](#algoritimo-de-huffman)
 *  [Shared Memory!](#shared-memory)
@@ -158,13 +158,12 @@ you will have to tackle
 
 ## I - 5 Game
 
-The main purpose of this website is to play pong against other players and show everyone
+- The main purpose of this website is to play pong against other players and show everyone
 how good you are!
-Therefor we should be able to play pong directly on the website and live against an
-other player.
-It can be in a canvas or it can be with 3d effects, it can be ugly but it must be a pong
+- Therefor we should be able to play pong directly on the website and live against an
+other player. It can be in a canvas or it can be with 3d effects, it can be ugly but it must be a pong
 like the one from 1972.
-If you want to, you can add power ups, different maps etc... but user must be able to
+- If you want to, you can add power ups, different maps etc... but user must be able to
 play a default pong game without any added stuff.
-The game must be responsive!
-Other users can watch the game live without interfering in it.
+- The game must be responsive!
+- Other users can watch the game live without interfering in it.
