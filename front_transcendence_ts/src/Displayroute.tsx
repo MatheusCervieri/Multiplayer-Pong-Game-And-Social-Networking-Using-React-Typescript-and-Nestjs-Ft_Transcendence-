@@ -39,7 +39,7 @@ export default function Displayroute() {
     <Route path="/twofa" element={<><Header socket={socket}/><SendTwoFaCode  /></>} />
     <Route path="/setname" element={<><LoginHeader/><Setname /></>} />
     <Route path="/setprofileimage" element={<><LoginHeader/><SetProfileImage /></>} />
-    <Route path="/dashboard" element={<><Header socket={socket}/><Dashboard /></>} />
+    <Route path="/dashboard" element={<><Header socket={socket}/><Dashboard socket={socket} /></>} />
     <Route path="/myperfil" element={<><Header socket={socket}/><MyPerfil /></>} />
     <Route path="/friends" element={<><Header socket={socket}/><Friends socket={socket} /></>} />
     <Route path='/chat' element={<><Header socket={socket}/><ChatInterface /></>} />
