@@ -61,9 +61,9 @@ There are additional functionalities in the game. At the end of this README, I w
 
 Remove the database: rm -rf ./pgdata
 
-### Setup - How to Use?
+### Usage
 
-O primeiro passo para executar o programa é rodar um "make" dentro do diretório. 
+"First, you need to install and download Docker and Docker Compose."
 
 ```
 make
@@ -85,7 +85,7 @@ make
 *  [Summary](#Summary)
 *  [Main Technologies](#Main-Technologies)
 *  [Visual Overview](#visual-overview)
-*  [Setup - How to Use?](#Setup---How-to-Use)
+*  [Usage](#Usage)
 *  [What was done in the project?!](#What-was-done-in-the-project)
 *  [Requirements](#Requirements)
 
