@@ -296,12 +296,16 @@ export class GamesServices {
 
     
     const rtGame = this.rtGames.get(gameId.toString());
+
+    if (rtGame)
+    {
     
     rtGame.timeToStart = 0;
     
     //remove game from rtGames
     this.rtGames.set(gameId.toString(), rtGame);
     this.gameGateway.server.to(gameId).emit('game-update', rtGame);
+    }
   }
 
 

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { io } from 'socket.io-client';
 import styled from 'styled-components';
 
 
@@ -82,7 +81,6 @@ export default function Notification(props: NotificationProps) {
       socket.on("receive-invitation", (data: invitation) => {
         setInvitationData(data);
         setInviteDiv(true);
-        toast.error("You have been invite to someone");
       });
   
       socket.on("invitation-work", (data: invitation) => {
