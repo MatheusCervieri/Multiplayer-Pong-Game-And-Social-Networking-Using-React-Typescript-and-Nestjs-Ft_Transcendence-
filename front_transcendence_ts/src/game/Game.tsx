@@ -8,6 +8,8 @@ import { RTGameRoomInterface, defaultGameRoom } from './roominterface'
 import  instance from '../confs/axios_information';
 import GameFinalScream from './GameFinalScream';
 import GamePauseScream from './GamePauseScream';
+import { useLocation } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 const socket = io("http://localhost:8002");
 
@@ -19,6 +21,8 @@ export default function Game() {
   const [gameRunning, setGameRunning] = useState<boolean>(false);
   const [isConnected, setIsConnected] = useState(false);
   const { id } = useParams<{ id: string | undefined }>();
+  const location = useLocation();
+  
 
   function getGameInformation()
   {

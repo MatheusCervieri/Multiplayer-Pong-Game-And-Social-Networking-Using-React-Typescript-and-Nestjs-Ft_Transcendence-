@@ -94,6 +94,7 @@ export class NotificationService {
   async declineInvite(invitation : invitation)
   {
     
+    
     //remove the invitation from the invitations array.
      
     this.invitations = this.invitations.filter(i => i.id !== invitation.id);

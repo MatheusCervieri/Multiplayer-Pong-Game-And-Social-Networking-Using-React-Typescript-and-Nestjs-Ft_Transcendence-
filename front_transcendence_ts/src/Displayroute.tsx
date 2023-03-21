@@ -22,6 +22,8 @@ import MyPerfil from "./dashboard/myperfil/MyPerfil";
 import Header from "./header/Header";
 import LoginHeader from "./header/LoginHeader";
 import TestLogin from "./login_setup/TestLogin/TestLogin";
+import CheckLogin from "./CheckLogin";
+
 
 
 
@@ -37,19 +39,19 @@ export default function Displayroute() {
     <Route path="/auth" element={<><Header socket={socket}/><AuthCallback  /></>} />
     <Route path="/authregister" element={<><Header socket={socket}/><AuthCallbackRegister  /></>} />
     <Route path="/twofa" element={<><Header socket={socket}/><SendTwoFaCode  /></>} />
-    <Route path="/setname" element={<><LoginHeader/><Setname /></>} />
-    <Route path="/setprofileimage" element={<><LoginHeader/><SetProfileImage /></>} />
-    <Route path="/dashboard" element={<><Header socket={socket}/><Dashboard socket={socket} /></>} />
-    <Route path="/myperfil" element={<><Header socket={socket}/><MyPerfil /></>} />
-    <Route path="/friends" element={<><Header socket={socket}/><Friends socket={socket} /></>} />
-    <Route path='/chat' element={<><Header socket={socket}/><ChatInterface /></>} />
-    <Route path='/findgame' element={<><Header socket={socket}/><FindGame /></>} />
-    <Route path='/watchgame' element={<><Header socket={socket}/><RunningGames/></>} />
-    <Route path='/ranking' element={<><Header socket={socket}/><Ranking/></>} />
-    <Route path='/users' element={<><Header socket={socket}/><Users socket={socket}/></>} />
-    <Route path='chat/:id' element={<><Header socket={socket}/><Chatroom socket={socket}/></>} />
-    <Route path='game/:id' element={<><Header socket={socket}/><Game/></>} />
-    <Route path='profile/:name' element={<><Header socket={socket}/><Profile/></>} />
+    <Route path="/setname" element={<><CheckLogin /><LoginHeader/><Setname /></>} />
+    <Route path="/setprofileimage" element={<><CheckLogin /><LoginHeader/><SetProfileImage /></>} />
+    <Route path="/dashboard" element={<><CheckLogin /><Header socket={socket}/><Dashboard socket={socket} /></>} />
+    <Route path="/myperfil" element={<><CheckLogin /><Header socket={socket}/><MyPerfil /></>} />
+    <Route path="/friends" element={<><CheckLogin /><Header socket={socket}/><Friends socket={socket} /></>} />
+    <Route path='/chat' element={<><CheckLogin /><Header socket={socket}/><ChatInterface /></>} />
+    <Route path='/findgame' element={<><CheckLogin /><Header socket={socket}/><FindGame /></>} />
+    <Route path='/watchgame' element={<><CheckLogin /><Header socket={socket}/><RunningGames/></>} />
+    <Route path='/ranking' element={<><CheckLogin /><Header socket={socket}/><Ranking/></>} />
+    <Route path='/users' element={<><CheckLogin /><Header socket={socket}/><Users socket={socket}/></>} />
+    <Route path='chat/:id' element={<><CheckLogin /><Header socket={socket}/><Chatroom socket={socket}/></>} />
+    <Route path='game/:id' element={<><CheckLogin /><Header socket={socket}/><Game/></>} />
+    <Route path='profile/:name' element={<><CheckLogin /><Header socket={socket}/><Profile/></>} />
   </Routes>
 </BrowserRouter>
   )
