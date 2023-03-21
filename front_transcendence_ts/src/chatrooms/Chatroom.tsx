@@ -500,7 +500,7 @@ if (renderPage == false && promptShown == true)
 else{
   return (
     <>
-    {showInfo && <Useradmin username={username} information={UserInformation} myStatus={myStatus}/>}
+    {showInfo && UserInformation && myStatus && <Useradmin username={username} information={UserInformation} myStatus={myStatus}/>}
     {showAddUser && data?.type == 'private' && <UserSearch btnName="Add User To This ROOM!" handleUser={AddUserToRoom}/>}
     <Container>
     

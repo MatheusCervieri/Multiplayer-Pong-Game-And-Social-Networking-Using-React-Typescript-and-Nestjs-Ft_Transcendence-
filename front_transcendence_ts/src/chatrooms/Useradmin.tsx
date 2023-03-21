@@ -89,10 +89,11 @@ const UserAdmin : any = (props : UserAdminProps) => {
   const [information, setInformation] = useState<any>();
   const [users, setUsers] = useState<any[]>();
   const [userPrivilleges, setuserPrivilleges] = useState<any>([]);
-  const [filteredUsers2, setFilteredUsers2] = useState<any[]>([]);
+  const [filteredUsers2, setFilteredUsers2] = useState<any[]>();
   const [showOwner, setShowOwner] = useState<boolean>(false);
   const [showSetRoomType, setShowSetRoomType] = useState<boolean>(false);
   const { id } = useParams<{ id: string | undefined }>();
+  const [loading, setLoading] = useState<boolean>(true);
   
   useEffect(() => {
     
@@ -104,16 +105,17 @@ const UserAdmin : any = (props : UserAdminProps) => {
  
 
   useEffect(() => {
-    handlePassword(props.information.sanitizedRoom);
-    setuserPrivilleges(props.myStatus);
-    setUsers(props.information.sanitizedUsers);
-    console.log("User privilleges", userPrivilleges);
-    console.log("Users", users);
-    
-  },[information, props.information, props.myStatus]);
+    if (props.information) {
+      handlePassword(props.information.sanitizedRoom);
+      setuserPrivilleges(props.myStatus);
+      setUsers(props.information.sanitizedUsers); // Add this line
+      console.log("User privilleges", userPrivilleges);
+      console.log("Users", users);
+    }
+  }, [information, props.information, props.myStatus]);
 
   useEffect(() => {
-    filterUsers2();
+    filterUsers2Function();
   },[searchTerm, users]);
 
   function handlePassword(info: any)
@@ -127,15 +129,26 @@ const UserAdmin : any = (props : UserAdminProps) => {
     }
   }
   
-  function filterUsers2()
+  function filterUsers2Function()
   {
+    console.log("Users at filter function", users);
     if(users)
     {
+      console.log("Chegou dentro do users at filter function");
       setFilteredUsers2(users.filter((user: any) =>
       user.name.toLowerCase().includes(searchTerm.toLowerCase())
     ));
     }
   }
+
+  useEffect(() => {
+    
+    if(filteredUsers2)
+    {
+      console.log("Filtered users inside filtered users use effect", filteredUsers2);
+      setLoading(false);
+    }
+  }, [filteredUsers2]);
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
@@ -274,7 +287,7 @@ const UserAdmin : any = (props : UserAdminProps) => {
 
 
   return (
-   <>{props.information &&
+   <>{props.information && !loading &&
   <Container>
     <br></br>
   {showSetRoomType && <SetRoomType setShowSetRoomType={setShowSetRoomType} />}
@@ -287,11 +300,12 @@ const UserAdmin : any = (props : UserAdminProps) => {
     value={searchTerm}
     onChange={handleSearch}
   />
+  {filteredUsers2 && filteredUsers2.length > 0 &&
   <UserListContainer>
     <ul>
       {filteredUsers2.map((user: any) => (
         <UserListItem key={user.id}>
-          <UserName>{user.name}</UserName>
+          <UserName>{user && user.name}</UserName>
           {userPrivilleges.name !== user.name && (
             <UserActions>
               {userPrivilleges.isOwner === true && (
@@ -314,7 +328,7 @@ const UserAdmin : any = (props : UserAdminProps) => {
         </UserListItem>
       ))}
     </ul>
-  </UserListContainer>
+  </UserListContainer> }
 </Container>}</>
               );
 };
