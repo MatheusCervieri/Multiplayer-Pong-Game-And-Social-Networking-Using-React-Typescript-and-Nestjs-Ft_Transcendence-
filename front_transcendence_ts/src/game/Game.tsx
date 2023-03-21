@@ -10,6 +10,8 @@ import GameFinalScream from './GameFinalScream';
 import GamePauseScream from './GamePauseScream';
 import { useLocation } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import GameHeader from '../header/GameHeader';
+import NotPlayingHeader from '../header/NotPlayingHeader';
 
 const socket = io("http://localhost:8002");
 
@@ -111,6 +113,7 @@ useEffect(() => {
   
   return (
     <>
+    {(myName === gameData.player1Name || myName === gameData.player2Name) ? <GameHeader /> : <NotPlayingHeader />}
     {gameRunning === true && gameData.status === 'lobby' && <Lobby myName={myName} socket={socket} gameData={gameData}/>}
     {gameRunning === true && myName !== '' && gameData.status === 'playing' && <GameCanvas {...canvasProps} />}
     {gameRunning === true && gameData.status === 'paused' && <GamePauseScream gameData={gameData}/>}

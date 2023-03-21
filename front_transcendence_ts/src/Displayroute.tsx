@@ -50,7 +50,7 @@ export default function Displayroute() {
     <Route path='/ranking' element={<><CheckLogin /><Header socket={socket}/><Ranking/></>} />
     <Route path='/users' element={<><CheckLogin /><Header socket={socket}/><Users socket={socket}/></>} />
     <Route path='chat/:id' element={<><CheckLogin /><Header socket={socket}/><Chatroom socket={socket}/></>} />
-    <Route path='game/:id' element={<><CheckLogin /><Header socket={socket}/><Game/></>} />
+    <Route path='game/:id' element={<><CheckLogin /><Game/></>} />
     <Route path='profile/:name' element={<><CheckLogin /><Header socket={socket}/><Profile/></>} />
   </Routes>
 </BrowserRouter>
