@@ -1,4 +1,3 @@
-sudo chmod -R 777 pgdata
 # Multiplayer Pong Game And Social Networking Using React, Typescript, Node and Nestjs!
 
 ### Summary!
@@ -63,11 +62,31 @@ Remove the database: rm -rf ./pgdata
 
 ### Usage
 
-"First, you need to install and download Docker and Docker Compose."
+1 - First, you need to install and download Docker and Docker Compose.
+
+2- Open the project folder.
+
+3- Run docker compose command inside the project folder
 
 ```
-make
-``` 
+docker-compose up –-build
+```
+or
+```
+docker compose up –-build
+
+4- Go to the login URL:
+
+```
+http://localhost:3000/
+```
+
+If you are not a 42 student:
+
+```
+http://localhost:3000/test
+```
+
 ### What was done in the project?!
 
 <List>
@@ -93,7 +112,7 @@ make
 
 ### Requirements
 
-# Mandatory part
+#### Mandatory part
 
 ## I - 1 Overview
 
@@ -101,7 +120,7 @@ In this subject you will need to build a website for the mighty pong contest.
 Your website will help user run pong tournament and play against each other.
 There will be an admin view, chat with moderators, real time multiplayer online
 games.
-There will be guilds and wars!
+
 You will need to follow thoses rules:
 
 -   you must use the last stable version of every frameworks or libraries.

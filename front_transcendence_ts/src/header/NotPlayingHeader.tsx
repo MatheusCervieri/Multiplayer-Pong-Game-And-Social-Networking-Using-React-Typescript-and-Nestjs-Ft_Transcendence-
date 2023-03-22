@@ -74,8 +74,6 @@ const MenuItem = styled.li`
   }
 `;
 
-
-
 const CustomModal = styled(Modal)`
   margin: 100px;
   border: 2px solid #00b8d9;
