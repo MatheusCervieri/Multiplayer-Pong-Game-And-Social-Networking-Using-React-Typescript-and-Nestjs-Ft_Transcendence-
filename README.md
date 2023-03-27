@@ -110,9 +110,9 @@ http://localhost:3000/test
 *  [Requirements](#Requirements)
 
 
-### Study
+# Study
 
-#### Backend
+# Backend
 
 ## Node
 
@@ -157,7 +157,7 @@ MVC stands for Model, View, Controller and refers to the architecture of your co
 
 ![image description](readme/mvcimage.png)
 
-# Model is used to comunicate with the database.
+#### Model is used to comunicate with the database.
 
 Data schema: It defines the structure of the data that will be stored in the database. The schema can be created using TypeScript classes or interfaces and can include properties, methods, and validation rules.
 
@@ -169,13 +169,13 @@ The Model layer is typically accessed by the Service layer, which provides busin
 
 In a simple way, the controller uses the service (in nestjs) to comunicate with the model. 
 
-# View
+#### View
 
 In summary, the View layer in NestJS represents the presentation layer of the application, and it is responsible for presenting data to the user in a meaningful way or in a specific format that meets the requirements of the application.
 
 However, in the context of server-side applications, the View layer can also refer to the format in which data is returned to the client, such as HTML, JSON, XML, or any other format. This format is determined by the specific requirements of the application.
 
-# Controler 
+#### Controler 
 
 Controller is responsible for the interaction with client, and is the bridge between Model and View. Controller will get data from Model, and pass the data to View to generate HTML template, and return the HTML page with data to client. It also can return a JSON object or other kind of data. 
 
