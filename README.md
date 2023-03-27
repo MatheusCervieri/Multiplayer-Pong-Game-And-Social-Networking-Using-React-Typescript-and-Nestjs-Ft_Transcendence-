@@ -148,6 +148,37 @@ CRUD stands for: Create, Read, Update and Delete. Put simply, if you are designi
 
 In your library example, this simply means that we are going to be building the ability for users to create entries (add books, authors or genres to the database), read entries (or, retrieve lists of books and other things from the database), update entries (edit details of an entry), and delete entries (remove them from the database).
 
+
+## MVC 
+
+MVC stands for Model, View, Controller and refers to the architecture of your code. Basically, it is a way to organize your application by separating all of the actions into 3 main components: Models, Views and Controllers.
+
+ The design logic is to separate the "logic processing" and the "data presentation" parts, clearly distinguish the functions of each component, which makes it easier to extend, improve usability, and each team member can do development without affecting each other.
+
+![image description](readme/mvcimage.png)
+
+# Model is used to comunicate with the database.
+
+Data schema: It defines the structure of the data that will be stored in the database. The schema can be created using TypeScript classes or interfaces and can include properties, methods, and validation rules.
+
+Object-Relational Mapping (ORM) or Object-Document Mapping (ODM) libraries: These libraries help to map the data schema to the database and provide a convenient way to interact with the database without having to write complex SQL or NoSQL queries.
+
+Database interaction methods: These methods define how to interact with the database to perform CRUD (Create, Read, Update, Delete) operations on the data.
+
+The Model layer is typically accessed by the Service layer, which provides business logic for the application. The Service layer interacts with the Model layer to retrieve or manipulate data.
+
+In a simple way, the controller uses the service (in nestjs) to comunicate with the model. 
+
+# View
+
+In summary, the View layer in NestJS represents the presentation layer of the application, and it is responsible for presenting data to the user in a meaningful way or in a specific format that meets the requirements of the application.
+
+However, in the context of server-side applications, the View layer can also refer to the format in which data is returned to the client, such as HTML, JSON, XML, or any other format. This format is determined by the specific requirements of the application.
+
+# Controler 
+
+Controller is responsible for the interaction with client, and is the bridge between Model and View. Controller will get data from Model, and pass the data to View to generate HTML template, and return the HTML page with data to client. It also can return a JSON object or other kind of data. 
+
 ## RESTful API?
 
 REST stands for Representational State Transfer. It is an architectural style for designing networked applications.
