@@ -74,6 +74,7 @@ docker-compose up –-build
 or
 ```
 docker compose up –-build
+```
 
 4- Go to the login URL:
 
@@ -107,6 +108,112 @@ http://localhost:3000/test
 *  [Usage](#Usage)
 *  [What was done in the project?!](#What-was-done-in-the-project)
 *  [Requirements](#Requirements)
+
+
+### Study
+
+#### Backend
+
+## Node
+
+“As an asynchronous event driven JavaScript runtime, Node is designed to build scalable network applications.”
+
+When javascript was first created it was designed to run in the broweser. Simply, it allow us to run javascript in a machine. Besides that it also adds functionalities to javascript as the ability to read and write local files, create http connections and listen to network requests.
+
+Node is asynchronous which allow us to use callbackfunction.
+
+“any time we get a network request, run this callback function”
+
+In my code, we can see that here:
+
+```
+@Get('running')
+  async getRunningGames(@Req() request: any, @Body() data : any): Promise<any> {
+    try
+    {
+    const games = await this.GameService.getRunningGames();
+    return games;
+    }
+    catch (e) {
+      return e;
+    }
+  }
+```
+
+When i make a get request to localhost:3001/running it calls a callback function that returns a array with the running games in the application. 
+
+## CRUD
+
+CRUD stands for: Create, Read, Update and Delete. Put simply, if you are designing a CRUD interface that means that users can expect to be able to do these 4 things to items in the database (providing they have the appropriate permissions of course).
+
+In your library example, this simply means that we are going to be building the ability for users to create entries (add books, authors or genres to the database), read entries (or, retrieve lists of books and other things from the database), update entries (edit details of an entry), and delete entries (remove them from the database).
+
+## RESTful API?
+
+REST stands for Representational State Transfer. It is an architectural style for designing networked applications.
+
+Uniform Interface: The interface between components is defined in a way that doesn’t depend on implementation details.
+
+Stateless: The server is independent of all previous requests, so the client can make requests in any order.
+
+Layered System: The client doesn’t know how many layers the server has, and the server can make requests to other servers on behalf of the client.
+
+Caching: The client can cache responses, so it doesn’t need to make the same request multiple times.
+
+Code on Demand: The server can extend or customize the functionality of the client by transferring executable code.
+
+The advantages are:
+
+Scalability: Since the client doesn’t need to maintain state, it can improve scalability.
+
+Flexibility: Since the client and server are completely decoupled, it can provide flexibility by allowing different layers of application functionality.
+
+Independence: You can use different programming languages to write programs without affecting the design of the API.
+
+Font: https://www.explainthis.io/
+
+# How to use?
+
+It uses the http protocol:
+
+GET: Used to retrieve data from the server.
+POST: Used to send data to the server.
+PUT: Used to update data on the server.
+DELETE: Used to delete data from the server.
+PATCH: Used to update part of the data on the server.
+
+It also has a http header that can contain a set of key-values that provide additional information about the request. In my code i use the header to send the login token. 
+
+# HTTP Status Code
+
+It is a 3-digit number that indicate the status of the response:
+
+1xx: Informational responses, the request has been received and the process is continuing.
+2xx: Success, the request has been successfully received, understood, and accepted.
+3xx: Redirection, further action needs to be taken in order to complete the request.
+4xx: Client error, the request contains bad syntax or cannot be fulfilled.
+5xx: Server error, the server failed to fulfill an apparently valid request.
+
+## SQL Injection
+
+SQL Injection is a common type of cyber attack that involves modifying SQL statements to maliciously access a database.
+
+In nestjs we use ORM (TypeORM) to prevent against SQL .injections. We also can use paremeterized queries if we want to use raw SQL queries. 
+
+There is other types of attacks such as XSS, CSRF...
+
+## Encryption, Encoding and Hashing
+
+-Encryption: Encryption is the process of transforming data in such a way that it becomes unreadable unless the recipient has the key to decrypt it. Encryption is often used to protect sensitive information during transmission or storage, and it can be reversed with the correct key. Examples of encryption algorithms include AES, RSA, and DES.
+
+-Encoding: Encoding is the process of converting data from one format to another, usually to make it more suitable for transmission or storage. Encoding does not provide any security or privacy protection and can be easily reversed. Examples of encoding schemes include base64, UTF-8, and ASCII.
+
+-Hashing: Hashing is the process of transforming data into a fixed-length string of characters, often referred to as a hash value or digest. Hashing is a one-way process that cannot be reversed, and it is commonly used to verify the integrity of data or passwords. Hashing algorithms produce a unique hash value for each input, making it difficult to guess the original data from the hash value. Examples of hashing algorithms include SHA-256, MD5, and bcrypt.
+
+All the passwords stored in my database are hashed. And i used encoding to store names that need to be used in urls. I also used encryption to generate the login token of the application. 
+
+## NPM 
+
 
 
 
