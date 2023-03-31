@@ -146,7 +146,7 @@ When i make a get request to localhost:3001/running it calls a callback function
 
 CRUD stands for: Create, Read, Update and Delete. Put simply, if you are designing a CRUD interface that means that users can expect to be able to do these 4 things to items in the database (providing they have the appropriate permissions of course).
 
-In your library example, this simply means that we are going to be building the ability for users to create entries (add books, authors or genres to the database), read entries (or, retrieve lists of books and other things from the database), update entries (edit details of an entry), and delete entries (remove them from the database).
+In a library example, this simply means that we are going to be building the ability for users to create entries (add books, authors or genres to the database), read entries (or, retrieve lists of books and other things from the database), update entries (edit details of an entry), and delete entries (remove them from the database).
 
 
 ## MVC 
@@ -245,8 +245,24 @@ All the passwords stored in my database are hashed. And i used encoding to store
 
 ## NPM 
 
+Npm is a tool used for managing and sharing JavaScript code. It allows developers to easily install, update, and share packages and dependencies that their applications require. With npm, developers can quickly integrate existing code libraries into their projects and share their own code with the wider development community. Essentially, it simplifies the process of working with and sharing JavaScript code using packaje.json file. 
 
+To put all the libraries, packges, etc in the last stable version. We can do the following:
 
+Install:
+```
+npm install -g npm-check-updates
+```
+
+Update package.json with:
+```
+ncu -u
+```
+
+Run npm install in the front and back folder:
+```
+npm install
+```
 
 ### Requirements
 
