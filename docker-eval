@@ -1,0 +1,50 @@
+version: '3'
+services:
+  nestjs:
+    build:
+      context: ./back_transcendence
+      dockerfile: Dockerfile
+    ports:
+      - 3001:3001
+      - 8001:8001
+      - 8002:8002
+      - 8003:8003
+    depends_on:
+      - postgres
+    volumes:
+      - nestjs-data:/app
+    env_file:
+      - .env
+  postgres:
+    image: postgres:latest
+    ports:
+      - 5432:5432
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    env_file:
+      - .env
+  pgadmin:
+    image: dpage/pgadmin4
+    ports:
+      - 5050:80
+    depends_on:
+      - postgres
+    env_file:
+      - .env
+  react:
+    build:
+      context: ./front_transcendence_ts
+      dockerfile: Dockerfile
+    ports:
+      - 3000:3000
+    volumes:
+      - react-data:/app
+    depends_on:
+      - nestjs
+    env_file:
+      - .env
+
+volumes:
+  nestjs-data:
+  pgdata:
+  react-data:
